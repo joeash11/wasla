@@ -140,9 +140,9 @@ CREATE TABLE contact_messages (
 -- SAMPLE DATA
 -- ============================================
 
--- Admin user (password: admin123)
+-- Admin user (email: admin@wasla.com  password: admin123)
 INSERT INTO users (first_name, last_name, email, password, role, is_verified, is_active)
-VALUES ('Admin', 'Wasla', 'admin@wasla.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', 1, 1);
+VALUES ('Admin', 'Wasla', 'admin@wasla.com', '$2y$10$TkZ6yH4VhGNt2Y0/S6QKoeltufWFRXNnjeM2UVvFYPoG9WEkoze06', 'admin', 1, 1);
 
 -- Sample client (password: password)
 INSERT INTO users (first_name, last_name, email, password, phone, role, company_name, city, is_verified, is_active)
