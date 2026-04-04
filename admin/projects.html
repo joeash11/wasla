@@ -41,22 +41,94 @@
                 <table class="admin-table" id="projects-table">
                     <thead><tr><th>Project</th><th>Client</th><th>Location</th><th>Date</th><th>Ushers</th><th>Status</th><th>Actions</th></tr></thead>
                     <tbody>
-                        <tr data-status="active"><td><strong>Gaming Festival 2024</strong></td><td>Insomnia Egypt</td><td>Riyadh</td><td>Jun 28, 2024</td><td>15/20</td><td><span class="card-badge status-active" style="position:static">Active</span></td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Flag"><i class="fas fa-flag"></i></button></td></tr>
-                        <tr data-status="active"><td><strong>MDLBEAST Soundstorm</strong></td><td>MDLBEAST</td><td>Riyadh</td><td>Jul 2, 2024</td><td>28/40</td><td><span class="card-badge status-active" style="position:static">Active</span></td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Flag"><i class="fas fa-flag"></i></button></td></tr>
-                        <tr data-status="completed"><td><strong>Fashion Week Riyadh</strong></td><td>Riyadh Events</td><td>Riyadh</td><td>Jun 15, 2024</td><td>12/12</td><td><span class="card-badge status-completed" style="position:static">Completed</span></td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button></td></tr>
-                        <tr data-status="active"><td><strong>Corporate Summit KSA</strong></td><td>Gulf Events Co.</td><td>Jeddah</td><td>Jul 10, 2024</td><td>5/8</td><td><span class="card-badge status-active" style="position:static">Active</span></td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Flag"><i class="fas fa-flag"></i></button></td></tr>
-                        <tr data-status="pending"><td><strong>Saudi Fashion Week</strong></td><td>Riyadh Events</td><td>Riyadh</td><td>Aug 5, 2024</td><td>0/20</td><td><span class="card-badge status-pending" style="position:static">Pending</span></td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn" title="Approve" style="color:var(--accent)"><i class="fas fa-check"></i></button></td></tr>
-                        <tr data-status="flagged"><td><strong>Private Event #129</strong></td><td>Anonymous User</td><td>Dubai</td><td>Jul 8, 2024</td><td>0/5</td><td><span class="card-badge" style="position:static;background:#e74c3c;color:#fff">Flagged</span></td><td class="action-cell"><button class="table-action-btn" title="Review"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-danger" title="Remove"><i class="fas fa-trash"></i></button></td></tr>
-                        <tr data-status="completed"><td><strong>Annual Charity Gala</strong></td><td>Al Faisaliyah</td><td>Riyadh</td><td>Jun 8, 2024</td><td>8/8</td><td><span class="card-badge status-completed" style="position:static">Completed</span></td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button></td></tr>
+                        <tr data-status="active"><td><strong>Gaming Festival 2024</strong></td><td>Insomnia Egypt</td><td>Cairo</td><td>Jun 28, 2024</td><td>15/20</td><td><span class="card-badge status-active" style="position:static">Active</span></td><td class="action-cell"><button class="table-action-btn" title="View" onclick="viewProject(this)"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Flag" onclick="flagProject(this)"><i class="fas fa-flag"></i></button></td></tr>
+                        <tr data-status="active"><td><strong>MDLBEAST Soundstorm</strong></td><td>MDLBEAST</td><td>Riyadh</td><td>Jul 2, 2024</td><td>28/40</td><td><span class="card-badge status-active" style="position:static">Active</span></td><td class="action-cell"><button class="table-action-btn" title="View" onclick="viewProject(this)"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Flag" onclick="flagProject(this)"><i class="fas fa-flag"></i></button></td></tr>
+                        <tr data-status="completed"><td><strong>Fashion Week</strong></td><td>Cairo Events Co.</td><td>Cairo</td><td>Jun 15, 2024</td><td>12/12</td><td><span class="card-badge status-completed" style="position:static">Completed</span></td><td class="action-cell"><button class="table-action-btn" title="View" onclick="viewProject(this)"><i class="fas fa-eye"></i></button></td></tr>
+                        <tr data-status="active"><td><strong>Corporate Summit</strong></td><td>Gulf Events Co.</td><td>Jeddah</td><td>Jul 10, 2024</td><td>5/8</td><td><span class="card-badge status-active" style="position:static">Active</span></td><td class="action-cell"><button class="table-action-btn" title="View" onclick="viewProject(this)"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Flag" onclick="flagProject(this)"><i class="fas fa-flag"></i></button></td></tr>
+                        <tr data-status="pending"><td><strong>Tech Innovation Expo</strong></td><td>Dubai Tech</td><td>Dubai</td><td>Aug 5, 2024</td><td>0/20</td><td><span class="card-badge status-pending" style="position:static">Pending</span></td><td class="action-cell"><button class="table-action-btn" title="View" onclick="viewProject(this)"><i class="fas fa-eye"></i></button><button class="table-action-btn" title="Approve" style="color:var(--accent)" onclick="approveProject(this)"><i class="fas fa-check"></i></button></td></tr>
+                        <tr data-status="flagged"><td><strong>Private Event #129</strong></td><td>Anonymous User</td><td>Dubai</td><td>Jul 8, 2024</td><td>0/5</td><td><span class="card-badge" style="position:static;background:#e74c3c;color:#fff">Flagged</span></td><td class="action-cell"><button class="table-action-btn" title="View" onclick="viewProject(this)"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-danger" title="Remove" onclick="removeProject(this)"><i class="fas fa-trash"></i></button></td></tr>
+                        <tr data-status="completed"><td><strong>Annual Charity Gala</strong></td><td>Al Faisaliyah</td><td>Jeddah</td><td>Jun 8, 2024</td><td>8/8</td><td><span class="card-badge status-completed" style="position:static">Completed</span></td><td class="action-cell"><button class="table-action-btn" title="View" onclick="viewProject(this)"><i class="fas fa-eye"></i></button></td></tr>
                     </tbody>
                 </table>
             </div>
         </main>
     </div>
+    <!-- View Modal -->
+    <div class="admin-modal-overlay" id="project-modal" style="display:none">
+        <div class="admin-modal">
+            <div class="admin-modal-header">
+                <h3 id="modal-title">Project Details</h3>
+                <button class="admin-modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body" id="modal-body"></div>
+        </div>
+    </div>
     <footer class="footer"><div class="footer-left"><h3>Wasla</h3><p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p></div><div class="footer-links"><a href="../terms.html">TERMS OF SERVICE</a><a href="../privacy.html">PRIVACY POLICY</a><a href="../contact.html">CONTACT US</a></div></footer>
     <script>
+    // Search & Filter
     document.getElementById('project-search').addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('#projects-table tbody tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none';});});
     document.getElementById('proj-status-filter').addEventListener('change',e=>{const v=e.target.value;document.querySelectorAll('#projects-table tbody tr').forEach(r=>{r.style.display=(!v||r.dataset.status===v)?'':'none';});});
+
+    // View Project
+    function viewProject(btn) {
+        const row = btn.closest('tr');
+        const cells = row.querySelectorAll('td');
+        const name = cells[0].textContent;
+        const client = cells[1].textContent;
+        const location = cells[2].textContent;
+        const date = cells[3].textContent;
+        const ushers = cells[4].textContent;
+        const status = cells[5].textContent.trim();
+        document.getElementById('modal-title').textContent = name;
+        document.getElementById('modal-body').innerHTML = `
+            <div class="modal-detail"><strong>Client:</strong> ${client}</div>
+            <div class="modal-detail"><strong>Location:</strong> ${location}</div>
+            <div class="modal-detail"><strong>Event Date:</strong> ${date}</div>
+            <div class="modal-detail"><strong>Ushers:</strong> ${ushers}</div>
+            <div class="modal-detail"><strong>Status:</strong> ${status}</div>
+        `;
+        document.getElementById('project-modal').style.display = 'flex';
+    }
+    function closeModal() {
+        document.getElementById('project-modal').style.display = 'none';
+    }
+    document.getElementById('project-modal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeModal();
+    });
+
+    // Flag Project
+    function flagProject(btn) {
+        const row = btn.closest('tr');
+        const name = row.querySelector('td strong').textContent;
+        if (confirm(`Flag project "${name}"? This will mark it for review.`)) {
+            row.dataset.status = 'flagged';
+            row.querySelector('td:nth-child(6)').innerHTML = '<span class="card-badge" style="position:static;background:#e74c3c;color:#fff">Flagged</span>';
+            btn.outerHTML = '<button class="table-action-btn table-action-danger" title="Remove" onclick="removeProject(this)"><i class="fas fa-trash"></i></button>';
+        }
+    }
+
+    // Approve Project
+    function approveProject(btn) {
+        const row = btn.closest('tr');
+        const name = row.querySelector('td strong').textContent;
+        if (confirm(`Approve project "${name}"?`)) {
+            row.dataset.status = 'active';
+            row.querySelector('td:nth-child(6)').innerHTML = '<span class="card-badge status-active" style="position:static">Active</span>';
+            btn.outerHTML = '<button class="table-action-btn table-action-warn" title="Flag" onclick="flagProject(this)"><i class="fas fa-flag"></i></button>';
+        }
+    }
+
+    // Remove Project
+    function removeProject(btn) {
+        const row = btn.closest('tr');
+        const name = row.querySelector('td strong').textContent;
+        if (confirm(`Permanently remove project "${name}"? This cannot be undone.`)) {
+            row.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+            row.style.opacity = '0';
+            row.style.transform = 'translateX(30px)';
+            setTimeout(() => row.remove(), 400);
+        }
+    }
     </script>
 </body>
 </html>

@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wasla - Log In</title>
-    <meta name="description" content="Log in to your Wasla account to manage events, find gigs, or administer the platform.">
+    <meta name="description"
+        content="Log in to your Wasla account to manage events, find gigs, or administer the platform.">
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="images/wasla-icon.png">
 </head>
+
 <body class="auth-body">
     <div class="auth-wrapper">
         <div class="auth-left">
@@ -18,8 +22,10 @@
                     <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="48" height="48">
                     <span class="logo-text" style="color:#fff;font-size:1.6rem">Wasla</span>
                 </a>
-                <h1 class="auth-hero-title">Connect Events<br>With <span class="hero-gradient-text">Top Talent</span></h1>
-                <p class="auth-hero-desc">The leading platform bridging event managers with professional ushers across the MENA region.</p>
+                <h1 class="auth-hero-title">Connect Events<br>With <span class="hero-gradient-text">Top Talent</span>
+                </h1>
+                <p class="auth-hero-desc">The leading platform bridging event managers with professional ushers across
+                    the MENA region.</p>
                 <div class="auth-hero-stats">
                     <div class="auth-hero-stat"><i class="fas fa-check-circle"></i> 500+ Events Managed</div>
                     <div class="auth-hero-stat"><i class="fas fa-check-circle"></i> 2,000+ Professional Ushers</div>
@@ -47,22 +53,30 @@
                     <input type="hidden" name="role" id="role-input" value="client">
                     <div class="form-group">
                         <label class="form-label">Email Address</label>
-                        <div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" name="email" class="form-input auth-input" placeholder="Enter your email" required></div>
+                        <div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" name="email"
+                                class="form-input auth-input" placeholder="Enter your email" required></div>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Password</label>
-                        <div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" name="password" class="form-input auth-input" id="login-password" placeholder="Enter your password" required><button type="button" class="auth-eye-btn" onclick="togglePassword('login-password',this)"><i class="fas fa-eye"></i></button></div>
+                        <div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" name="password"
+                                class="form-input auth-input" id="login-password" placeholder="Enter your password"
+                                required><button type="button" class="auth-eye-btn"
+                                onclick="togglePassword('login-password',this)"><i class="fas fa-eye"></i></button>
+                        </div>
                     </div>
                     <div class="auth-options">
                         <label class="auth-remember"><input type="checkbox" checked> Remember me</label>
                         <a href="#" class="auth-forgot">Forgot password?</a>
                     </div>
-                    <button type="submit" class="btn-auth-submit" id="login-submit"><i class="fas fa-arrow-right"></i> Log In</button>
+                    <button type="submit" class="btn-auth-submit" id="login-submit"><i class="fas fa-arrow-right"></i>
+                        Log In</button>
                 </form>
                 <div class="auth-divider"><span>or continue with</span></div>
                 <div class="auth-social-row">
-                    <button class="auth-social-btn" onclick="handleSocialLogin()"><i class="fab fa-google"></i> Google</button>
-                    <button class="auth-social-btn" onclick="handleSocialLogin()"><i class="fab fa-apple"></i> Apple</button>
+                    <button class="auth-social-btn" onclick="handleSocialLogin()"><i class="fab fa-google"></i>
+                        Google</button>
+                    <button class="auth-social-btn" onclick="handleSocialLogin()"><i class="fab fa-apple"></i>
+                        Apple</button>
                 </div>
                 <p class="auth-switch">Don't have an account? <a href="signup.html">Sign up</a></p>
             </div>
@@ -114,4 +128,5 @@
         }
     </script>
 </body>
+
 </html>

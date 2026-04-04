@@ -1583,6 +1583,65 @@ body {
     margin-bottom: 16px;
 }
 
+/* Admin Modal */
+.admin-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease;
+}
+.admin-modal {
+    background: #fff;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 480px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    animation: scaleIn 0.3s ease;
+}
+.admin-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--gray-200);
+}
+.admin-modal-header h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+.admin-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--gray-400);
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 4px;
+}
+.admin-modal-close:hover { color: var(--primary); }
+.admin-modal-body {
+    padding: 24px;
+}
+.modal-detail {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 0.92rem;
+    color: var(--gray-800);
+}
+.modal-detail:last-child { border-bottom: none; }
+.modal-detail strong {
+    color: var(--gray-600);
+    font-weight: 600;
+}
+
 /* --- Form Styling (light theme) --- */
 .auth-form { display: flex; flex-direction: column; gap: 14px; }
 .auth-form .form-group { display: flex; flex-direction: column; gap: 6px; }

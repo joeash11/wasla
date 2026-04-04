@@ -54,11 +54,93 @@
             </div>
         </main>
     </div>
+    <!-- User Detail Modal -->
+    <div class="admin-modal-overlay" id="user-modal" style="display:none">
+        <div class="admin-modal">
+            <div class="admin-modal-header">
+                <h3 id="user-modal-title">User Details</h3>
+                <button class="admin-modal-close" onclick="closeUserModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body" id="user-modal-body"></div>
+        </div>
+    </div>
     <footer class="footer"><div class="footer-left"><h3>Wasla</h3><p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p></div><div class="footer-links"><a href="../terms.html">TERMS OF SERVICE</a><a href="../privacy.html">PRIVACY POLICY</a><a href="../contact.html">CONTACT US</a></div></footer>
     <script>
+    // Search & Filters
     document.getElementById('user-search').addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('#users-table tbody tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none';});});
     document.getElementById('role-filter').addEventListener('change',e=>{const v=e.target.value;document.querySelectorAll('#users-table tbody tr').forEach(r=>{r.style.display=(!v||r.dataset.role===v)?'':'none';});});
     document.getElementById('status-filter').addEventListener('change',e=>{const v=e.target.value;document.querySelectorAll('#users-table tbody tr').forEach(r=>{r.style.display=(!v||r.dataset.status===v)?'':'none';});});
+
+    // Wire up all action buttons
+    document.querySelectorAll('#users-table .table-action-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const row = this.closest('tr');
+            const title = this.getAttribute('title');
+            if (title === 'View') viewUser(row);
+            else if (title === 'Suspend') suspendUser(row, this);
+            else if (title === 'Reactivate') reactivateUser(row, this);
+            else if (title === 'Delete') deleteUser(row);
+        });
+    });
+
+    // View User
+    function viewUser(row) {
+        const cells = row.querySelectorAll('td');
+        const name = cells[0].querySelector('strong').textContent;
+        const role = cells[1].textContent.trim();
+        const email = cells[2].textContent;
+        const joined = cells[3].textContent;
+        const status = cells[4].textContent.trim();
+        document.getElementById('user-modal-title').textContent = name;
+        document.getElementById('user-modal-body').innerHTML = `
+            <div class="modal-detail"><strong>Role:</strong> ${role}</div>
+            <div class="modal-detail"><strong>Email:</strong> ${email}</div>
+            <div class="modal-detail"><strong>Joined:</strong> ${joined}</div>
+            <div class="modal-detail"><strong>Status:</strong> ${status}</div>
+        `;
+        document.getElementById('user-modal').style.display = 'flex';
+    }
+    function closeUserModal() {
+        document.getElementById('user-modal').style.display = 'none';
+    }
+    document.getElementById('user-modal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeUserModal();
+    });
+
+    // Suspend User
+    function suspendUser(row, btn) {
+        const name = row.querySelector('strong').textContent;
+        if (confirm(`Suspend user "${name}"? They will not be able to log in.`)) {
+            row.dataset.status = 'suspended';
+            row.querySelector('td:nth-child(5)').innerHTML = '<span class="status-dot status-dot-suspended"></span> Suspended';
+            btn.setAttribute('title', 'Reactivate');
+            btn.innerHTML = '<i class="fas fa-undo"></i>';
+            btn.classList.remove('table-action-warn');
+            btn.classList.add('table-action-warn');
+        }
+    }
+
+    // Reactivate User
+    function reactivateUser(row, btn) {
+        const name = row.querySelector('strong').textContent;
+        if (confirm(`Reactivate user "${name}"?`)) {
+            row.dataset.status = 'active';
+            row.querySelector('td:nth-child(5)').innerHTML = '<span class="status-dot status-dot-active"></span> Active';
+            btn.setAttribute('title', 'Suspend');
+            btn.innerHTML = '<i class="fas fa-ban"></i>';
+        }
+    }
+
+    // Delete User
+    function deleteUser(row) {
+        const name = row.querySelector('strong').textContent;
+        if (confirm(`Permanently delete user "${name}"? This cannot be undone.`)) {
+            row.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+            row.style.opacity = '0';
+            row.style.transform = 'translateX(30px)';
+            setTimeout(() => row.remove(), 400);
+        }
+    }
     </script>
 </body>
 </html>
