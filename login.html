@@ -121,10 +121,58 @@
             if (input.type === 'password') { input.type = 'text'; icon.className = 'fas fa-eye-slash'; }
             else { input.type = 'password'; icon.className = 'fas fa-eye'; }
         }
+<<<<<<< HEAD
 
         function handleSocialLogin() {
             // Social login placeholder - submit the form
             document.getElementById('login-form').submit();
+=======
+        function handleLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('login-submit');
+            const form = document.getElementById('login-form');
+            const email = form.querySelector('input[type="email"]').value;
+            const password = form.querySelector('input[type="password"]').value;
+
+            // Remove old error
+            const oldErr = form.querySelector('.auth-error');
+            if (oldErr) oldErr.remove();
+
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            btn.disabled = true;
+
+            fetch('/wasla/api/login.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password, role: selectedRole })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    btn.innerHTML = '<i class="fas fa-check"></i> Success!';
+                    btn.style.background = 'var(--accent)';
+                    setTimeout(() => { window.location.href = data.redirect; }, 600);
+                } else {
+                    btn.innerHTML = '<i class="fas fa-arrow-right"></i> Log In';
+                    btn.disabled = false;
+                    const errDiv = document.createElement('div');
+                    errDiv.className = 'auth-error';
+                    errDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + (data.error || 'Login failed');
+                    form.insertBefore(errDiv, form.firstChild);
+                }
+            })
+            .catch(() => {
+                btn.innerHTML = '<i class="fas fa-arrow-right"></i> Log In';
+                btn.disabled = false;
+                const errDiv = document.createElement('div');
+                errDiv.className = 'auth-error';
+                errDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> Connection error. Make sure XAMPP is running.';
+                form.insertBefore(errDiv, form.firstChild);
+            });
+        }
+        function handleSocialLogin() {
+            alert('Social login is not yet available. Please use email/password.');
+>>>>>>> f3066768cc65d7ff0e84510ab738b5033ef031d8
         }
     </script>
 </body>
