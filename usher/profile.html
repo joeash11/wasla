@@ -4,10 +4,326 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wasla - Usher Profile</title>
+    <meta name="description" content="View and manage your Wasla usher profile, skills, languages, and availability.">
     <link rel="stylesheet" href="../styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="../images/wasla-icon.png">
+    <style>
+        /* ===== EDIT PROFILE MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(10, 15, 26, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .modal-container {
+            background: #fff;
+            border-radius: 16px;
+            width: 95%;
+            max-width: 640px;
+            max-height: 88vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.1);
+            transform: translateY(30px) scale(0.96);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .modal-overlay.active .modal-container {
+            transform: translateY(0) scale(1);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 28px 0;
+            position: sticky;
+            top: 0;
+            background: #fff;
+            z-index: 10;
+            border-radius: 16px 16px 0 0;
+        }
+        .modal-header h2 {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modal-header h2 i {
+            color: var(--cyan);
+        }
+        .modal-close-btn {
+            width: 36px; height: 36px;
+            border: 1px solid var(--gray-300);
+            border-radius: 50%;
+            background: transparent;
+            color: var(--gray-600);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-close-btn:hover {
+            border-color: #e74c3c;
+            color: #e74c3c;
+            background: rgba(231,76,60,0.06);
+            transform: rotate(90deg);
+        }
+        .modal-body {
+            padding: 24px 28px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .edit-section {
+            background: var(--gray-50);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--gray-200);
+            transition: border-color 0.3s ease;
+        }
+        .edit-section:hover {
+            border-color: var(--cyan);
+        }
+        .edit-section-title {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .edit-section-title i {
+            color: var(--cyan);
+            font-size: 0.88rem;
+        }
+
+        /* Personal Info */
+        .edit-form-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .edit-form-row:last-child { margin-bottom: 0; }
+        .edit-form-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .edit-form-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .edit-form-input {
+            padding: 10px 14px;
+            border: 1.5px solid var(--gray-300);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            color: var(--primary);
+            background: #fff;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .edit-form-input:focus {
+            outline: none;
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 3px rgba(79,195,247,0.12);
+        }
+        textarea.edit-form-input {
+            resize: vertical;
+            min-height: 72px;
+        }
+
+        /* Skills / Language Tags */
+        .edit-tags-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 10px 12px;
+            border: 1.5px solid var(--gray-300);
+            border-radius: 8px;
+            background: #fff;
+            min-height: 44px;
+            align-items: center;
+            transition: border-color 0.3s ease;
+            cursor: text;
+        }
+        .edit-tags-wrap:focus-within {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 3px rgba(79,195,247,0.12);
+        }
+        .edit-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            background: linear-gradient(135deg, rgba(79,195,247,0.12), rgba(0,212,170,0.08));
+            color: var(--cyan-dark);
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            animation: scaleIn 0.25s ease-out;
+        }
+        .edit-tag .remove-tag {
+            cursor: pointer;
+            font-size: 0.7rem;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        .edit-tag .remove-tag:hover {
+            background: rgba(231,76,60,0.15);
+            color: #e74c3c;
+        }
+        .edit-tag-input {
+            border: none;
+            outline: none;
+            font-size: 0.88rem;
+            font-family: inherit;
+            color: var(--gray-800);
+            min-width: 100px;
+            flex: 1;
+            padding: 4px;
+            background: transparent;
+        }
+        .edit-tag-input::placeholder {
+            color: var(--gray-400);
+        }
+        .tag-hint {
+            font-size: 0.75rem;
+            color: var(--gray-400);
+            margin-top: 6px;
+        }
+
+        /* Availability Toggle */
+        .edit-avail-grid {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .edit-avail-day {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            user-select: none;
+        }
+        .edit-avail-day.available {
+            background: rgba(0,212,170,0.15);
+            color: #059669;
+            border-color: rgba(0,212,170,0.3);
+        }
+        .edit-avail-day.available:hover {
+            background: rgba(0,212,170,0.25);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,212,170,0.2);
+        }
+        .edit-avail-day.unavailable {
+            background: rgba(231,76,60,0.08);
+            color: #e74c3c;
+            border-color: rgba(231,76,60,0.2);
+        }
+        .edit-avail-day.unavailable:hover {
+            background: rgba(231,76,60,0.15);
+            transform: translateY(-2px);
+        }
+
+        /* Modal Footer */
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding-top: 8px;
+        }
+        .btn-modal-cancel {
+            padding: 11px 24px;
+            background: transparent;
+            border: 1.5px solid var(--gray-300);
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .btn-modal-cancel:hover {
+            border-color: var(--gray-400);
+            color: var(--primary);
+        }
+        .btn-modal-save {
+            padding: 11px 28px;
+            background: linear-gradient(135deg, var(--cyan-dark), var(--cyan));
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-modal-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(79,195,247,0.35);
+        }
+
+        /* Save Success Toast */
+        .save-toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 30px rgba(16,185,129,0.35);
+            z-index: 3000;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .save-toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar"><div class="navbar-left">
@@ -32,11 +348,11 @@
                 <div class="profile-header-body">
                     <div class="profile-large-avatar"><i class="fas fa-user-circle"></i></div>
                     <div class="profile-header-info">
-                        <h2 class="profile-full-name">Ahmed Mohamed</h2>
-                        <p class="profile-role"><i class="fas fa-id-badge"></i> Professional Usher</p>
-                        <p class="profile-location-text"><i class="fas fa-map-marker-alt"></i> Riyadh, Saudi Arabia</p>
+                        <h2 class="profile-full-name" id="display-name">Ahmed Mohamed</h2>
+                        <p class="profile-role"><i class="fas fa-id-badge"></i> <span id="display-role">Professional Usher</span></p>
+                        <p class="profile-location-text"><i class="fas fa-map-marker-alt"></i> <span id="display-location">Riyadh, Saudi Arabia</span></p>
                     </div>
-                    <button class="btn-edit-profile">Edit Profile</button>
+                    <button class="btn-edit-profile" id="btn-edit-profile" onclick="openEditModal()"><i class="fas fa-pen"></i> Edit Profile</button>
                 </div>
             </div>
             <!-- Stats -->
@@ -50,10 +366,10 @@
                 <!-- Skills & Availability -->
                 <div class="profile-card">
                     <h3 class="profile-card-title"><i class="fas fa-star"></i> Skills & Languages</h3>
-                    <div class="card-tags" style="margin-bottom:16px"><span class="card-tag">Customer Service</span><span class="card-tag">VIP Handling</span><span class="card-tag">Registration</span><span class="card-tag">Crowd Management</span></div>
-                    <div class="card-tags"><span class="card-tag">Arabic (Native)</span><span class="card-tag">English (Fluent)</span></div>
+                    <div class="card-tags" id="display-skills" style="margin-bottom:16px"><span class="card-tag">Customer Service</span><span class="card-tag">VIP Handling</span><span class="card-tag">Registration</span><span class="card-tag">Crowd Management</span></div>
+                    <div class="card-tags" id="display-languages"><span class="card-tag">Arabic (Native)</span><span class="card-tag">English (Fluent)</span></div>
                     <h3 class="profile-card-title" style="margin-top:20px"><i class="fas fa-calendar"></i> Availability</h3>
-                    <div class="availability-grid">
+                    <div class="availability-grid" id="display-availability">
                         <span class="avail-day avail-on">Sun</span><span class="avail-day avail-on">Mon</span><span class="avail-day avail-on">Tue</span><span class="avail-day avail-off">Wed</span><span class="avail-day avail-on">Thu</span><span class="avail-day avail-on">Fri</span><span class="avail-day avail-on">Sat</span>
                     </div>
                 </div>
@@ -70,5 +386,248 @@
         </main>
     </div>
     <footer class="footer"><div class="footer-left"><h3>Wasla</h3><p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p></div><div class="footer-links"><a href="../terms.html">TERMS OF SERVICE</a><a href="../privacy.html">PRIVACY POLICY</a><a href="../contact.html">CONTACT US</a></div></footer>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal-overlay" id="edit-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-edit"></i> Edit Profile</h2>
+                <button class="modal-close-btn" onclick="closeEditModal()" id="btn-close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <!-- Personal Info -->
+                <div class="edit-section">
+                    <div class="edit-section-title"><i class="fas fa-user"></i> Personal Information</div>
+                    <div class="edit-form-row">
+                        <div class="edit-form-group">
+                            <label class="edit-form-label">First Name</label>
+                            <input type="text" class="edit-form-input" id="edit-fname" value="Ahmed">
+                        </div>
+                        <div class="edit-form-group">
+                            <label class="edit-form-label">Last Name</label>
+                            <input type="text" class="edit-form-input" id="edit-lname" value="Mohamed">
+                        </div>
+                    </div>
+                    <div class="edit-form-row">
+                        <div class="edit-form-group">
+                            <label class="edit-form-label">Role / Title</label>
+                            <input type="text" class="edit-form-input" id="edit-role" value="Professional Usher">
+                        </div>
+                        <div class="edit-form-group">
+                            <label class="edit-form-label">Location</label>
+                            <input type="text" class="edit-form-input" id="edit-location" value="Riyadh, Saudi Arabia">
+                        </div>
+                    </div>
+                    <div class="edit-form-row">
+                        <div class="edit-form-group">
+                            <label class="edit-form-label">Bio</label>
+                            <textarea class="edit-form-input" id="edit-bio" placeholder="Tell clients about yourself...">Experienced professional usher specializing in VIP handling, gaming events, and corporate summits. Passionate about delivering outstanding guest experiences.</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills -->
+                <div class="edit-section">
+                    <div class="edit-section-title"><i class="fas fa-star"></i> Skills</div>
+                    <div class="edit-tags-wrap" id="skills-tags" onclick="document.getElementById('skill-input').focus()">
+                        <span class="edit-tag">Customer Service <span class="remove-tag" onclick="removeTag(this, event)"><i class="fas fa-times"></i></span></span>
+                        <span class="edit-tag">VIP Handling <span class="remove-tag" onclick="removeTag(this, event)"><i class="fas fa-times"></i></span></span>
+                        <span class="edit-tag">Registration <span class="remove-tag" onclick="removeTag(this, event)"><i class="fas fa-times"></i></span></span>
+                        <span class="edit-tag">Crowd Management <span class="remove-tag" onclick="removeTag(this, event)"><i class="fas fa-times"></i></span></span>
+                        <input type="text" class="edit-tag-input" id="skill-input" placeholder="Type a skill & press Enter">
+                    </div>
+                    <p class="tag-hint">Press Enter to add a new skill</p>
+                </div>
+
+                <!-- Languages -->
+                <div class="edit-section">
+                    <div class="edit-section-title"><i class="fas fa-globe"></i> Languages</div>
+                    <div class="edit-tags-wrap" id="lang-tags" onclick="document.getElementById('lang-input').focus()">
+                        <span class="edit-tag">Arabic (Native) <span class="remove-tag" onclick="removeTag(this, event)"><i class="fas fa-times"></i></span></span>
+                        <span class="edit-tag">English (Fluent) <span class="remove-tag" onclick="removeTag(this, event)"><i class="fas fa-times"></i></span></span>
+                        <input type="text" class="edit-tag-input" id="lang-input" placeholder="Type a language & press Enter">
+                    </div>
+                    <p class="tag-hint">Press Enter to add a new language (e.g., "French (Basic)")</p>
+                </div>
+
+                <!-- Availability -->
+                <div class="edit-section">
+                    <div class="edit-section-title"><i class="fas fa-calendar-alt"></i> Availability</div>
+                    <p style="font-size: 0.82rem; color: var(--gray-600); margin-bottom: 12px;">Click a day to toggle your availability</p>
+                    <div class="edit-avail-grid" id="edit-availability">
+                        <div class="edit-avail-day available" data-day="Sun" onclick="toggleDay(this)">Sun</div>
+                        <div class="edit-avail-day available" data-day="Mon" onclick="toggleDay(this)">Mon</div>
+                        <div class="edit-avail-day available" data-day="Tue" onclick="toggleDay(this)">Tue</div>
+                        <div class="edit-avail-day unavailable" data-day="Wed" onclick="toggleDay(this)">Wed</div>
+                        <div class="edit-avail-day available" data-day="Thu" onclick="toggleDay(this)">Thu</div>
+                        <div class="edit-avail-day available" data-day="Fri" onclick="toggleDay(this)">Fri</div>
+                        <div class="edit-avail-day available" data-day="Sat" onclick="toggleDay(this)">Sat</div>
+                    </div>
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button class="btn-modal-cancel" onclick="closeEditModal()">Cancel</button>
+                    <button class="btn-modal-save" onclick="saveProfile()" id="btn-save-profile"><i class="fas fa-check"></i> Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="save-toast" id="save-toast"><i class="fas fa-check-circle"></i> Profile updated successfully!</div>
+
+    <script>
+    // ===== EDIT MODAL =====
+    function openEditModal() {
+        document.getElementById('edit-modal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeEditModal() {
+        document.getElementById('edit-modal').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    // Close on overlay click
+    document.getElementById('edit-modal').addEventListener('click', function(e) {
+        if (e.target === this) closeEditModal();
+    });
+    // Close on Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeEditModal();
+    });
+
+    // ===== TAG MANAGEMENT =====
+    function removeTag(el, evt) {
+        evt.stopPropagation();
+        const tag = el.parentElement;
+        tag.style.transform = 'scale(0)';
+        tag.style.opacity = '0';
+        setTimeout(() => tag.remove(), 200);
+    }
+
+    function addTag(containerId, inputId) {
+        const input = document.getElementById(inputId);
+        const container = document.getElementById(containerId);
+        const value = input.value.trim();
+        if (!value) return;
+
+        // Check for duplicate
+        const existing = container.querySelectorAll('.edit-tag');
+        for (let tag of existing) {
+            if (tag.textContent.trim().toLowerCase().replace('×','').trim() === value.toLowerCase()) {
+                input.value = '';
+                return;
+            }
+        }
+
+        const tag = document.createElement('span');
+        tag.className = 'edit-tag';
+        tag.innerHTML = `${value} <span class="remove-tag" onclick="removeTag(this, event)"><i class="fas fa-times"></i></span>`;
+        container.insertBefore(tag, input);
+        input.value = '';
+    }
+
+    document.getElementById('skill-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addTag('skills-tags', 'skill-input');
+        }
+        if (e.key === 'Backspace' && !this.value) {
+            const tags = this.parentElement.querySelectorAll('.edit-tag');
+            if (tags.length) {
+                const last = tags[tags.length - 1];
+                last.style.transform = 'scale(0)';
+                last.style.opacity = '0';
+                setTimeout(() => last.remove(), 200);
+            }
+        }
+    });
+
+    document.getElementById('lang-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            addTag('lang-tags', 'lang-input');
+        }
+        if (e.key === 'Backspace' && !this.value) {
+            const tags = this.parentElement.querySelectorAll('.edit-tag');
+            if (tags.length) {
+                const last = tags[tags.length - 1];
+                last.style.transform = 'scale(0)';
+                last.style.opacity = '0';
+                setTimeout(() => last.remove(), 200);
+            }
+        }
+    });
+
+    // ===== AVAILABILITY TOGGLE =====
+    function toggleDay(el) {
+        if (el.classList.contains('available')) {
+            el.classList.remove('available');
+            el.classList.add('unavailable');
+        } else {
+            el.classList.remove('unavailable');
+            el.classList.add('available');
+        }
+        // Add a little bounce
+        el.style.transform = 'scale(0.85)';
+        setTimeout(() => { el.style.transform = ''; }, 150);
+    }
+
+    // ===== SAVE PROFILE =====
+    function saveProfile() {
+        const fname = document.getElementById('edit-fname').value.trim();
+        const lname = document.getElementById('edit-lname').value.trim();
+        const role = document.getElementById('edit-role').value.trim();
+        const location = document.getElementById('edit-location').value.trim();
+
+        // Update display
+        if (fname || lname) {
+            document.getElementById('display-name').textContent = `${fname} ${lname}`;
+        }
+        if (role) {
+            document.getElementById('display-role').textContent = role;
+        }
+        if (location) {
+            document.getElementById('display-location').textContent = location;
+        }
+
+        // Update skills display
+        const skillTags = document.getElementById('skills-tags').querySelectorAll('.edit-tag');
+        const skillsDisplay = document.getElementById('display-skills');
+        skillsDisplay.innerHTML = '';
+        skillTags.forEach(tag => {
+            const text = tag.childNodes[0].textContent.trim();
+            skillsDisplay.innerHTML += `<span class="card-tag">${text}</span>`;
+        });
+
+        // Update languages display
+        const langTags = document.getElementById('lang-tags').querySelectorAll('.edit-tag');
+        const langsDisplay = document.getElementById('display-languages');
+        langsDisplay.innerHTML = '';
+        langTags.forEach(tag => {
+            const text = tag.childNodes[0].textContent.trim();
+            langsDisplay.innerHTML += `<span class="card-tag">${text}</span>`;
+        });
+
+        // Update availability display
+        const availDays = document.querySelectorAll('#edit-availability .edit-avail-day');
+        const availDisplay = document.getElementById('display-availability');
+        availDisplay.innerHTML = '';
+        availDays.forEach(day => {
+            const isOn = day.classList.contains('available');
+            availDisplay.innerHTML += `<span class="avail-day ${isOn ? 'avail-on' : 'avail-off'}">${day.dataset.day}</span>`;
+        });
+
+        // Close modal and show toast
+        closeEditModal();
+        showToast();
+    }
+
+    function showToast() {
+        const toast = document.getElementById('save-toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+    </script>
 </body>
 </html>
