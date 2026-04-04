@@ -8,13 +8,14 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="images/wasla-icon.png">
 </head>
 <body class="auth-body">
     <div class="auth-wrapper">
         <div class="auth-left">
             <div class="auth-left-content">
                 <a href="landing.html" class="logo">
-                    <svg class="logo-icon" viewBox="0 0 40 40" width="44" height="44"><circle cx="20" cy="20" r="18" fill="#4fc3f7"/><text x="20" y="26" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" font-family="Inter">W</text></svg>
+                    <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="48" height="48">
                     <span class="logo-text" style="color:#fff;font-size:1.6rem">Wasla</span>
                 </a>
                 <h1 class="auth-hero-title">Connect Events<br>With <span class="hero-gradient-text">Top Talent</span></h1>
@@ -30,13 +31,13 @@
             <div class="auth-form-container">
                 <h2 class="auth-form-title">Welcome Back</h2>
                 <p class="auth-form-subtitle">Log in to your account to continue</p>
-                <!-- Role Selector -->
-                <div class="auth-role-selector">
-                    <button class="auth-role-btn active" data-role="client" onclick="selectRole(this)"><i class="fas fa-briefcase"></i> Client</button>
-                    <button class="auth-role-btn" data-role="usher" onclick="selectRole(this)"><i class="fas fa-id-badge"></i> Usher</button>
-                    <button class="auth-role-btn" data-role="admin" onclick="selectRole(this)"><i class="fas fa-shield-alt"></i> Admin</button>
+                <!-- Role Slide Toggle -->
+                <div class="auth-slide-toggle" id="role-toggle">
+                    <span class="toggle-option active" data-role="client" onclick="selectRole(this)">Client</span>
+                    <span class="toggle-option" data-role="usher" onclick="selectRole(this)">Usher</span>
+                    <div class="toggle-knob"></div>
                 </div>
-                <form class="auth-form" id="login-form" onsubmit="return false">
+                <form class="auth-form" id="login-form" onsubmit="handleLogin(event)">
                     <div class="form-group">
                         <label class="form-label">Email Address</label>
                         <div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" class="form-input auth-input" placeholder="Enter your email" required></div>
@@ -49,12 +50,12 @@
                         <label class="auth-remember"><input type="checkbox" checked> Remember me</label>
                         <a href="#" class="auth-forgot">Forgot password?</a>
                     </div>
-                    <button type="submit" class="btn-auth-submit" id="login-submit" onclick="handleLogin()"><i class="fas fa-arrow-right"></i> Log In</button>
+                    <button type="submit" class="btn-auth-submit" id="login-submit"><i class="fas fa-arrow-right"></i> Log In</button>
                 </form>
                 <div class="auth-divider"><span>or continue with</span></div>
                 <div class="auth-social-row">
-                    <button class="auth-social-btn" onclick="handleLogin()"><i class="fab fa-google"></i> Google</button>
-                    <button class="auth-social-btn" onclick="handleLogin()"><i class="fab fa-apple"></i> Apple</button>
+                    <button class="auth-social-btn" onclick="handleSocialLogin()"><i class="fab fa-google"></i> Google</button>
+                    <button class="auth-social-btn" onclick="handleSocialLogin()"><i class="fab fa-apple"></i> Apple</button>
                 </div>
                 <p class="auth-switch">Don't have an account? <a href="signup.html">Sign up</a></p>
             </div>
@@ -62,10 +63,16 @@
     </div>
     <script>
         let selectedRole = 'client';
-        function selectRole(btn) {
-            document.querySelectorAll('.auth-role-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            selectedRole = btn.dataset.role;
+        function selectRole(option) {
+            document.querySelectorAll('.toggle-option').forEach(o => o.classList.remove('active'));
+            option.classList.add('active');
+            selectedRole = option.dataset.role;
+            const knob = document.querySelector('.toggle-knob');
+            if (selectedRole === 'usher') {
+                knob.style.transform = 'translateX(100%)';
+            } else {
+                knob.style.transform = 'translateX(0)';
+            }
         }
         function togglePassword(id, btn) {
             const input = document.getElementById(id);
@@ -73,14 +80,22 @@
             if (input.type === 'password') { input.type = 'text'; icon.className = 'fas fa-eye-slash'; }
             else { input.type = 'password'; icon.className = 'fas fa-eye'; }
         }
-        function handleLogin() {
+        function redirectByRole() {
+            if (selectedRole === 'client') window.location.href = 'index.html';
+            else if (selectedRole === 'usher') window.location.href = 'usher/dashboard.html';
+        }
+        function handleLogin(e) {
+            e.preventDefault();
             const btn = document.getElementById('login-submit');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
-            setTimeout(() => {
-                if (selectedRole === 'client') window.location.href = 'index.html';
-                else if (selectedRole === 'usher') window.location.href = 'usher/dashboard.html';
-                else if (selectedRole === 'admin') window.location.href = 'admin/dashboard.html';
-            }, 1200);
+            btn.disabled = true;
+            setTimeout(redirectByRole, 1200);
+        }
+        function handleSocialLogin() {
+            const btn = document.getElementById('login-submit');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            btn.disabled = true;
+            setTimeout(redirectByRole, 1200);
         }
     </script>
 </body>

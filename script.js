@@ -161,6 +161,7 @@ function animateOnScroll() {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('animate-fade-in-up');
+                    entry.target.classList.add('animated');
                     observer.unobserve(entry.target);
                 }
             });
@@ -168,8 +169,8 @@ function animateOnScroll() {
         { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
     );
 
-    // Observe sections
-    const sections = document.querySelectorAll('.filters-row, .projects-section, .footer');
+    // Observe sections and animate-on-scroll elements
+    const sections = document.querySelectorAll('.filters-row, .projects-section, .footer, .animate-on-scroll, .feature-card, .step-card, .testimonial-card, .dashboard-panel, .settings-card, .help-section, .gig-card');
     sections.forEach(section => observer.observe(section));
 }
 

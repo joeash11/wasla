@@ -8,13 +8,14 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="images/wasla-icon.png">
 </head>
 <body class="auth-body">
     <div class="auth-wrapper">
         <div class="auth-left">
             <div class="auth-left-content">
                 <a href="landing.html" class="logo">
-                    <svg class="logo-icon" viewBox="0 0 40 40" width="44" height="44"><circle cx="20" cy="20" r="18" fill="#4fc3f7"/><text x="20" y="26" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" font-family="Inter">W</text></svg>
+                    <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="48" height="48">
                     <span class="logo-text" style="color:#fff;font-size:1.6rem">Wasla</span>
                 </a>
                 <h1 class="auth-hero-title">Join the Future<br>of <span class="hero-gradient-text">Event Staffing</span></h1>
@@ -30,13 +31,14 @@
             <div class="auth-form-container">
                 <h2 class="auth-form-title">Create Your Account</h2>
                 <p class="auth-form-subtitle">Select your role and get started</p>
-                <!-- Role Selector -->
-                <div class="auth-role-selector">
-                    <button class="auth-role-btn active" data-role="client" onclick="switchSignupRole(this)"><i class="fas fa-briefcase"></i> Client</button>
-                    <button class="auth-role-btn" data-role="usher" onclick="switchSignupRole(this)"><i class="fas fa-id-badge"></i> Usher</button>
+                <!-- Role Slide Toggle -->
+                <div class="auth-slide-toggle" id="role-toggle">
+                    <span class="toggle-option active" data-role="client" onclick="switchSignupRole(this)">Client</span>
+                    <span class="toggle-option" data-role="usher" onclick="switchSignupRole(this)">Usher</span>
+                    <div class="toggle-knob"></div>
                 </div>
                 <!-- Client Signup -->
-                <form class="auth-form" id="signup-client" onsubmit="return false">
+                <form class="auth-form" id="signup-client" onsubmit="handleSignup(event, 'client')">
                     <div class="form-row">
                         <div class="form-group"><label class="form-label">First Name</label><div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" class="form-input auth-input" placeholder="Abdullah" required></div></div>
                         <div class="form-group"><label class="form-label">Last Name</label><div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" class="form-input auth-input" placeholder="Elsayed" required></div></div>
@@ -46,10 +48,10 @@
                     <div class="form-group"><label class="form-label">Phone Number</label><div class="auth-input-wrap"><i class="fas fa-phone"></i><input type="tel" class="form-input auth-input" placeholder="+966 5XX XXX XXXX" required></div></div>
                     <div class="form-group"><label class="form-label">Password</label><div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" class="form-input auth-input" id="signup-pass-client" placeholder="Min 8 characters" required><button type="button" class="auth-eye-btn" onclick="togglePassword('signup-pass-client',this)"><i class="fas fa-eye"></i></button></div></div>
                     <label class="auth-terms-check"><input type="checkbox" required> I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></label>
-                    <button type="submit" class="btn-auth-submit" onclick="handleSignup('client')"><i class="fas fa-rocket"></i> Create Client Account</button>
+                    <button type="submit" class="btn-auth-submit"><i class="fas fa-rocket"></i> Create Client Account</button>
                 </form>
                 <!-- Usher Signup -->
-                <form class="auth-form" id="signup-usher" style="display:none" onsubmit="return false">
+                <form class="auth-form" id="signup-usher" style="display:none" onsubmit="handleSignup(event, 'usher')">
                     <div class="form-row">
                         <div class="form-group"><label class="form-label">First Name</label><div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" class="form-input auth-input" placeholder="Ahmed" required></div></div>
                         <div class="form-group"><label class="form-label">Last Name</label><div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" class="form-input auth-input" placeholder="Mohamed" required></div></div>
@@ -64,38 +66,56 @@
                     <div class="form-group"><label class="form-label">Skills</label><div class="auth-input-wrap"><i class="fas fa-star"></i><input type="text" class="form-input auth-input" placeholder="e.g. Customer Service, Bilingual, VIP Handling"></div></div>
                     <div class="form-group"><label class="form-label">Password</label><div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" class="form-input auth-input" id="signup-pass-usher" placeholder="Min 8 characters" required><button type="button" class="auth-eye-btn" onclick="togglePassword('signup-pass-usher',this)"><i class="fas fa-eye"></i></button></div></div>
                     <label class="auth-terms-check"><input type="checkbox" required> I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></label>
-                    <button type="submit" class="btn-auth-submit btn-auth-usher" onclick="handleSignup('usher')"><i class="fas fa-id-badge"></i> Create Usher Account</button>
+                    <button type="submit" class="btn-auth-submit btn-auth-usher"><i class="fas fa-id-badge"></i> Create Usher Account</button>
                 </form>
                 <div class="auth-divider"><span>or sign up with</span></div>
                 <div class="auth-social-row">
-                    <button class="auth-social-btn"><i class="fab fa-google"></i> Google</button>
-                    <button class="auth-social-btn"><i class="fab fa-apple"></i> Apple</button>
+                    <button class="auth-social-btn" onclick="handleSocialSignup()"><i class="fab fa-google"></i> Google</button>
+                    <button class="auth-social-btn" onclick="handleSocialSignup()"><i class="fab fa-apple"></i> Apple</button>
                 </div>
                 <p class="auth-switch">Already have an account? <a href="login.html">Log in</a></p>
             </div>
         </div>
     </div>
     <script>
+        let selectedRole = 'client';
         function togglePassword(id, btn) {
             const input = document.getElementById(id);
             const icon = btn.querySelector('i');
             if (input.type === 'password') { input.type = 'text'; icon.className = 'fas fa-eye-slash'; }
             else { input.type = 'password'; icon.className = 'fas fa-eye'; }
         }
-        function switchSignupRole(btn) {
-            document.querySelectorAll('.auth-role-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const role = btn.dataset.role;
-            document.getElementById('signup-client').style.display = role === 'client' ? '' : 'none';
-            document.getElementById('signup-usher').style.display = role === 'usher' ? '' : 'none';
+        function switchSignupRole(option) {
+            document.querySelectorAll('.toggle-option').forEach(o => o.classList.remove('active'));
+            option.classList.add('active');
+            selectedRole = option.dataset.role;
+            const knob = document.querySelector('.toggle-knob');
+            if (selectedRole === 'usher') {
+                knob.style.transform = 'translateX(100%)';
+            } else {
+                knob.style.transform = 'translateX(0)';
+            }
+            document.getElementById('signup-client').style.display = selectedRole === 'client' ? '' : 'none';
+            document.getElementById('signup-usher').style.display = selectedRole === 'usher' ? '' : 'none';
         }
-        function handleSignup(role) {
-            const btn = event.target.closest('.btn-auth-submit');
+        function redirectByRole(role) {
+            if (role === 'client') window.location.href = 'index.html';
+            else window.location.href = 'usher/dashboard.html';
+        }
+        function handleSignup(e, role) {
+            e.preventDefault();
+            const btn = e.target.querySelector('.btn-auth-submit');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
-            setTimeout(() => {
-                if (role === 'client') window.location.href = 'index.html';
-                else window.location.href = 'usher/dashboard.html';
-            }, 1500);
+            btn.disabled = true;
+            setTimeout(() => redirectByRole(role), 1500);
+        }
+        function handleSocialSignup() {
+            const btn = document.querySelector('#signup-' + selectedRole + ' .btn-auth-submit');
+            if (btn) {
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
+                btn.disabled = true;
+            }
+            setTimeout(() => redirectByRole(selectedRole), 1200);
         }
     </script>
 </body>

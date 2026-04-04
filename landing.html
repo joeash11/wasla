@@ -8,12 +8,13 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="icon" type="image/png" href="images/wasla-icon.png">
 </head>
 <body class="landing-body">
     <!-- Landing Navbar -->
     <nav class="landing-nav">
         <a href="landing.html" class="logo">
-            <svg class="logo-icon" viewBox="0 0 40 40" width="36" height="36"><circle cx="20" cy="20" r="18" fill="#4fc3f7"/><text x="20" y="26" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" font-family="Inter">W</text></svg>
+            <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36">
             <span class="logo-text">Wasla</span>
         </a>
         <div class="landing-nav-links">
@@ -23,8 +24,8 @@
             <a href="contact.html">Contact</a>
         </div>
         <div class="landing-nav-actions">
-            <a href="index.html" class="btn-landing-login">Log In</a>
-            <a href="index.html" class="btn-landing-signup">Get Started</a>
+            <a href="login.html" class="btn-landing-login">Log In</a>
+            <a href="signup.html" class="btn-landing-signup">Get Started</a>
         </div>
     </nav>
 
@@ -40,7 +41,7 @@
             <h1 class="hero-title">Connect Your Events<br>With <span class="hero-gradient-text">Top Talent</span></h1>
             <p class="hero-subtitle">Wasla bridges the gap between event managers and professional ushers. Find, hire, and manage event staff seamlessly — all in one powerful platform.</p>
             <div class="hero-actions">
-                <a href="index.html" class="btn-hero-primary"><i class="fas fa-rocket"></i> Start For Free</a>
+                <a href="signup.html" class="btn-hero-primary"><i class="fas fa-rocket"></i> Start For Free</a>
                 <a href="#how-it-works" class="btn-hero-secondary"><i class="fas fa-play-circle"></i> See How It Works</a>
             </div>
             <div class="hero-stats-row">
@@ -62,7 +63,7 @@
                 <p class="landing-section-desc">From project setup to team coordination, Wasla provides a complete suite of tools.</p>
             </div>
             <div class="features-grid">
-                <div class="feature-card">
+                <div class="feature-card animate-on-scroll stagger-1">
                     <div class="feature-icon"><i class="fas fa-project-diagram"></i></div>
                     <h3>Project Management</h3>
                     <p>Create, organize, and track your events with an intuitive dashboard that keeps everything on schedule.</p>
@@ -166,7 +167,7 @@
         <div class="landing-container">
             <h2 class="cta-title">Ready to Elevate Your Events?</h2>
             <p class="cta-desc">Join thousands of event managers who trust Wasla to deliver exceptional results.</p>
-            <a href="index.html" class="btn-hero-primary btn-cta"><i class="fas fa-arrow-right"></i> Get Started Today</a>
+            <a href="signup.html" class="btn-hero-primary btn-cta"><i class="fas fa-arrow-right"></i> Get Started Today</a>
         </div>
     </section>
 
@@ -176,7 +177,7 @@
             <div class="landing-footer-grid">
                 <div class="landing-footer-brand">
                     <div class="logo" style="margin-bottom:12px">
-                        <svg class="logo-icon" viewBox="0 0 40 40" width="32" height="32"><circle cx="20" cy="20" r="18" fill="#4fc3f7"/><text x="20" y="26" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" font-family="Inter">W</text></svg>
+                        <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="32" height="32">
                         <span class="logo-text" style="color:#fff">Wasla</span>
                     </div>
                     <p class="landing-footer-desc">The leading platform connecting event managers with professional talent across the MENA region.</p>
@@ -218,5 +219,41 @@
             </div>
         </div>
     </footer>
+    <script>
+        // Scroll Reveal Animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animated');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+            document.querySelectorAll('.animate-on-scroll, .feature-card, .step-card, .testimonial-card').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Counter animation for hero stats
+            const statNums = document.querySelectorAll('.hero-stat-number');
+            statNums.forEach(el => {
+                const text = el.textContent;
+                const num = parseInt(text.replace(/[^0-9]/g, ''));
+                const suffix = text.replace(/[0-9,]/g, '');
+                let current = 0;
+                const step = Math.ceil(num / 60);
+                const timer = setInterval(() => {
+                    current += step;
+                    if (current >= num) {
+                        el.textContent = text;
+                        clearInterval(timer);
+                    } else {
+                        el.textContent = current.toLocaleString() + suffix;
+                    }
+                }, 25);
+            });
+        });
+    </script>
 </body>
 </html>
