@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wasla - Settings</title>
+    <meta name="description" content="Manage your Wasla account settings.">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="navbar-left">
+            <a href="index.html" class="logo">
+                <svg class="logo-icon" viewBox="0 0 40 40" width="36" height="36"><circle cx="20" cy="20" r="18" fill="#4fc3f7"/><text x="20" y="26" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" font-family="Inter">W</text></svg>
+                <span class="logo-text">Wasla</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="projects.html">My Projects</a></li>
+                <li><a href="profile.html">Profile</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <span class="welcome-text">Welcome Abdullah</span>
+            <a href="profile.html" class="user-avatar-small"><i class="fas fa-user-circle"></i></a>
+            <a href="create-project.html" class="btn-create">Create Project</a>
+        </div>
+    </nav>
+    <div class="main-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-profile">
+                <a href="profile.html" class="profile-avatar"><i class="fas fa-user-circle"></i></a>
+                <h3 class="profile-name">Abdullah<br>Elsayed</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="sidebar-link"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                <a href="projects.html" class="sidebar-link"><i class="fas fa-file-alt"></i><span>My Projects</span></a>
+                <a href="messages.html" class="sidebar-link"><i class="fas fa-envelope"></i><span>Messages</span></a>
+                <a href="settings.html" class="sidebar-link active"><i class="fas fa-cog"></i><span>Settings</span></a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="help.html" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a>
+                <button class="btn-logout" onclick="window.location.href='landing.html'">Log Out</button>
+            </div>
+        </aside>
+        <main class="content" id="main-content">
+            <h1 class="section-title">Settings</h1>
+            <div class="settings-page">
+                <div class="settings-tabs">
+                    <button class="settings-tab active" data-tab="account" onclick="switchSettingsTab('account')"><i class="fas fa-user-cog"></i> Account</button>
+                    <button class="settings-tab" data-tab="notifications" onclick="switchSettingsTab('notifications')"><i class="fas fa-bell"></i> Notifications</button>
+                    <button class="settings-tab" data-tab="privacy" onclick="switchSettingsTab('privacy')"><i class="fas fa-shield-alt"></i> Privacy</button>
+                    <button class="settings-tab" data-tab="appearance" onclick="switchSettingsTab('appearance')"><i class="fas fa-palette"></i> Appearance</button>
+                </div>
+                <div class="settings-panel active" id="panel-account">
+                    <div class="settings-card">
+                        <h2 class="settings-card-title">Account Information</h2>
+                        <div class="settings-form">
+                            <div class="form-row"><div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input" value="Abdullah"></div><div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input" value="Elsayed"></div></div>
+                            <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" value="abdullah.elsayed@wasla.com"></div>
+                            <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" value="+966 55 123 4567"></div>
+                            <button class="btn-save">Save Changes</button>
+                        </div>
+                    </div>
+                    <div class="settings-card">
+                        <h2 class="settings-card-title">Change Password</h2>
+                        <div class="settings-form">
+                            <div class="form-group"><label class="form-label">Current Password</label><input type="password" class="form-input" placeholder="Enter current password"></div>
+                            <div class="form-row"><div class="form-group"><label class="form-label">New Password</label><input type="password" class="form-input" placeholder="New password"></div><div class="form-group"><label class="form-label">Confirm</label><input type="password" class="form-input" placeholder="Confirm"></div></div>
+                            <button class="btn-save">Update Password</button>
+                        </div>
+                    </div>
+                    <div class="settings-card settings-card-danger">
+                        <h2 class="settings-card-title"><i class="fas fa-exclamation-triangle"></i> Danger Zone</h2>
+                        <p class="settings-danger-text">Once you delete your account, there is no going back.</p>
+                        <button class="btn-danger">Delete Account</button>
+                    </div>
+                </div>
+                <div class="settings-panel" id="panel-notifications">
+                    <div class="settings-card">
+                        <h2 class="settings-card-title">Email Notifications</h2>
+                        <div class="settings-toggle-list">
+                            <div class="settings-toggle-row"><div><h4 class="toggle-title">Project Updates</h4><p class="toggle-desc">Receive emails when projects are updated</p></div><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+                            <div class="settings-toggle-row"><div><h4 class="toggle-title">New Messages</h4><p class="toggle-desc">Get notified for new messages</p></div><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+                            <div class="settings-toggle-row"><div><h4 class="toggle-title">Usher Applications</h4><p class="toggle-desc">Alerts when ushers apply</p></div><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+                            <div class="settings-toggle-row"><div><h4 class="toggle-title">Marketing</h4><p class="toggle-desc">Promotional content</p></div><label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+                        </div>
+                    </div>
+                    <div class="settings-card">
+                        <h2 class="settings-card-title">Push Notifications</h2>
+                        <div class="settings-toggle-list">
+                            <div class="settings-toggle-row"><div><h4 class="toggle-title">Desktop Notifications</h4><p class="toggle-desc">Show browser notifications</p></div><label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+                            <div class="settings-toggle-row"><div><h4 class="toggle-title">Sound Alerts</h4><p class="toggle-desc">Play sound on new notifications</p></div><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-panel" id="panel-privacy">
+                    <div class="settings-card">
+                        <h2 class="settings-card-title">Privacy</h2>
+                        <div class="settings-toggle-list">
+                            <div class="settings-toggle-row"><div><h4 class="toggle-title">Profile Visibility</h4><p class="toggle-desc">Allow others to see your profile</p></div><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+                            <div class="settings-toggle-row"><div><h4 class="toggle-title">Show Email</h4><p class="toggle-desc">Display email publicly</p></div><label class="toggle-switch"><input type="checkbox"><span class="toggle-slider"></span></label></div>
+                            <div class="settings-toggle-row"><div><h4 class="toggle-title">Online Status</h4><p class="toggle-desc">Show when you are active</p></div><label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="settings-panel" id="panel-appearance">
+                    <div class="settings-card">
+                        <h2 class="settings-card-title">Theme</h2>
+                        <div class="theme-options">
+                            <div class="theme-option active" data-theme="light"><div class="theme-preview theme-preview-light"><div class="theme-preview-bar"></div><div class="theme-preview-body"><div class="theme-preview-sidebar"></div><div class="theme-preview-content"></div></div></div><span>Light</span></div>
+                            <div class="theme-option" data-theme="dark"><div class="theme-preview theme-preview-dark"><div class="theme-preview-bar"></div><div class="theme-preview-body"><div class="theme-preview-sidebar"></div><div class="theme-preview-content"></div></div></div><span>Dark</span></div>
+                            <div class="theme-option" data-theme="system"><div class="theme-preview theme-preview-system"><div class="theme-preview-bar"></div><div class="theme-preview-body"><div class="theme-preview-sidebar"></div><div class="theme-preview-content"></div></div></div><span>System</span></div>
+                        </div>
+                    </div>
+                    <div class="settings-card">
+                        <h2 class="settings-card-title">Language</h2>
+                        <div class="form-group"><select class="form-input"><option>English</option><option>العربية (Arabic)</option><option>Français (French)</option></select></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <footer class="footer" id="footer">
+        <div class="footer-left"><h3>Wasla</h3><p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p></div>
+        <div class="footer-links"><a href="terms.html">TERMS OF SERVICE</a><a href="privacy.html">PRIVACY POLICY</a><a href="contact.html">CONTACT US</a><a href="#">TWITTER</a><a href="#">INSTAGRAM</a></div>
+    </footer>
+    <script>
+        function switchSettingsTab(tab){document.querySelectorAll('.settings-tab').forEach(t=>t.classList.remove('active'));document.querySelector(`[data-tab="${tab}"]`).classList.add('active');document.querySelectorAll('.settings-panel').forEach(p=>p.classList.remove('active'));document.getElementById(`panel-${tab}`).classList.add('active');}
+        document.querySelectorAll('.theme-option').forEach(o=>{o.addEventListener('click',()=>{document.querySelectorAll('.theme-option').forEach(x=>x.classList.remove('active'));o.classList.add('active');});});
+        document.querySelectorAll('.btn-save').forEach(b=>{b.addEventListener('click',()=>{const t=b.textContent;b.textContent='✓ Saved!';b.style.background='var(--accent)';setTimeout(()=>{b.textContent=t;b.style.background='';},2000);});});
+    </script>
+</body>
+</html>

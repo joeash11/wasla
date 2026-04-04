@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wasla - Sign Up</title>
+    <meta name="description" content="Create your Wasla account and start connecting with events and talent.">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body class="auth-body">
+    <div class="auth-wrapper">
+        <div class="auth-left">
+            <div class="auth-left-content">
+                <a href="landing.html" class="logo">
+                    <svg class="logo-icon" viewBox="0 0 40 40" width="44" height="44"><circle cx="20" cy="20" r="18" fill="#4fc3f7"/><text x="20" y="26" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" font-family="Inter">W</text></svg>
+                    <span class="logo-text" style="color:#fff;font-size:1.6rem">Wasla</span>
+                </a>
+                <h1 class="auth-hero-title">Join the Future<br>of <span class="hero-gradient-text">Event Staffing</span></h1>
+                <p class="auth-hero-desc">Whether you manage events or work as an usher, Wasla is your one-stop platform.</p>
+                <div class="auth-hero-stats">
+                    <div class="auth-hero-stat"><i class="fas fa-bolt"></i> Set up in under 2 minutes</div>
+                    <div class="auth-hero-stat"><i class="fas fa-shield-alt"></i> Verified & Secure</div>
+                    <div class="auth-hero-stat"><i class="fas fa-globe"></i> Available across MENA</div>
+                </div>
+            </div>
+        </div>
+        <div class="auth-right">
+            <div class="auth-form-container">
+                <h2 class="auth-form-title">Create Your Account</h2>
+                <p class="auth-form-subtitle">Select your role and get started</p>
+                <!-- Role Selector -->
+                <div class="auth-role-selector">
+                    <button class="auth-role-btn active" data-role="client" onclick="switchSignupRole(this)"><i class="fas fa-briefcase"></i> Client</button>
+                    <button class="auth-role-btn" data-role="usher" onclick="switchSignupRole(this)"><i class="fas fa-id-badge"></i> Usher</button>
+                </div>
+                <!-- Client Signup -->
+                <form class="auth-form" id="signup-client" onsubmit="return false">
+                    <div class="form-row">
+                        <div class="form-group"><label class="form-label">First Name</label><div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" class="form-input auth-input" placeholder="Abdullah" required></div></div>
+                        <div class="form-group"><label class="form-label">Last Name</label><div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" class="form-input auth-input" placeholder="Elsayed" required></div></div>
+                    </div>
+                    <div class="form-group"><label class="form-label">Company Name</label><div class="auth-input-wrap"><i class="fas fa-building"></i><input type="text" class="form-input auth-input" placeholder="Your company" required></div></div>
+                    <div class="form-group"><label class="form-label">Email Address</label><div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" class="form-input auth-input" placeholder="email@company.com" required></div></div>
+                    <div class="form-group"><label class="form-label">Phone Number</label><div class="auth-input-wrap"><i class="fas fa-phone"></i><input type="tel" class="form-input auth-input" placeholder="+966 5XX XXX XXXX" required></div></div>
+                    <div class="form-group"><label class="form-label">Password</label><div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" class="form-input auth-input" id="signup-pass-client" placeholder="Min 8 characters" required><button type="button" class="auth-eye-btn" onclick="togglePassword('signup-pass-client',this)"><i class="fas fa-eye"></i></button></div></div>
+                    <label class="auth-terms-check"><input type="checkbox" required> I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></label>
+                    <button type="submit" class="btn-auth-submit" onclick="handleSignup('client')"><i class="fas fa-rocket"></i> Create Client Account</button>
+                </form>
+                <!-- Usher Signup -->
+                <form class="auth-form" id="signup-usher" style="display:none" onsubmit="return false">
+                    <div class="form-row">
+                        <div class="form-group"><label class="form-label">First Name</label><div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" class="form-input auth-input" placeholder="Ahmed" required></div></div>
+                        <div class="form-group"><label class="form-label">Last Name</label><div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" class="form-input auth-input" placeholder="Mohamed" required></div></div>
+                    </div>
+                    <div class="form-group"><label class="form-label">Email Address</label><div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" class="form-input auth-input" placeholder="email@example.com" required></div></div>
+                    <div class="form-group"><label class="form-label">Phone Number</label><div class="auth-input-wrap"><i class="fas fa-phone"></i><input type="tel" class="form-input auth-input" placeholder="+966 5XX XXX XXXX" required></div></div>
+                    <div class="form-group"><label class="form-label">City</label>
+                        <div class="auth-input-wrap"><i class="fas fa-map-marker-alt"></i>
+                            <select class="form-input auth-input"><option>Riyadh</option><option>Jeddah</option><option>Cairo</option><option>Dubai</option><option>Dammam</option></select>
+                        </div>
+                    </div>
+                    <div class="form-group"><label class="form-label">Skills</label><div class="auth-input-wrap"><i class="fas fa-star"></i><input type="text" class="form-input auth-input" placeholder="e.g. Customer Service, Bilingual, VIP Handling"></div></div>
+                    <div class="form-group"><label class="form-label">Password</label><div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" class="form-input auth-input" id="signup-pass-usher" placeholder="Min 8 characters" required><button type="button" class="auth-eye-btn" onclick="togglePassword('signup-pass-usher',this)"><i class="fas fa-eye"></i></button></div></div>
+                    <label class="auth-terms-check"><input type="checkbox" required> I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></label>
+                    <button type="submit" class="btn-auth-submit btn-auth-usher" onclick="handleSignup('usher')"><i class="fas fa-id-badge"></i> Create Usher Account</button>
+                </form>
+                <div class="auth-divider"><span>or sign up with</span></div>
+                <div class="auth-social-row">
+                    <button class="auth-social-btn"><i class="fab fa-google"></i> Google</button>
+                    <button class="auth-social-btn"><i class="fab fa-apple"></i> Apple</button>
+                </div>
+                <p class="auth-switch">Already have an account? <a href="login.html">Log in</a></p>
+            </div>
+        </div>
+    </div>
+    <script>
+        function togglePassword(id, btn) {
+            const input = document.getElementById(id);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') { input.type = 'text'; icon.className = 'fas fa-eye-slash'; }
+            else { input.type = 'password'; icon.className = 'fas fa-eye'; }
+        }
+        function switchSignupRole(btn) {
+            document.querySelectorAll('.auth-role-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const role = btn.dataset.role;
+            document.getElementById('signup-client').style.display = role === 'client' ? '' : 'none';
+            document.getElementById('signup-usher').style.display = role === 'usher' ? '' : 'none';
+        }
+        function handleSignup(role) {
+            const btn = event.target.closest('.btn-auth-submit');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
+            setTimeout(() => {
+                if (role === 'client') window.location.href = 'index.html';
+                else window.location.href = 'usher/dashboard.html';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
