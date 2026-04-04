@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wasla Admin - Users</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar admin-navbar"><div class="navbar-left">
+        <a href="dashboard.html" class="logo"><svg class="logo-icon" viewBox="0 0 40 40" width="36" height="36"><circle cx="20" cy="20" r="18" fill="#4fc3f7"/><text x="20" y="26" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" font-family="Inter">W</text></svg><span class="logo-text">Wasla</span> <span class="admin-tag">Admin</span></a>
+        <ul class="nav-links"><li><a href="dashboard.html">Dashboard</a></li><li><a href="users.html" class="active">Users</a></li><li><a href="projects.html">Projects</a></li></ul>
+    </div><div class="navbar-right"><span class="welcome-text">Admin Panel</span><div class="user-avatar-small"><i class="fas fa-user-shield"></i></div></div></nav>
+    <div class="main-wrapper">
+        <aside class="sidebar admin-sidebar">
+            <div class="sidebar-profile"><div class="profile-avatar"><i class="fas fa-user-shield"></i></div><h3 class="profile-name">System<br>Admin</h3></div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="sidebar-link"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                <a href="users.html" class="sidebar-link active"><i class="fas fa-users"></i><span>Users</span></a>
+                <a href="projects.html" class="sidebar-link"><i class="fas fa-folder-open"></i><span>Projects</span></a>
+            </nav>
+            <div class="sidebar-footer"><button class="btn-logout" onclick="window.location.href='../landing.html'">Log Out</button></div>
+        </aside>
+        <main class="content">
+            <div class="page-header"><h1 class="section-title">User Management</h1></div>
+            <!-- Summary -->
+            <section class="stats-row">
+                <div class="stat-card"><p class="stat-label">Total Users</p><h2 class="stat-value">1,247</h2></div>
+                <div class="stat-card"><p class="stat-label">Clients</p><h2 class="stat-value">342</h2></div>
+                <div class="stat-card"><p class="stat-label">Ushers</p><h2 class="stat-value">905</h2></div>
+            </section>
+            <!-- Filters -->
+            <section class="filters-row">
+                <div class="filter-search"><i class="fas fa-search"></i><input type="text" placeholder="Search users..." id="user-search"></div>
+                <div class="filter-select"><select id="role-filter"><option value="">All Roles</option><option value="client">Client</option><option value="usher">Usher</option></select></div>
+                <div class="filter-select"><select id="status-filter"><option value="">All Status</option><option value="active">Active</option><option value="suspended">Suspended</option></select></div>
+            </section>
+            <!-- Users Table -->
+            <div class="admin-table-wrap">
+                <table class="admin-table" id="users-table">
+                    <thead><tr><th>User</th><th>Role</th><th>Email</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        <tr data-role="client" data-status="active"><td class="user-cell"><div class="table-avatar"><i class="fas fa-user-circle"></i></div><strong>Abdullah Elsayed</strong></td><td><span class="role-badge role-client">Client</span></td><td>abdullah@company.com</td><td>Jan 12, 2024</td><td><span class="status-dot status-dot-active"></span> Active</td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Suspend" onclick="this.closest('tr').querySelector('.status-dot').className='status-dot status-dot-suspended';this.closest('tr').querySelector('td:nth-child(5)').innerHTML='<span class=\'status-dot status-dot-suspended\'></span> Suspended'"><i class="fas fa-ban"></i></button><button class="table-action-btn table-action-danger" title="Delete"><i class="fas fa-trash"></i></button></td></tr>
+                        <tr data-role="usher" data-status="active"><td class="user-cell"><div class="table-avatar table-avatar-blue"><i class="fas fa-user-circle"></i></div><strong>Ahmed Mohamed</strong></td><td><span class="role-badge role-usher">Usher</span></td><td>ahmed@email.com</td><td>Feb 5, 2024</td><td><span class="status-dot status-dot-active"></span> Active</td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Suspend"><i class="fas fa-ban"></i></button><button class="table-action-btn table-action-danger" title="Delete"><i class="fas fa-trash"></i></button></td></tr>
+                        <tr data-role="client" data-status="active"><td class="user-cell"><div class="table-avatar table-avatar-green"><i class="fas fa-user-circle"></i></div><strong>Sara Ahmed</strong></td><td><span class="role-badge role-client">Client</span></td><td>sara@mdlbeast.com</td><td>Mar 18, 2024</td><td><span class="status-dot status-dot-active"></span> Active</td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Suspend"><i class="fas fa-ban"></i></button><button class="table-action-btn table-action-danger" title="Delete"><i class="fas fa-trash"></i></button></td></tr>
+                        <tr data-role="usher" data-status="active"><td class="user-cell"><div class="table-avatar table-avatar-purple"><i class="fas fa-user-circle"></i></div><strong>Fatimah Al-Saud</strong></td><td><span class="role-badge role-usher">Usher</span></td><td>fatimah@email.com</td><td>Apr 2, 2024</td><td><span class="status-dot status-dot-active"></span> Active</td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Suspend"><i class="fas fa-ban"></i></button><button class="table-action-btn table-action-danger" title="Delete"><i class="fas fa-trash"></i></button></td></tr>
+                        <tr data-role="usher" data-status="suspended"><td class="user-cell"><div class="table-avatar table-avatar-orange"><i class="fas fa-user-circle"></i></div><strong>Youssef Nabil</strong></td><td><span class="role-badge role-usher">Usher</span></td><td>youssef@email.com</td><td>Jan 28, 2024</td><td><span class="status-dot status-dot-suspended"></span> Suspended</td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Reactivate"><i class="fas fa-undo"></i></button><button class="table-action-btn table-action-danger" title="Delete"><i class="fas fa-trash"></i></button></td></tr>
+                        <tr data-role="client" data-status="active"><td class="user-cell"><div class="table-avatar"><i class="fas fa-user-circle"></i></div><strong>Khalid Al-Farsi</strong></td><td><span class="role-badge role-client">Client</span></td><td>khalid@gulfevents.com</td><td>May 10, 2024</td><td><span class="status-dot status-dot-active"></span> Active</td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Suspend"><i class="fas fa-ban"></i></button><button class="table-action-btn table-action-danger" title="Delete"><i class="fas fa-trash"></i></button></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <footer class="footer"><div class="footer-left"><h3>Wasla</h3><p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p></div><div class="footer-links"><a href="../terms.html">TERMS OF SERVICE</a><a href="../privacy.html">PRIVACY POLICY</a><a href="../contact.html">CONTACT US</a></div></footer>
+    <script>
+    document.getElementById('user-search').addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('#users-table tbody tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none';});});
+    document.getElementById('role-filter').addEventListener('change',e=>{const v=e.target.value;document.querySelectorAll('#users-table tbody tr').forEach(r=>{r.style.display=(!v||r.dataset.role===v)?'':'none';});});
+    document.getElementById('status-filter').addEventListener('change',e=>{const v=e.target.value;document.querySelectorAll('#users-table tbody tr').forEach(r=>{r.style.display=(!v||r.dataset.status===v)?'':'none';});});
+    </script>
+</body>
+</html>

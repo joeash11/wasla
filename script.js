@@ -175,41 +175,12 @@ function animateOnScroll() {
 
 // ===== NAV LINKS =====
 function setupNavLinks() {
-    // Top nav
+    // Top nav - add ripple effect (links navigate naturally now)
     const navLinks = document.querySelectorAll('.nav-links a');
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
-            e.preventDefault();
-            navLinks.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-            
-            // Ripple effect
             addRipple(link, e);
         });
-    });
-
-    // Sidebar nav
-    const sideLinks = document.querySelectorAll('.sidebar-link');
-    sideLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            sideLinks.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-        });
-    });
-
-    // Create Project button
-    const createBtn = document.getElementById('btn-create-project');
-    createBtn.addEventListener('click', () => {
-        createBtn.style.animation = 'pulse 0.3s ease';
-        setTimeout(() => createBtn.style.animation = '', 300);
-    });
-
-    // Logout button
-    const logoutBtn = document.getElementById('btn-logout');
-    logoutBtn.addEventListener('click', () => {
-        logoutBtn.style.transform = 'scale(0.95)';
-        setTimeout(() => logoutBtn.style.transform = '', 150);
     });
 }
 
@@ -292,13 +263,7 @@ function setupSearch() {
 
 // ===== MANAGE PROJECT HANDLER =====
 function handleManageProject(index) {
-    const btn = event.target;
-    
-    // Shine animation
-    btn.style.background = 'linear-gradient(135deg, var(--accent), var(--cyan))';
-    setTimeout(() => {
-        btn.style.background = '';
-    }, 400);
+    window.location.href = 'projects.html';
 }
 
 // ===== RIPPLE EFFECT =====

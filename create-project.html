@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wasla - Create Project</title>
+    <meta name="description" content="Create a new project on Wasla.">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="navbar-left">
+            <a href="index.html" class="logo">
+                <svg class="logo-icon" viewBox="0 0 40 40" width="36" height="36"><circle cx="20" cy="20" r="18" fill="#4fc3f7"/><text x="20" y="26" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" font-family="Inter">W</text></svg>
+                <span class="logo-text">Wasla</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="projects.html">My Projects</a></li>
+                <li><a href="profile.html">Profile</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <span class="welcome-text">Welcome Abdullah</span>
+            <a href="profile.html" class="user-avatar-small"><i class="fas fa-user-circle"></i></a>
+            <a href="create-project.html" class="btn-create">Create Project</a>
+        </div>
+    </nav>
+    <div class="main-wrapper">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-profile">
+                <a href="profile.html" class="profile-avatar"><i class="fas fa-user-circle"></i></a>
+                <h3 class="profile-name">Abdullah<br>Elsayed</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="sidebar-link"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                <a href="projects.html" class="sidebar-link"><i class="fas fa-file-alt"></i><span>My Projects</span></a>
+                <a href="messages.html" class="sidebar-link"><i class="fas fa-envelope"></i><span>Messages</span></a>
+                <a href="settings.html" class="sidebar-link"><i class="fas fa-cog"></i><span>Settings</span></a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="help.html" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a>
+                <button class="btn-logout" onclick="window.location.href='landing.html'">Log Out</button>
+            </div>
+        </aside>
+        <main class="content" id="main-content">
+            <div class="page-header">
+                <h1 class="section-title">Create New Project</h1>
+                <a href="projects.html" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Projects</a>
+            </div>
+            <div class="create-project-form">
+                <!-- Step Indicator -->
+                <div class="form-steps">
+                    <div class="form-step active" data-step="1"><span class="step-number">1</span><span class="step-label">Details</span></div>
+                    <div class="form-step-line"></div>
+                    <div class="form-step" data-step="2"><span class="step-number">2</span><span class="step-label">Ushers</span></div>
+                    <div class="form-step-line"></div>
+                    <div class="form-step" data-step="3"><span class="step-number">3</span><span class="step-label">Review</span></div>
+                </div>
+                <!-- Step 1: Details -->
+                <div class="step-panel active" id="step-1">
+                    <div class="settings-card">
+                        <h2 class="settings-card-title">Project Details</h2>
+                        <div class="settings-form">
+                            <div class="form-group">
+                                <label class="form-label">Project Name *</label>
+                                <input type="text" class="form-input" id="project-name" placeholder="e.g. Insomnia Gaming Festival 2026">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group"><label class="form-label">Event Date *</label><input type="date" class="form-input" id="project-date"></div>
+                                <div class="form-group"><label class="form-label">End Date</label><input type="date" class="form-input" id="project-end-date"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Location *</label>
+                                <input type="text" class="form-input" id="project-location" placeholder="e.g. The Ritz-Carlton, Riyadh">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-input form-textarea" id="project-desc" placeholder="Describe your project..." rows="4"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Cover Image</label>
+                                <div class="file-upload-area" id="file-upload-area">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>Drag & drop an image or <span class="file-upload-link">browse</span></p>
+                                    <span class="file-upload-hint">PNG, JPG up to 5MB</span>
+                                    <input type="file" id="file-input" accept="image/*" hidden>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn-save btn-next" onclick="goToStep(2)">Next: Ushers <i class="fas fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Step 2: Ushers -->
+                <div class="step-panel" id="step-2">
+                    <div class="settings-card">
+                        <h2 class="settings-card-title">Usher Requirements</h2>
+                        <div class="settings-form">
+                            <div class="form-row">
+                                <div class="form-group"><label class="form-label">Number of Ushers Needed *</label><input type="number" class="form-input" id="ushers-count" min="1" value="1"></div>
+                                <div class="form-group"><label class="form-label">Budget per Usher (SAR)</label><input type="number" class="form-input" id="ushers-budget" placeholder="0.00"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Requirements</label>
+                                <textarea class="form-input form-textarea" rows="3" placeholder="e.g. Must speak Arabic and English, professional attire..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Skills Needed</label>
+                                <div class="skills-tags">
+                                    <span class="skill-tag">Communication <i class="fas fa-times" onclick="this.parentElement.remove()"></i></span>
+                                    <span class="skill-tag">Customer Service <i class="fas fa-times" onclick="this.parentElement.remove()"></i></span>
+                                    <input type="text" class="skill-input" placeholder="Add skill..." id="skill-input">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn-back-step" onclick="goToStep(1)"><i class="fas fa-arrow-left"></i> Back</button>
+                                <button class="btn-save btn-next" onclick="goToStep(3)">Next: Review <i class="fas fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Step 3: Review -->
+                <div class="step-panel" id="step-3">
+                    <div class="settings-card">
+                        <h2 class="settings-card-title">Review & Submit</h2>
+                        <div class="review-summary" id="review-summary">
+                            <div class="review-row"><span class="review-label">Project Name</span><span class="review-value" id="rev-name">—</span></div>
+                            <div class="review-row"><span class="review-label">Date</span><span class="review-value" id="rev-date">—</span></div>
+                            <div class="review-row"><span class="review-label">Location</span><span class="review-value" id="rev-location">—</span></div>
+                            <div class="review-row"><span class="review-label">Ushers</span><span class="review-value" id="rev-ushers">—</span></div>
+                        </div>
+                        <div class="form-actions">
+                            <button class="btn-back-step" onclick="goToStep(2)"><i class="fas fa-arrow-left"></i> Back</button>
+                            <button class="btn-save btn-submit" onclick="submitProject()"><i class="fas fa-check"></i> Create Project</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <footer class="footer" id="footer">
+        <div class="footer-left"><h3>Wasla</h3><p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p></div>
+        <div class="footer-links"><a href="terms.html">TERMS OF SERVICE</a><a href="privacy.html">PRIVACY POLICY</a><a href="contact.html">CONTACT US</a></div>
+    </footer>
+    <script>
+        function goToStep(n){
+            document.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));
+            document.getElementById('step-'+n).classList.add('active');
+            document.querySelectorAll('.form-step').forEach(s=>{
+                const sn=parseInt(s.dataset.step);
+                s.classList.toggle('active',sn<=n);
+                s.classList.toggle('completed',sn<n);
+            });
+            if(n===3){
+                document.getElementById('rev-name').textContent=document.getElementById('project-name').value||'—';
+                document.getElementById('rev-date').textContent=document.getElementById('project-date').value||'—';
+                document.getElementById('rev-location').textContent=document.getElementById('project-location').value||'—';
+                document.getElementById('rev-ushers').textContent=document.getElementById('ushers-count').value||'—';
+            }
+        }
+        function submitProject(){
+            const btn=document.querySelector('.btn-submit');
+            btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Creating...';
+            setTimeout(()=>{btn.innerHTML='<i class="fas fa-check"></i> Created!';btn.style.background='var(--accent)';setTimeout(()=>{window.location.href='projects.html';},1500);},1500);
+        }
+        document.getElementById('file-upload-area').addEventListener('click',()=>document.getElementById('file-input').click());
+        document.getElementById('skill-input').addEventListener('keypress',e=>{
+            if(e.key==='Enter'&&e.target.value.trim()){
+                const tag=document.createElement('span');tag.className='skill-tag';tag.innerHTML=e.target.value.trim()+' <i class="fas fa-times" onclick="this.parentElement.remove()"></i>';
+                e.target.parentElement.insertBefore(tag,e.target);e.target.value='';
+            }
+        });
+    </script>
+</body>
+</html>

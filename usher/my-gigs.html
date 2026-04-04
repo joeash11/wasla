@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wasla - My Gigs</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar"><div class="navbar-left">
+        <a href="dashboard.html" class="logo"><svg class="logo-icon" viewBox="0 0 40 40" width="36" height="36"><circle cx="20" cy="20" r="18" fill="#4fc3f7"/><text x="20" y="26" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" font-family="Inter">W</text></svg><span class="logo-text">Wasla</span></a>
+        <ul class="nav-links"><li><a href="dashboard.html">Dashboard</a></li><li><a href="jobs.html">Available Jobs</a></li><li><a href="my-gigs.html" class="active">My Gigs</a></li></ul>
+    </div><div class="navbar-right"><span class="welcome-text">Welcome Ahmed</span><a href="profile.html" class="user-avatar-small"><i class="fas fa-user-circle"></i></a></div></nav>
+    <div class="main-wrapper">
+        <aside class="sidebar">
+            <div class="sidebar-profile"><a href="profile.html" class="profile-avatar"><i class="fas fa-user-circle"></i></a><h3 class="profile-name">Ahmed<br>Mohamed</h3><span class="usher-badge"><i class="fas fa-id-badge"></i> Usher</span></div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="sidebar-link"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                <a href="jobs.html" class="sidebar-link"><i class="fas fa-search"></i><span>Available Jobs</span></a>
+                <a href="my-gigs.html" class="sidebar-link active"><i class="fas fa-calendar-check"></i><span>My Gigs</span></a>
+                <a href="profile.html" class="sidebar-link"><i class="fas fa-user"></i><span>Profile</span></a>
+            </nav>
+            <div class="sidebar-footer"><a href="../help.html" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a><button class="btn-logout" onclick="window.location.href='../landing.html'">Log Out</button></div>
+        </aside>
+        <main class="content">
+            <h1 class="section-title">My Gigs</h1>
+            <!-- Earnings Summary -->
+            <section class="revenue-row">
+                <div class="revenue-card"><div class="revenue-card-icon revenue-icon-green"><i class="fas fa-wallet"></i></div><div class="revenue-card-info"><p class="revenue-label">This Month</p><h3 class="revenue-value">SAR 1,430</h3><span class="revenue-trend trend-up"><i class="fas fa-arrow-up"></i> 18% vs last month</span></div></div>
+                <div class="revenue-card"><div class="revenue-card-icon revenue-icon-blue"><i class="fas fa-calendar-check"></i></div><div class="revenue-card-info"><p class="revenue-label">Gigs This Month</p><h3 class="revenue-value">4</h3><span class="revenue-trend trend-neutral"><i class="fas fa-minus"></i> 1 upcoming</span></div></div>
+                <div class="revenue-card"><div class="revenue-card-icon revenue-icon-purple"><i class="fas fa-star"></i></div><div class="revenue-card-info"><p class="revenue-label">Avg Rating</p><h3 class="revenue-value">4.8</h3><span class="revenue-trend trend-up"><i class="fas fa-arrow-up"></i> +0.2 this month</span></div></div>
+            </section>
+            <!-- Tabs -->
+            <div class="tab-bar">
+                <button class="tab-btn active" onclick="filterGigs('all',this)">All</button>
+                <button class="tab-btn" onclick="filterGigs('upcoming',this)">Upcoming</button>
+                <button class="tab-btn" onclick="filterGigs('completed',this)">Completed</button>
+                <button class="tab-btn" onclick="filterGigs('cancelled',this)">Cancelled</button>
+            </div>
+            <!-- Gig Cards -->
+            <div class="gigs-list" id="gigs-list">
+                <div class="gig-card" data-status="upcoming"><div class="card-badge status-active">Upcoming</div><div class="gig-card-body"><div class="gig-date-col"><span class="upcoming-day">28</span><span class="upcoming-month">Jun</span></div><div class="gig-info-col"><h3>Gaming Festival 2024</h3><p><i class="fas fa-building"></i> Insomnia Egypt</p><p><i class="fas fa-map-marker-alt"></i> Riyadh, KSA</p><p><i class="fas fa-clock"></i> 9 AM - 5 PM (8 hours)</p></div><div class="gig-pay-col"><span class="gig-pay">SAR 450</span><a href="dashboard.html" class="btn-manage">View Details</a></div></div></div>
+                <div class="gig-card" data-status="upcoming"><div class="card-badge status-active">Upcoming</div><div class="gig-card-body"><div class="gig-date-col"><span class="upcoming-day">02</span><span class="upcoming-month">Jul</span></div><div class="gig-info-col"><h3>MDLBEAST Soundstorm</h3><p><i class="fas fa-building"></i> MDLBEAST</p><p><i class="fas fa-map-marker-alt"></i> Riyadh, KSA</p><p><i class="fas fa-clock"></i> 4 PM - 2 AM (10 hours)</p></div><div class="gig-pay-col"><span class="gig-pay">SAR 600</span><a href="dashboard.html" class="btn-manage">View Details</a></div></div></div>
+                <div class="gig-card" data-status="completed"><div class="card-badge status-completed">Completed</div><div class="gig-card-body"><div class="gig-date-col"><span class="upcoming-day">15</span><span class="upcoming-month">Jun</span></div><div class="gig-info-col"><h3>Fashion Week Riyadh</h3><p><i class="fas fa-building"></i> Riyadh Events</p><p><i class="fas fa-map-marker-alt"></i> Riyadh, KSA</p><p><i class="fas fa-clock"></i> 10 AM - 8 PM (10 hours)</p></div><div class="gig-pay-col"><span class="gig-pay">SAR 550</span><span class="gig-rating"><i class="fas fa-star"></i> 5.0</span></div></div></div>
+                <div class="gig-card" data-status="completed"><div class="card-badge status-completed">Completed</div><div class="gig-card-body"><div class="gig-date-col"><span class="upcoming-day">08</span><span class="upcoming-month">Jun</span></div><div class="gig-info-col"><h3>Annual Charity Gala</h3><p><i class="fas fa-building"></i> Al Faisaliyah</p><p><i class="fas fa-map-marker-alt"></i> Riyadh, KSA</p><p><i class="fas fa-clock"></i> 6 PM - 11 PM (5 hours)</p></div><div class="gig-pay-col"><span class="gig-pay">SAR 380</span><span class="gig-rating"><i class="fas fa-star"></i> 4.8</span></div></div></div>
+                <div class="gig-card" data-status="cancelled"><div class="card-badge status-pending">Cancelled</div><div class="gig-card-body"><div class="gig-date-col"><span class="upcoming-day">01</span><span class="upcoming-month">Jun</span></div><div class="gig-info-col"><h3>Food Festival</h3><p><i class="fas fa-building"></i> Events Co.</p><p><i class="fas fa-map-marker-alt"></i> Jeddah, KSA</p><p><i class="fas fa-clock"></i> Cancelled by organizer</p></div><div class="gig-pay-col"><span class="gig-pay" style="text-decoration:line-through;opacity:0.5">SAR 320</span></div></div></div>
+            </div>
+        </main>
+    </div>
+    <footer class="footer"><div class="footer-left"><h3>Wasla</h3><p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p></div><div class="footer-links"><a href="../terms.html">TERMS OF SERVICE</a><a href="../privacy.html">PRIVACY POLICY</a><a href="../contact.html">CONTACT US</a></div></footer>
+    <script>
+    function filterGigs(status, btn) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.gig-card').forEach(c => {
+            c.style.display = (status === 'all' || c.dataset.status === status) ? '' : 'none';
+        });
+    }
+    </script>
+</body>
+</html>

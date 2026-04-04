@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wasla - My Projects</title>
+    <meta name="description" content="View and manage all your Wasla projects in one place.">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Top Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-left">
+            <a href="index.html" class="logo">
+                <svg class="logo-icon" viewBox="0 0 40 40" width="36" height="36">
+                    <circle cx="20" cy="20" r="18" fill="#4fc3f7"/>
+                    <text x="20" y="26" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" font-family="Inter">W</text>
+                </svg>
+                <span class="logo-text">Wasla</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html" id="nav-dashboard">Dashboard</a></li>
+                <li><a href="projects.html" class="active" id="nav-projects">My Projects</a></li>
+                <li><a href="profile.html" id="nav-profile">Profile</a></li>
+            </ul>
+        </div>
+        <div class="navbar-right">
+            <span class="welcome-text">Welcome Abdullah</span>
+            <a href="profile.html" class="user-avatar-small">
+                <i class="fas fa-user-circle"></i>
+            </a>
+            <a href="create-project.html" class="btn-create">Create Project</a>
+        </div>
+    </nav>
+
+    <div class="main-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-profile">
+                <a href="profile.html" class="profile-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </a>
+                <h3 class="profile-name">Abdullah<br>Elsayed</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="index.html" class="sidebar-link" id="side-dashboard">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="projects.html" class="sidebar-link active" id="side-projects">
+                    <i class="fas fa-file-alt"></i>
+                    <span>My Projects</span>
+                </a>
+                <a href="messages.html" class="sidebar-link" id="side-messages">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
+                </a>
+                <a href="settings.html" class="sidebar-link" id="side-settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="help.html" class="sidebar-link" id="help-center">
+                    <i class="fas fa-question-circle"></i>
+                    <span>Help Center</span>
+                </a>
+                <button class="btn-logout" id="btn-logout" onclick="window.location.href='landing.html'">Log Out</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content" id="main-content">
+            <!-- Tab Bar -->
+            <div class="page-header">
+                <h1 class="section-title">My Projects</h1>
+            </div>
+
+            <div class="tab-bar" id="project-tabs">
+                <button class="tab-btn active" data-filter="all">All</button>
+                <button class="tab-btn" data-filter="active">Active</button>
+                <button class="tab-btn" data-filter="completed">Completed</button>
+                <button class="tab-btn" data-filter="pending">Pending</button>
+            </div>
+
+            <!-- Filters -->
+            <section class="filters-row" id="filters-section">
+                <div class="filter-search">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search Projects..." id="search-input">
+                </div>
+                <div class="filter-date">
+                    <input type="date" id="date-input">
+                </div>
+                <div class="filter-select">
+                    <select id="location-filter">
+                        <option value="">Location</option>
+                        <option value="riyadh">Riyadh</option>
+                        <option value="cairo">Cairo</option>
+                        <option value="dubai">Dubai</option>
+                    </select>
+                </div>
+            </section>
+
+            <!-- Projects Grid -->
+            <section class="projects-section" id="projects-section">
+                <div class="projects-grid" id="projects-grid">
+                    <!-- Cards generated by JS -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <div class="footer-left">
+            <h3>Wasla</h3>
+            <p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p>
+        </div>
+        <div class="footer-links">
+            <a href="terms.html">TERMS OF SERVICE</a>
+            <a href="privacy.html">PRIVACY POLICY</a>
+            <a href="contact.html">CONTACT US</a>
+            <a href="#">TWITTER</a>
+            <a href="#">INSTAGRAM</a>
+        </div>
+    </footer>
+
+    <script>
+        // Project data with statuses
+        const projects = [
+            { title: "Insomnia Egypt Gaming Festival 2026", date: "Nov 02, 2024", location: "The Ritz-Carlton, Riyadh", ushers: 3, image: "images/event_gaming.png", status: "active" },
+            { title: "Insomnia Egypt Gaming Festival 2026", date: "Nov 02, 2024", location: "The Ritz-Carlton, Riyadh", ushers: 3, image: "images/event_training.png", status: "active" },
+            { title: "Foundation training year 2025/26", date: "Nov 02, 2024", location: "The Ritz-Carlton, Riyadh", ushers: 3, image: "images/event_training.png", status: "completed" },
+            { title: "Insomnia Egypt Gaming Festival 2026", date: "Nov 02, 2024", location: "The Ritz-Carlton, Riyadh", ushers: 3, image: "images/event_gaming.png", status: "pending" },
+            { title: "Foundation training year 2025/26", date: "Nov 02, 2024", location: "The Ritz-Carlton, Riyadh", ushers: 7, image: "images/event_training.png", status: "active" },
+            { title: "Insomnia Egypt Gaming Festival 2026", date: "Dec 15, 2024", location: "The Ritz-Carlton, Riyadh", ushers: 5, image: "images/event_gaming.png", status: "completed" }
+        ];
+
+        let currentFilter = 'all';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProjects();
+            setupTabs();
+            setupSearch();
+        });
+
+        function renderProjects(filter = 'all') {
+            const grid = document.getElementById('projects-grid');
+            grid.innerHTML = '';
+            const filtered = filter === 'all' ? projects : projects.filter(p => p.status === filter);
+
+            filtered.forEach((project, index) => {
+                const statusClass = project.status === 'active' ? 'status-active' : project.status === 'completed' ? 'status-completed' : 'status-pending';
+                const statusLabel = project.status.charAt(0).toUpperCase() + project.status.slice(1);
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                card.innerHTML = `
+                    <div class="card-image">
+                        <img src="${project.image}" alt="${project.title}" loading="lazy">
+                        <span class="card-badge ${statusClass}">${statusLabel}</span>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">${project.title}</h3>
+                        <div class="card-detail"><i class="far fa-calendar"></i><span>${project.date}</span></div>
+                        <div class="card-detail"><i class="fas fa-map-marker-alt"></i><span>${project.location}</span></div>
+                        <div class="card-detail"><i class="fas fa-users"></i><span>${project.ushers} ushers remaining</span></div>
+                        <button class="btn-manage">Manage Project</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+
+                // stagger animation
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        }
+
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentFilter = tab.dataset.filter;
+                    renderProjects(currentFilter);
+                });
+            });
+        }
+
+        function setupSearch() {
+            const searchInput = document.getElementById('search-input');
+            let debounce;
+            searchInput.addEventListener('input', e => {
+                clearTimeout(debounce);
+                debounce = setTimeout(() => {
+                    const query = e.target.value.toLowerCase();
+                    const cards = document.querySelectorAll('.project-card');
+                    cards.forEach(card => {
+                        const title = card.querySelector('.card-title').textContent.toLowerCase();
+                        card.style.display = title.includes(query) ? '' : 'none';
+                    });
+                }, 250);
+            });
+        }
+    </script>
+</body>
+</html>
