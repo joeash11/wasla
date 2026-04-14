@@ -36,6 +36,7 @@ if ($entered_code !== $_SESSION['pending_code']) {
 // Code is correct - complete login
 $_SESSION['user_id']    = $_SESSION['pending_user_id'];
 $_SESSION['user_name']  = $_SESSION['pending_user_name'];
+$_SESSION['first_name'] = explode(' ', $_SESSION['pending_user_name'])[0];
 $_SESSION['user_email'] = $_SESSION['pending_user_email'];
 $_SESSION['user_role']  = $_SESSION['pending_user_role'];
 $_SESSION['logged_in']  = true;
@@ -56,7 +57,7 @@ switch ($role) {
         header('Location: admin/dashboard.html');
         break;
     case 'usher':
-        header('Location: usher/dashboard.html');
+        header('Location: usher/dashboard.php');
         break;
     case 'client':
     default:

@@ -49,13 +49,14 @@ if ($stmt->execute()) {
     $user_id = $stmt->insert_id;
     $_SESSION['user_id']    = $user_id;
     $_SESSION['user_name']  = $first_name . ' ' . $last_name;
+    $_SESSION['first_name'] = $first_name;
     $_SESSION['user_email'] = $email;
     $_SESSION['user_role']  = $role;
     $_SESSION['logged_in']  = true;
 
     // Redirect based on role
     if ($role === 'usher') {
-        header('Location: usher/dashboard.html');
+        header('Location: usher/dashboard.php');
     } else {
         header('Location: index.html');
     }

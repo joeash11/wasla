@@ -1,6 +1,10 @@
 <?php session_start();
-$usher_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 3;
-$user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : 'Ahmed';
+if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'usher') {
+    header('Location: ../login.html');
+    exit;
+}
+$usher_id = $_SESSION['user_id'];
+$user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($_SESSION['user_name']) ? explode(' ', $_SESSION['user_name'])[0] : 'Usher');
 ?>
 <!DOCTYPE html>
 <html lang="en">

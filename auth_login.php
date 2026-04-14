@@ -56,7 +56,35 @@ if ($role !== 'admin' && $user['role'] !== $role && $user['role'] !== 'admin') {
     exit;
 }
 
-// ---- Generate 6-digit verification code ----
+// On localhost, skip email verification and log in directly
+$is_localhost = in_array($_SERVER['HTTP_HOST'], ['localhost', '127.0.0.1']);
+
+if ($is_localhost) {
+    // Direct login - no verification needed on localhost
+    $_SESSION['user_id']    = $user['id'];
+    $_SESSION['user_name']  = $user['first_name'] . ' ' . $user['last_name'];
+    $_SESSION['first_name'] = $user['first_name'];
+    $_SESSION['user_email'] = $user['email'];
+    $_SESSION['user_role']  = $user['role'];
+    $_SESSION['logged_in']  = true;
+
+    // Redirect based on role
+    switch ($user['role']) {
+        case 'admin':
+            header('Location: admin/dashboard.html');
+            break;
+        case 'usher':
+            header('Location: usher/dashboard.php');
+            break;
+        case 'client':
+        default:
+            header('Location: index.html');
+            break;
+    }
+    exit;
+}
+
+// ---- Production: Generate 6-digit verification code ----
 $code = str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
 
 // Save code to database
@@ -65,13 +93,13 @@ $stmt->bind_param("si", $code, $user['id']);
 $stmt->execute();
 $stmt->close();
 
-// Try to send email (works if XAMPP mail is configured)
+// Send email
 $to = $user['email'];
 $subject = "Wasla - Your Login Verification Code";
 $message = "Your Wasla verification code is: $code\n\nThis code expires in 10 minutes.\nIf you didn't request this, please ignore this email.";
 $headers = "From: noreply@wasla.com\r\nContent-Type: text/plain; charset=UTF-8";
 
-@mail($to, $subject, $message, $headers); // Suppress errors if mail not configured
+@mail($to, $subject, $message, $headers);
 
 // Store pending login data in session
 $_SESSION['pending_user_id']   = $user['id'];
