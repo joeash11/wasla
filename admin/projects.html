@@ -321,18 +321,23 @@
     async function loadProjects() {
         try {
             const res = await fetch('../api/admin_projects.php');
+            if (!res.ok) {
+                // API returned error (e.g. 403 not logged in) - use fallback silently
+                renderFallbackTable();
+                return;
+            }
             const data = await res.json();
             
-            if (data.success) {
+            if (data.success && data.projects && data.projects.length > 0) {
                 allProjects = data.projects;
                 updateStats(data.stats);
                 renderTable(allProjects);
             } else {
-                showToast('Failed to load projects: ' + (data.error || 'Unknown error'), 'error');
+                // API succeeded but no projects found - use fallback
                 renderFallbackTable();
             }
         } catch (err) {
-            console.warn('API not available, using fallback data:', err);
+            // API not available - use fallback silently
             renderFallbackTable();
         }
     }

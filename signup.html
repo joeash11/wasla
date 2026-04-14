@@ -70,6 +70,18 @@
                             <select name="city" class="form-input auth-input"><option>Riyadh</option><option>Jeddah</option><option>Cairo</option><option>Dubai</option><option>Dammam</option></select>
                         </div>
                     </div>
+                    <div class="form-group"><label class="form-label">Category</label>
+                        <div class="auth-input-wrap"><i class="fas fa-briefcase"></i>
+                            <select name="category" class="form-input auth-input" required>
+                                <option value="">Select your category...</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Event organizers">Event Organizers</option>
+                                <option value="Quality control">Quality Control</option>
+                                <option value="Models">Models</option>
+                                <option value="Operation">Operation</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-group"><label class="form-label">Skills</label><div class="auth-input-wrap"><i class="fas fa-star"></i><input type="text" name="skills" class="form-input auth-input" placeholder="e.g. Customer Service, Bilingual, VIP Handling"></div></div>
                     <div class="form-group"><label class="form-label">Password</label><div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" name="password" class="form-input auth-input" id="signup-pass-usher" placeholder="Min 8 characters" required><button type="button" class="auth-eye-btn" onclick="togglePassword('signup-pass-usher',this)"><i class="fas fa-eye"></i></button></div></div>
                     <label class="auth-terms-check"><input type="checkbox" required> I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></label>

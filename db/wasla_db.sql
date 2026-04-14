@@ -21,6 +21,8 @@ CREATE TABLE users (
     company_name VARCHAR(100) DEFAULT NULL,
     city VARCHAR(50) DEFAULT NULL,
     skills VARCHAR(255) DEFAULT NULL,
+    category ENUM('Entertainment', 'Event organizers', 'Quality control', 'Models', 'Operation') DEFAULT NULL,
+    email_verification_code VARCHAR(10) DEFAULT NULL,
     profile_image VARCHAR(255) DEFAULT NULL,
     bio TEXT DEFAULT NULL,
     rating DECIMAL(3,2) DEFAULT 0.00,
@@ -171,16 +173,16 @@ INSERT INTO users (first_name, last_name, email, password, phone, role, company_
 VALUES ('Abdullah', 'Elsayed', 'abdullah@company.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '+966 555 123 456', 'client', 'Gulf Events Co.', 'Riyadh', 1, 1);
 
 -- Sample usher (password: password)
-INSERT INTO users (first_name, last_name, email, password, phone, role, city, skills, rating, is_verified, is_active)
-VALUES ('Ahmed', 'Mohamed', 'ahmed@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '+966 555 789 012', 'usher', 'Riyadh', 'Customer Service, Bilingual, VIP Handling', 4.80, 1, 1);
+INSERT INTO users (first_name, last_name, email, password, phone, role, city, skills, category, rating, is_verified, is_active)
+VALUES ('Ahmed', 'Mohamed', 'ahmed@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '+966 555 789 012', 'usher', 'Riyadh', 'Customer Service, Bilingual, VIP Handling', 'Entertainment', 4.80, 1, 1);
 
 -- Second client
 INSERT INTO users (first_name, last_name, email, password, phone, role, company_name, city, is_verified, is_active)
 VALUES ('Sara', 'Ahmed', 'sara@mdlbeast.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '+966 555 456 789', 'client', 'MDLBEAST', 'Riyadh', 1, 1);
 
 -- Second usher
-INSERT INTO users (first_name, last_name, email, password, phone, role, city, skills, rating, is_verified, is_active)
-VALUES ('Fatimah', 'Al-Saud', 'fatimah@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '+966 555 321 654', 'usher', 'Riyadh', 'VIP Handling, Arabic, Fashion', 4.50, 1, 1);
+INSERT INTO users (first_name, last_name, email, password, phone, role, city, skills, category, rating, is_verified, is_active)
+VALUES ('Fatimah', 'Al-Saud', 'fatimah@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '+966 555 321 654', 'usher', 'Riyadh', 'VIP Handling, Arabic, Fashion', 'Models', 4.50, 1, 1);
 
 -- ============================================
 -- SAMPLE PROJECTS

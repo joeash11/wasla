@@ -19,6 +19,7 @@ $role         = $_POST['role'] ?? 'client';
 $company_name = trim($_POST['company_name'] ?? '');
 $city         = trim($_POST['city'] ?? '');
 $skills       = trim($_POST['skills'] ?? '');
+$category     = trim($_POST['category'] ?? '');
 
 // Validate required fields
 if (empty($first_name) || empty($last_name) || empty($email) || empty($password)) {
@@ -40,8 +41,8 @@ $stmt->close();
 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
 // Insert user
-$stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, password, phone, role, company_name, city, skills, is_verified, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 1)");
-$stmt->bind_param("sssssssss", $first_name, $last_name, $email, $hashed_password, $phone, $role, $company_name, $city, $skills);
+$stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, password, phone, role, company_name, city, skills, category, is_verified, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 1)");
+$stmt->bind_param("ssssssssss", $first_name, $last_name, $email, $hashed_password, $phone, $role, $company_name, $city, $skills, $category);
 
 if ($stmt->execute()) {
     // Auto-login after signup

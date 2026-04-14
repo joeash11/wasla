@@ -1,11 +1,10 @@
 <?php
 // ============================================
-// Login Handler - Processes login form
+// Login Handler - With Email Verification Code
 // ============================================
 session_start();
 require_once __DIR__ . '/db/connection.php';
 
-// Only accept POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: login.html');
     exit;
@@ -47,38 +46,42 @@ if (!$user['is_active']) {
     exit;
 }
 
-// Verify role matches what user selected
-// Admin can only login through admin toggle
+// Verify role matches
 if ($role === 'admin' && $user['role'] !== 'admin') {
     header('Location: login.html?error=role');
     exit;
 }
-
-// For client/usher, check the role matches
 if ($role !== 'admin' && $user['role'] !== $role && $user['role'] !== 'admin') {
     header('Location: login.html?error=role');
     exit;
 }
 
-// ---- Login Successful ----
-$_SESSION['user_id']    = $user['id'];
-$_SESSION['user_name']  = $user['first_name'] . ' ' . $user['last_name'];
-$_SESSION['user_email'] = $user['email'];
-$_SESSION['user_role']  = $user['role'];
-$_SESSION['logged_in']  = true;
+// ---- Generate 6-digit verification code ----
+$code = str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
 
-// Redirect based on role
-switch ($user['role']) {
-    case 'admin':
-        header('Location: admin/dashboard.html');
-        break;
-    case 'usher':
-        header('Location: usher/dashboard.html');
-        break;
-    case 'client':
-    default:
-        header('Location: index.html');
-        break;
-}
+// Save code to database
+$stmt = $conn->prepare("UPDATE users SET email_verification_code = ? WHERE id = ?");
+$stmt->bind_param("si", $code, $user['id']);
+$stmt->execute();
+$stmt->close();
+
+// Try to send email (works if XAMPP mail is configured)
+$to = $user['email'];
+$subject = "Wasla - Your Login Verification Code";
+$message = "Your Wasla verification code is: $code\n\nThis code expires in 10 minutes.\nIf you didn't request this, please ignore this email.";
+$headers = "From: noreply@wasla.com\r\nContent-Type: text/plain; charset=UTF-8";
+
+@mail($to, $subject, $message, $headers); // Suppress errors if mail not configured
+
+// Store pending login data in session
+$_SESSION['pending_user_id']   = $user['id'];
+$_SESSION['pending_user_name'] = $user['first_name'] . ' ' . $user['last_name'];
+$_SESSION['pending_user_email']= $user['email'];
+$_SESSION['pending_user_role'] = $user['role'];
+$_SESSION['pending_code']      = $code;
+$_SESSION['pending_code_time'] = time();
+
+// Redirect to verification page
+header('Location: verify-email.html');
 exit;
 ?>
