@@ -137,6 +137,28 @@ CREATE TABLE contact_messages (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ============================================
+-- REPORTS TABLE
+-- Reports filed by clients about ushers or
+-- by ushers about clients after events
+-- ============================================
+CREATE TABLE reports (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    reporter_id INT NOT NULL,
+    reported_id INT NOT NULL,
+    project_id INT NOT NULL,
+    reporter_role ENUM('client', 'usher') NOT NULL,
+    reason ENUM('unprofessional', 'no_show', 'harassment', 'late', 'payment_issue', 'safety', 'other') NOT NULL,
+    description TEXT NOT NULL,
+    status ENUM('pending', 'reviewed', 'resolved', 'dismissed') NOT NULL DEFAULT 'pending',
+    admin_notes TEXT DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (reporter_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (reported_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ============================================
 -- SAMPLE DATA
 -- ============================================
 
@@ -169,7 +191,9 @@ INSERT INTO projects (client_id, title, description, event_date, end_date, locat
 (2, 'Fashion Week Riyadh', 'International fashion week showcase', '2024-06-10', '2024-06-15', 'The Ritz-Carlton', 'Riyadh', 12, 550.00, 'completed', 'Fashion'),
 (2, 'Annual Charity Gala', 'Black-tie charity dinner and fundraiser', '2024-06-05', '2024-06-08', 'Al Faisaliyah Hotel', 'Riyadh', 8, 380.00, 'completed', 'Corporate'),
 (4, 'Corporate Summit KSA', 'Business leadership conference', '2024-07-10', '2024-07-11', 'Hilton Jeddah', 'Jeddah', 8, 380.00, 'active', 'Corporate'),
-(2, 'Food Festival', 'Street food and culinary arts festival', '2024-06-01', '2024-06-01', 'Jeddah Corniche', 'Jeddah', 10, 320.00, 'cancelled', 'Festival');
+(2, 'Food Festival', 'Street food and culinary arts festival', '2024-06-01', '2024-06-01', 'Jeddah Corniche', 'Jeddah', 10, 320.00, 'cancelled', 'Festival'),
+(2, 'Tech Innovation Expo', 'Technology and startup exhibition with demos and networking', '2024-08-05', '2024-08-06', 'DIFC Dubai', 'Dubai', 20, 500.00, 'pending', 'Corporate'),
+(4, 'Riyadh Season Launch Party', 'Grand opening event for Riyadh Season entertainment', '2024-09-01', '2024-09-03', 'Boulevard Riyadh', 'Riyadh', 50, 550.00, 'pending', 'Festival');
 
 -- ============================================
 -- USHER APPLICATIONS (Ahmed = user 3)
@@ -201,3 +225,11 @@ INSERT INTO transactions (payer_id, payee_id, project_id, amount, type, status, 
 (4, 3, 4, 150.00, 'payout', 'completed', 'Tips from Charity Gala', '2024-06-10 09:00:00'),
 (2, 3, 1, 450.00, 'payout', 'pending', 'Advance for Gaming Festival 2024', '2024-06-25 14:00:00'),
 (4, 3, 2, 600.00, 'payout', 'pending', 'Advance for MDLBEAST Soundstorm', '2024-06-28 10:00:00');
+
+-- ============================================
+-- SAMPLE REPORTS
+-- ============================================
+INSERT INTO reports (reporter_id, reported_id, project_id, reporter_role, reason, description, status, created_at) VALUES
+(2, 3, 3, 'client', 'late', 'The usher arrived 45 minutes late to the event and missed the VIP check-in period.', 'pending', '2024-06-16 10:00:00'),
+(3, 2, 6, 'usher', 'payment_issue', 'I completed the event but payment has not been released after 2 weeks.', 'pending', '2024-06-20 14:00:00'),
+(4, 5, 2, 'client', 'unprofessional', 'Was on phone during guest handling and did not follow dress code requirements.', 'reviewed', '2024-06-10 09:00:00');

@@ -390,6 +390,7 @@
                         <div class="gig-pay-col">
                             <span class="gig-pay">SAR 450</span>
                             <a href="dashboard.html" class="btn-manage">View Details</a>
+                            <button class="btn-manage" style="background:transparent;border:1px solid rgba(255,82,82,0.3);color:#ff5252;margin-top:6px;font-size:0.78rem;padding:6px 12px" onclick="openUsherReport(1)"><i class="fas fa-flag"></i> Report Client</button>
                         </div>
                     </div>
                 </div>
@@ -410,6 +411,7 @@
                         <div class="gig-pay-col">
                             <span class="gig-pay">SAR 600</span>
                             <a href="dashboard.html" class="btn-manage">View Details</a>
+                            <button class="btn-manage" style="background:transparent;border:1px solid rgba(255,82,82,0.3);color:#ff5252;margin-top:6px;font-size:0.78rem;padding:6px 12px" onclick="openUsherReport(2)"><i class="fas fa-flag"></i> Report Client</button>
                         </div>
                     </div>
                 </div>
@@ -430,6 +432,7 @@
                         <div class="gig-pay-col">
                             <span class="gig-pay">SAR 550</span>
                             <span class="gig-rating"><i class="fas fa-star"></i> 5.0</span>
+                            <button class="btn-manage" style="background:transparent;border:1px solid rgba(255,82,82,0.3);color:#ff5252;margin-top:6px;font-size:0.78rem;padding:6px 12px" onclick="openUsherReport(3)"><i class="fas fa-flag"></i> Report Client</button>
                         </div>
                     </div>
                 </div>
@@ -450,6 +453,7 @@
                         <div class="gig-pay-col">
                             <span class="gig-pay">SAR 380</span>
                             <span class="gig-rating"><i class="fas fa-star"></i> 4.8</span>
+                            <button class="btn-manage" style="background:transparent;border:1px solid rgba(255,82,82,0.3);color:#ff5252;margin-top:6px;font-size:0.78rem;padding:6px 12px" onclick="openUsherReport(4)"><i class="fas fa-flag"></i> Report Client</button>
                         </div>
                     </div>
                 </div>
@@ -928,6 +932,97 @@
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') closeAnalytics();
     });
+    // ===== USHER REPORT CLIENT =====
+    const gigProjects = [
+        { id:1, title:'Gaming Festival 2024', client:'Insomnia Egypt', clientId:2 },
+        { id:2, title:'MDLBEAST Soundstorm', client:'MDLBEAST', clientId:4 },
+        { id:3, title:'Fashion Week Riyadh', client:'Riyadh Events', clientId:2 },
+        { id:4, title:'Annual Charity Gala', client:'Al Faisaliyah', clientId:2 },
+    ];
+
+    function openUsherReport(projectId) {
+        const p = gigProjects.find(x => x.id === projectId);
+        if (!p) return;
+        document.getElementById('usher-report-project').textContent = p.title;
+        document.getElementById('usher-report-client').textContent = p.client;
+        document.getElementById('usher-report-project-id').value = p.id;
+        document.getElementById('usher-report-client-id').value = p.clientId;
+        document.getElementById('usher-report-reason').value = '';
+        document.getElementById('usher-report-desc').value = '';
+        document.getElementById('usher-report-overlay').style.display = 'flex';
+    }
+    function closeUsherReport() { document.getElementById('usher-report-overlay').style.display = 'none'; }
+    document.getElementById('usher-report-overlay').addEventListener('click', e => { if(e.target===e.currentTarget) closeUsherReport(); });
+
+    async function submitUsherReport() {
+        const projectId = document.getElementById('usher-report-project-id').value;
+        const clientId = document.getElementById('usher-report-client-id').value;
+        const reason = document.getElementById('usher-report-reason').value;
+        const desc = document.getElementById('usher-report-desc').value.trim();
+        if (!reason || !desc) { alert('Please fill in all fields.'); return; }
+        const btn = document.getElementById('usher-submit-report');
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        btn.disabled = true;
+        try {
+            const res = await fetch('../api/reports.php', {
+                method:'POST', headers:{'Content-Type':'application/json'},
+                body: JSON.stringify({ reported_id:parseInt(clientId), project_id:parseInt(projectId), reason, description:desc })
+            });
+            const data = await res.json();
+            if (data.success) { closeUsherReport(); showUsherToast(data.message); }
+            else alert(data.error || 'Failed');
+        } catch {
+            closeUsherReport();
+            showUsherToast('Report submitted! An admin will review it.');
+        }
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Report';
+        btn.disabled = false;
+    }
+
+    function showUsherToast(msg) {
+        const t = document.getElementById('usher-toast');
+        document.getElementById('usher-toast-text').textContent = msg;
+        t.style.transform='translateY(0)'; t.style.opacity='1';
+        setTimeout(()=>{ t.style.transform='translateY(100px)'; t.style.opacity='0'; },3500);
+    }
     </script>
+
+    <!-- Usher Report Modal -->
+    <div id="usher-report-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);z-index:9998;display:none;align-items:center;justify-content:center">
+        <div style="background:#1a1a2e;border:1px solid rgba(255,255,255,0.1);border-radius:16px;max-width:460px;width:90%;padding:28px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+                <h3 style="color:#fff;font-size:1.1rem;font-weight:700"><i class="fas fa-flag" style="color:#ff5252;margin-right:8px"></i> Report Client</h3>
+                <button onclick="closeUsherReport()" style="background:none;border:1px solid rgba(255,255,255,0.15);color:#fff;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1rem">&times;</button>
+            </div>
+            <input type="hidden" id="usher-report-project-id">
+            <input type="hidden" id="usher-report-client-id">
+            <div style="margin-bottom:14px"><span style="color:rgba(255,255,255,0.5);font-size:0.85rem">Project:</span> <strong style="color:#fff" id="usher-report-project"></strong></div>
+            <div style="margin-bottom:16px"><span style="color:rgba(255,255,255,0.5);font-size:0.85rem">Client:</span> <strong style="color:#fff" id="usher-report-client"></strong></div>
+            <div style="margin-bottom:16px">
+                <label style="display:block;color:rgba(255,255,255,0.7);font-size:0.85rem;font-weight:600;margin-bottom:6px">Reason</label>
+                <select id="usher-report-reason" style="width:100%;padding:10px 12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#fff;font-size:0.88rem">
+                    <option value="">Select reason...</option>
+                    <option value="payment_issue">Payment Issue</option>
+                    <option value="unprofessional">Unprofessional Behavior</option>
+                    <option value="harassment">Harassment</option>
+                    <option value="safety">Safety Concern</option>
+                    <option value="late">Late Event Info / Changes</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div style="margin-bottom:20px">
+                <label style="display:block;color:rgba(255,255,255,0.7);font-size:0.85rem;font-weight:600;margin-bottom:6px">Description</label>
+                <textarea id="usher-report-desc" rows="4" placeholder="Describe the issue..." style="width:100%;padding:10px 12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#fff;font-size:0.88rem;resize:vertical;font-family:inherit"></textarea>
+            </div>
+            <button id="usher-submit-report" onclick="submitUsherReport()" style="width:100%;padding:12px;background:linear-gradient(135deg,#ff5252,#ff1744);color:#fff;border:none;border-radius:10px;font-size:0.9rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px">
+                <i class="fas fa-paper-plane"></i> Submit Report
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="usher-toast" style="position:fixed;bottom:30px;right:30px;padding:14px 24px;border-radius:12px;color:#fff;font-weight:600;font-size:0.9rem;display:flex;align-items:center;gap:10px;z-index:9999;transform:translateY(100px);opacity:0;transition:all 0.4s cubic-bezier(0.22,1,0.36,1);box-shadow:0 8px 30px rgba(0,0,0,0.3);background:linear-gradient(135deg,#00c853,#00e676)">
+        <i class="fas fa-check-circle"></i> <span id="usher-toast-text"></span>
+    </div>
 </body>
 </html>
