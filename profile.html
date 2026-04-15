@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="images/wasla-icon.png">
+    <script src="theme-init.js"></script>
 </head>
 <body>
     <!-- Top Navbar -->
@@ -82,7 +83,7 @@
                         <div class="profile-header-info">
                             <h1 class="profile-full-name">Abdullah Elsayed</h1>
                             <p class="profile-role"><i class="fas fa-briefcase"></i> Event Manager</p>
-                            <p class="profile-location-text"><i class="fas fa-map-marker-alt"></i> Riyadh, Saudi Arabia</p>
+                            <p class="profile-location-text"><i class="fas fa-map-marker-alt"></i> Cairo, Egypt</p>
                         </div>
                         <button class="btn-edit-profile" id="btn-edit-profile">
                             <i class="fas fa-pen"></i> Edit Profile
@@ -104,7 +105,7 @@
                         </div>
                         <div class="profile-info-row">
                             <span class="profile-info-label">Phone</span>
-                            <span class="profile-info-value">+966 55 123 4567</span>
+                            <span class="profile-info-value">+20 100 123 4567</span>
                         </div>
                         <div class="profile-info-row">
                             <span class="profile-info-label">Member Since</span>
@@ -194,9 +195,153 @@
             <a href="terms.html">TERMS OF SERVICE</a>
             <a href="privacy.html">PRIVACY POLICY</a>
             <a href="contact.html">CONTACT US</a>
-            <a href="#">TWITTER</a>
-            <a href="#">INSTAGRAM</a>
         </div>
     </footer>
-</body>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal-overlay" id="edit-profile-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-edit"></i> Edit Profile</h2>
+                <button class="modal-close" id="modal-close-profile">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-input" id="edit-first-name" value="Abdullah">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-input" id="edit-last-name" value="Elsayed">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="edit-email" value="abdullah.elsayed@wasla.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" class="form-input" id="edit-phone" value="+20 100 123 4567">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Location</label>
+                    <input type="text" class="form-input" id="edit-location" value="Cairo, Egypt">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Bio</label>
+                    <textarea class="form-input form-textarea" id="edit-bio" rows="4">Experienced event manager with a passion for creating seamless, large-scale experiences. Specializing in gaming festivals, corporate events, and training programs across the MENA region. Always looking for talented ushers and coordinators to build world-class event teams.</textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" id="btn-cancel-profile">Cancel</button>
+                <button class="btn-modal-save" id="btn-save-profile"><i class="fas fa-check"></i> Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Edit Profile Modal
+        const editModal = document.getElementById('edit-profile-modal');
+        const editBtn = document.getElementById('btn-edit-profile');
+        const closeBtn = document.getElementById('modal-close-profile');
+        const cancelBtn = document.getElementById('btn-cancel-profile');
+        const saveBtn = document.getElementById('btn-save-profile');
+
+        function openEditModal() {
+            editModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeEditModal() {
+            editModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        editBtn.addEventListener('click', openEditModal);
+        closeBtn.addEventListener('click', closeEditModal);
+        cancelBtn.addEventListener('click', closeEditModal);
+        editModal.addEventListener('click', (e) => {
+            if (e.target === editModal) closeEditModal();
+        });
+
+        saveBtn.addEventListener('click', async () => {
+            const firstName = document.getElementById('edit-first-name').value;
+            const lastName = document.getElementById('edit-last-name').value;
+            const email = document.getElementById('edit-email').value;
+            const phone = document.getElementById('edit-phone').value;
+            const location = document.getElementById('edit-location').value;
+            const bio = document.getElementById('edit-bio').value;
+
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            saveBtn.disabled = true;
+
+            // Save to backend
+            try {
+                await fetch('db/update_profile.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ first_name: firstName, last_name: lastName, email, phone, bio, city: location })
+                });
+            } catch(e) { console.log('Profile saved locally only'); }
+
+            // Update displayed profile values
+            document.querySelector('.profile-full-name').textContent = firstName + ' ' + lastName;
+            document.querySelectorAll('.profile-info-value')[0].textContent = firstName + ' ' + lastName;
+            document.querySelectorAll('.profile-info-value')[1].textContent = email;
+            document.querySelectorAll('.profile-info-value')[2].textContent = phone;
+            document.querySelector('.profile-location-text').innerHTML = '<i class="fas fa-map-marker-alt"></i> ' + location;
+            document.querySelector('.profile-bio-text').textContent = bio;
+            document.querySelector('.welcome-text').textContent = 'Welcome ' + firstName;
+            document.querySelector('.profile-name').innerHTML = firstName + '<br>' + lastName;
+
+            saveBtn.innerHTML = '<i class="fas fa-check"></i> Saved!';
+            saveBtn.style.background = 'var(--accent)';
+            saveBtn.disabled = false;
+            setTimeout(() => {
+                saveBtn.innerHTML = '<i class="fas fa-check"></i> Save Changes';
+                saveBtn.style.background = '';
+                closeEditModal();
+            }, 1200);
+        });
+
+        // ===== Load Profile from Backend =====
+        async function loadProfile() {
+            try {
+                const res = await fetch('db/get_user.php');
+                const data = await res.json();
+                if (data.logged_in && data.user) {
+                    const u = data.user;
+                    document.querySelector('.profile-full-name').textContent = u.first_name + ' ' + u.last_name;
+                    document.querySelector('.welcome-text').textContent = 'Welcome ' + u.first_name;
+                    document.querySelector('.profile-name').innerHTML = u.first_name + '<br>' + u.last_name;
+                    document.querySelector('.profile-role').innerHTML = '<i class="fas fa-briefcase"></i> ' + (u.role === 'client' ? 'Event Manager' : 'Usher');
+                    document.querySelector('.profile-location-text').innerHTML = '<i class="fas fa-map-marker-alt"></i> ' + (u.city || 'Cairo, Egypt');
+
+                    const infoValues = document.querySelectorAll('.profile-info-value');
+                    if (infoValues[0]) infoValues[0].textContent = u.first_name + ' ' + u.last_name;
+                    if (infoValues[1]) infoValues[1].textContent = u.email;
+                    if (infoValues[2]) infoValues[2].textContent = u.phone || '+20 100 123 4567';
+                    if (infoValues[3]) infoValues[3].textContent = new Date(u.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+                    if (u.bio) document.querySelector('.profile-bio-text').textContent = u.bio;
+
+                    // Populate edit modal
+                    document.getElementById('edit-first-name').value = u.first_name;
+                    document.getElementById('edit-last-name').value = u.last_name;
+                    document.getElementById('edit-email').value = u.email;
+                    document.getElementById('edit-phone').value = u.phone || '';
+                    document.getElementById('edit-location').value = u.city || 'Cairo, Egypt';
+                    if (u.bio) document.getElementById('edit-bio').value = u.bio;
+                }
+            } catch(e) { console.log('Profile: Using static data'); }
+        }
+
+        // Logout
+        document.querySelector('.btn-logout')?.addEventListener('click', async () => {
+            try { await fetch('db/logout.php'); } catch(e) {}
+            window.location.href = 'landing.html';
+        });
+
+        loadProfile();
+    </script>
 </html>

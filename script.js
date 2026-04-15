@@ -3,7 +3,7 @@ const projects = [
     {
         title: "Insomnia Egypt Gaming Festival 2026",
         date: "Nov 02, 2024",
-        location: "The Ritz-Carlton, Riyadh",
+        location: "Cairo International Convention Centre, Cairo",
         ushers: 3,
         image: "images/event_gaming.png",
         type: "gaming"
@@ -11,7 +11,7 @@ const projects = [
     {
         title: "Insomnia Egypt Gaming Festival 2026",
         date: "Nov 02, 2024",
-        location: "The Ritz-Carlton, Riyadh",
+        location: "Cairo International Convention Centre, Cairo",
         ushers: 3,
         image: "images/event_training.png",
         type: "gaming"
@@ -19,7 +19,7 @@ const projects = [
     {
         title: "Insomnia Egypt Gaming Festival 2026",
         date: "Nov 02, 2024",
-        location: "The Ritz-Carlton, Riyadh",
+        location: "Cairo International Convention Centre, Cairo",
         ushers: 3,
         image: "images/event_training.png",
         type: "gaming"
@@ -27,7 +27,7 @@ const projects = [
     {
         title: "Insomnia Egypt Gaming Festival 2026",
         date: "Nov 02, 2024",
-        location: "The Ritz-Carlton, Riyadh",
+        location: "Cairo International Convention Centre, Cairo",
         ushers: 3,
         image: "images/event_gaming.png",
         type: "gaming"
@@ -35,7 +35,7 @@ const projects = [
     {
         title: "Foundation training year 2025/26: the skills you need to help you",
         date: "Nov 02, 2024",
-        location: "The Ritz-Carlton, Riyadh",
+        location: "Cairo International Convention Centre, Cairo",
         ushers: 3,
         image: "images/event_training.png",
         type: "training"
@@ -43,7 +43,7 @@ const projects = [
     {
         title: "Foundation training year 2025/26: the skills you need to help you",
         date: "Nov 02, 2024",
-        location: "The Ritz-Carlton, Riyadh",
+        location: "Cairo International Convention Centre, Cairo",
         ushers: 7,
         image: "images/event_training.png",
         type: "training"

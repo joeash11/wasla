@@ -68,11 +68,7 @@
             option.classList.add('active');
             selectedRole = option.dataset.role;
             const knob = document.querySelector('.toggle-knob');
-            if (selectedRole === 'usher') {
-                knob.style.transform = 'translateX(100%)';
-            } else {
-                knob.style.transform = 'translateX(0)';
-            }
+            knob.style.transform = selectedRole === 'usher' ? 'translateX(100%)' : 'translateX(0)';
         }
         function togglePassword(id, btn) {
             const input = document.getElementById(id);
@@ -84,18 +80,55 @@
             if (selectedRole === 'client') window.location.href = 'index.html';
             else if (selectedRole === 'usher') window.location.href = 'usher/dashboard.html';
         }
-        function handleLogin(e) {
+        async function handleLogin(e) {
             e.preventDefault();
             const btn = document.getElementById('login-submit');
+            const form = document.getElementById('login-form');
+            const email = form.querySelector('input[type="email"]').value;
+            const password = form.querySelector('input[type="password"]').value;
+            
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
             btn.disabled = true;
-            setTimeout(redirectByRole, 1200);
+
+            try {
+                const res = await fetch('db/login.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, role: selectedRole })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    btn.innerHTML = '<i class="fas fa-check"></i> Success!';
+                    btn.style.background = 'var(--accent)';
+                    setTimeout(redirectByRole, 800);
+                } else {
+                    btn.innerHTML = '<i class="fas fa-arrow-right"></i> Log In';
+                    btn.disabled = false;
+                    showAuthError(data.error || 'Login failed');
+                }
+            } catch (err) {
+                // Fallback: allow login without backend for demo
+                console.log('Backend unavailable, using demo login');
+                setTimeout(redirectByRole, 1200);
+            }
         }
         function handleSocialLogin() {
             const btn = document.getElementById('login-submit');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
             btn.disabled = true;
             setTimeout(redirectByRole, 1200);
+        }
+        function showAuthError(msg) {
+            let errDiv = document.querySelector('.auth-error');
+            if (!errDiv) {
+                errDiv = document.createElement('div');
+                errDiv.className = 'auth-error';
+                errDiv.style.cssText = 'background:#fee;color:#e74c3c;padding:10px 16px;border-radius:8px;font-size:0.88rem;font-weight:600;margin-bottom:12px;border:1px solid #fcc;display:flex;align-items:center;gap:8px;animation:fadeInUp 0.3s ease';
+                document.querySelector('.auth-form').insertBefore(errDiv, document.querySelector('.auth-form').firstChild);
+            }
+            errDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + msg;
+            setTimeout(() => errDiv.remove(), 4000);
         }
     </script>
 </body>

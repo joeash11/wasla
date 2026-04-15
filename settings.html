@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="images/wasla-icon.png">
+    <script src="theme-init.js"></script>
 </head>
 <body>
     <nav class="navbar" id="navbar">
@@ -61,7 +62,7 @@
                         <div class="settings-form">
                             <div class="form-row"><div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input" value="Abdullah"></div><div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input" value="Elsayed"></div></div>
                             <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" value="abdullah.elsayed@wasla.com"></div>
-                            <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" value="+966 55 123 4567"></div>
+                            <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" id="settings-phone" value="+20 100 123 4567"></div>
                             <button class="btn-save">Save Changes</button>
                         </div>
                     </div>
@@ -118,7 +119,7 @@
                     </div>
                     <div class="settings-card">
                         <h2 class="settings-card-title">Language</h2>
-                        <div class="form-group"><select class="form-input"><option>English</option><option>العربية (Arabic)</option><option>Français (French)</option></select></div>
+                        <div class="form-group"><select class="form-input" id="settings-language"><option value="en">English</option><option value="ar">العربية (Arabic)</option><option value="fr">Français (French)</option></select></div>
                     </div>
                 </div>
             </div>
@@ -128,10 +129,186 @@
         <div class="footer-left"><h3>Wasla</h3><p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p></div>
         <div class="footer-links"><a href="terms.html">TERMS OF SERVICE</a><a href="privacy.html">PRIVACY POLICY</a><a href="contact.html">CONTACT US</a><a href="#">TWITTER</a><a href="#">INSTAGRAM</a></div>
     </footer>
+    <div class="toast-notification" id="settings-toast"><i class="fas fa-check-circle"></i> <span id="toast-text">Changes saved!</span></div>
     <script>
-        function switchSettingsTab(tab){document.querySelectorAll('.settings-tab').forEach(t=>t.classList.remove('active'));document.querySelector(`[data-tab="${tab}"]`).classList.add('active');document.querySelectorAll('.settings-panel').forEach(p=>p.classList.remove('active'));document.getElementById(`panel-${tab}`).classList.add('active');}
-        document.querySelectorAll('.theme-option').forEach(o=>{o.addEventListener('click',()=>{document.querySelectorAll('.theme-option').forEach(x=>x.classList.remove('active'));o.classList.add('active');});});
-        document.querySelectorAll('.btn-save').forEach(b=>{b.addEventListener('click',()=>{const t=b.textContent;b.textContent='✓ Saved!';b.style.background='var(--accent)';setTimeout(()=>{b.textContent=t;b.style.background='';},2000);});});
+        // ===== TAB SWITCHING =====
+        function switchSettingsTab(tab) {
+            document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+            document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(`panel-${tab}`).classList.add('active');
+        }
+
+        // ===== TOAST =====
+        function showToast(msg) {
+            const toast = document.getElementById('settings-toast');
+            document.getElementById('toast-text').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2500);
+        }
+
+        // ===== SAVE CHANGES (Account Info) =====
+        document.querySelectorAll('.btn-save').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Gather form values from account panel
+                const panel = btn.closest('.settings-card');
+                const inputs = panel.querySelectorAll('.form-input');
+                const data = {};
+                inputs.forEach((input, i) => {
+                    data['field_' + i] = input.value;
+                });
+
+                // Save to localStorage
+                const key = panel.querySelector('.settings-card-title')?.textContent?.trim() || 'settings';
+                localStorage.setItem('wasla_' + key.replace(/\s+/g, '_').toLowerCase(), JSON.stringify(data));
+
+                // Visual feedback
+                const origText = btn.textContent;
+                btn.textContent = '✓ Saved!';
+                btn.style.background = 'var(--accent)';
+                showToast(key + ' updated successfully!');
+                setTimeout(() => {
+                    btn.textContent = origText;
+                    btn.style.background = '';
+                }, 2000);
+            });
+        });
+
+        // ===== LOAD SAVED SETTINGS =====
+        function loadSavedSettings() {
+            try {
+                const acctData = JSON.parse(localStorage.getItem('wasla_account_information'));
+                if (acctData) {
+                    const panel = document.getElementById('panel-account');
+                    const inputs = panel.querySelector('.settings-card')?.querySelectorAll('.form-input');
+                    if (inputs) {
+                        Object.keys(acctData).forEach((key, i) => {
+                            if (inputs[i]) inputs[i].value = acctData[key];
+                        });
+                    }
+                }
+            } catch(e) { /* ignore parse errors */ }
+        }
+
+        // ===== NOTIFICATION TOGGLE SAVE =====
+        document.querySelectorAll('.toggle-switch input').forEach(toggle => {
+            toggle.addEventListener('change', () => {
+                const title = toggle.closest('.settings-toggle-row')?.querySelector('.toggle-title')?.textContent || 'setting';
+                const state = toggle.checked ? 'enabled' : 'disabled';
+                localStorage.setItem('wasla_toggle_' + title.replace(/\s+/g, '_').toLowerCase(), state);
+                showToast(title + ' ' + state);
+            });
+
+            // Load saved state
+            const title = toggle.closest('.settings-toggle-row')?.querySelector('.toggle-title')?.textContent || '';
+            const saved = localStorage.getItem('wasla_toggle_' + title.replace(/\s+/g, '_').toLowerCase());
+            if (saved !== null) {
+                toggle.checked = saved === 'enabled';
+            }
+        });
+
+        // ===== THEME SWITCHING =====
+        function applyTheme(theme) {
+            localStorage.setItem('wasla_theme', theme);
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else if (theme === 'light') {
+                document.documentElement.removeAttribute('data-theme');
+            } else {
+                // System preference
+                if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                } else {
+                    document.documentElement.removeAttribute('data-theme');
+                }
+            }
+        }
+
+        document.querySelectorAll('.theme-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.theme-option').forEach(x => x.classList.remove('active'));
+                option.classList.add('active');
+                const theme = option.dataset.theme;
+                applyTheme(theme);
+                showToast('Theme changed to ' + theme.charAt(0).toUpperCase() + theme.slice(1));
+            });
+        });
+
+        // Load saved theme on settings page
+        const savedTheme = localStorage.getItem('wasla_theme') || 'light';
+        document.querySelectorAll('.theme-option').forEach(o => {
+            o.classList.toggle('active', o.dataset.theme === savedTheme);
+        });
+        applyTheme(savedTheme);
+
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+            if (localStorage.getItem('wasla_theme') === 'system') {
+                applyTheme('system');
+            }
+        });
+
+        // ===== LANGUAGE SWITCHING =====
+        const translations = {
+            en: { dashboard: 'Dashboard', myProjects: 'My Projects', profile: 'Profile', messages: 'Messages', settings: 'Settings', helpCenter: 'Help Center', logOut: 'Log Out', welcome: 'Welcome Abdullah', langChanged: 'Language changed to English' },
+            ar: { dashboard: 'لوحة التحكم', myProjects: 'مشاريعي', profile: 'الملف الشخصي', messages: 'الرسائل', settings: 'الإعدادات', helpCenter: 'مركز المساعدة', logOut: 'تسجيل الخروج', welcome: 'مرحباً عبدالله', langChanged: 'تم تغيير اللغة إلى العربية' },
+            fr: { dashboard: 'Tableau de bord', myProjects: 'Mes Projets', profile: 'Profil', messages: 'Messages', settings: 'Paramètres', helpCenter: "Centre d'aide", logOut: 'Déconnexion', welcome: 'Bienvenue Abdullah', langChanged: 'Langue changée en Français' }
+        };
+
+        const langSelect = document.getElementById('settings-language');
+        const savedLang = localStorage.getItem('wasla_language') || 'en';
+        langSelect.value = savedLang;
+
+        langSelect.addEventListener('change', () => {
+            const lang = langSelect.value;
+            localStorage.setItem('wasla_language', lang);
+            applyLanguage(lang);
+            showToast(translations[lang].langChanged);
+
+            // Set text direction for Arabic
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        });
+
+        function applyLanguage(lang) {
+            const t = translations[lang];
+            if (!t) return;
+
+            // Update nav links
+            const navLinks = document.querySelectorAll('.nav-links a');
+            if (navLinks[0]) navLinks[0].textContent = t.dashboard;
+            if (navLinks[1]) navLinks[1].textContent = t.myProjects;
+            if (navLinks[2]) navLinks[2].textContent = t.profile;
+
+            // Update sidebar
+            const sideLabels = document.querySelectorAll('.sidebar-link span');
+            if (sideLabels[0]) sideLabels[0].textContent = t.dashboard;
+            if (sideLabels[1]) sideLabels[1].textContent = t.myProjects;
+            if (sideLabels[2]) sideLabels[2].textContent = t.messages;
+            if (sideLabels[3]) sideLabels[3].textContent = t.settings;
+            if (sideLabels[4]) sideLabels[4].textContent = t.helpCenter;
+
+            // Update welcome text
+            const welcome = document.querySelector('.welcome-text');
+            if (welcome) welcome.textContent = t.welcome;
+
+            // Update logout button
+            const logout = document.querySelector('.btn-logout');
+            if (logout) logout.textContent = t.logOut;
+
+            // Update section title
+            const sectionTitle = document.querySelector('.section-title');
+            if (sectionTitle) sectionTitle.textContent = t.settings;
+
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        }
+
+        // Apply saved language on load
+        if (savedLang !== 'en') {
+            applyLanguage(savedLang);
+        }
+
+        // Init
+        loadSavedSettings();
     </script>
 </body>
 </html>

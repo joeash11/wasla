@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="images/wasla-icon.png">
+    <script src="theme-init.js"></script>
 </head>
 
 <body>
@@ -96,7 +97,7 @@
                     <div class="revenue-card-icon revenue-icon-green"><i class="fas fa-chart-line"></i></div>
                     <div class="revenue-card-info">
                         <p class="revenue-label">Total Revenue</p>
-                        <h3 class="revenue-value">SAR 124,500</h3>
+                        <h3 class="revenue-value">EGP 124,500</h3>
                         <span class="revenue-trend trend-up"><i class="fas fa-arrow-up"></i> 12.5% vs last month</span>
                     </div>
                 </div>
@@ -104,7 +105,7 @@
                     <div class="revenue-card-icon revenue-icon-orange"><i class="fas fa-clock"></i></div>
                     <div class="revenue-card-info">
                         <p class="revenue-label">Pending Payments</p>
-                        <h3 class="revenue-value">SAR 18,200</h3>
+                        <h3 class="revenue-value">EGP 18,200</h3>
                         <span class="revenue-trend trend-neutral"><i class="fas fa-minus"></i> 3 invoices pending</span>
                     </div>
                 </div>
@@ -112,7 +113,7 @@
                     <div class="revenue-card-icon revenue-icon-blue"><i class="fas fa-wallet"></i></div>
                     <div class="revenue-card-info">
                         <p class="revenue-label">Total Spent</p>
-                        <h3 class="revenue-value">SAR 67,800</h3>
+                        <h3 class="revenue-value">EGP 67,800</h3>
                         <span class="revenue-trend trend-down"><i class="fas fa-arrow-down"></i> 4.2% vs last month</span>
                     </div>
                 </div>
@@ -120,7 +121,7 @@
                     <div class="revenue-card-icon revenue-icon-purple"><i class="fas fa-user-tag"></i></div>
                     <div class="revenue-card-info">
                         <p class="revenue-label">Avg Cost / Usher</p>
-                        <h3 class="revenue-value">SAR 450</h3>
+                        <h3 class="revenue-value">EGP 450</h3>
                         <span class="revenue-trend trend-up"><i class="fas fa-arrow-up"></i> 2.1% efficiency gain</span>
                     </div>
                 </div>
@@ -147,22 +148,22 @@
                         <div class="transaction-item">
                             <div class="transaction-icon tx-expense"><i class="fas fa-arrow-up"></i></div>
                             <div class="transaction-info"><strong>Gaming Festival Ushers</strong><span>Jun 28, 2024</span></div>
-                            <span class="transaction-amount tx-expense">- SAR 4,500</span>
+                            <span class="transaction-amount tx-expense">- EGP 4,500</span>
                         </div>
                         <div class="transaction-item">
                             <div class="transaction-icon tx-income"><i class="fas fa-arrow-down"></i></div>
                             <div class="transaction-info"><strong>Client Payment - MDLBEAST</strong><span>Jun 25, 2024</span></div>
-                            <span class="transaction-amount tx-income">+ SAR 18,000</span>
+                            <span class="transaction-amount tx-income">+ EGP 18,000</span>
                         </div>
                         <div class="transaction-item">
                             <div class="transaction-icon tx-expense"><i class="fas fa-arrow-up"></i></div>
                             <div class="transaction-info"><strong>Corporate Summit Staff</strong><span>Jun 20, 2024</span></div>
-                            <span class="transaction-amount tx-expense">- SAR 2,800</span>
+                            <span class="transaction-amount tx-expense">- EGP 2,800</span>
                         </div>
                         <div class="transaction-item">
                             <div class="transaction-icon tx-income"><i class="fas fa-arrow-down"></i></div>
                             <div class="transaction-info"><strong>Client Payment - Gulf Events</strong><span>Jun 18, 2024</span></div>
-                            <span class="transaction-amount tx-income">+ SAR 12,500</span>
+                            <span class="transaction-amount tx-income">+ EGP 12,500</span>
                         </div>
                     </div>
                 </div>
@@ -189,9 +190,9 @@
                 <div class="filter-select">
                     <select id="location-filter">
                         <option value="">Location</option>
-                        <option value="riyadh">Riyadh</option>
-                        <option value="cairo">Cairo</option>
-                        <option value="dubai">Dubai</option>
+                        <option value="cairo" selected>Cairo</option>
+                        <option value="alexandria">Alexandria</option>
+                        <option value="giza">Giza</option>
                     </select>
                 </div>
             </section>
@@ -232,6 +233,74 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // ===== Dashboard Backend Integration =====
+        async function loadDashboardData() {
+            try {
+                // Load user session
+                const userRes = await fetch('db/get_user.php');
+                const userData = await userRes.json();
+                if (userData.logged_in && userData.user) {
+                    const u = userData.user;
+                    document.querySelector('.welcome-text').textContent = 'Welcome ' + u.first_name;
+                    document.querySelector('.profile-name').innerHTML = u.first_name + '<br>' + u.last_name;
+                }
+
+                // Load dashboard stats
+                const res = await fetch('db/get_dashboard.php');
+                const data = await res.json();
+
+                if (data.stats) {
+                    const statActive = document.querySelector('#stat-active .stat-value');
+                    const statUshers = document.querySelector('#stat-ushers .stat-value');
+                    const statEvents = document.querySelector('#stat-events .stat-value');
+                    if (statActive) { statActive.dataset.target = data.stats.active_projects; statActive.textContent = data.stats.active_projects; }
+                    if (statUshers) { statUshers.dataset.target = data.stats.ushers_hired; statUshers.textContent = data.stats.ushers_hired; }
+                    if (statEvents) { statEvents.dataset.target = data.stats.upcoming_events; statEvents.textContent = data.stats.upcoming_events; }
+                }
+
+                if (data.revenue) {
+                    const revenueValues = document.querySelectorAll('.revenue-value');
+                    if (revenueValues[0]) revenueValues[0].textContent = 'EGP ' + Number(data.revenue.total).toLocaleString();
+                    if (revenueValues[1]) revenueValues[1].textContent = 'EGP ' + Number(data.revenue.pending).toLocaleString();
+                    if (revenueValues[2]) revenueValues[2].textContent = 'EGP ' + Number(data.revenue.spent).toLocaleString();
+
+                    const trendNeutral = document.querySelector('.trend-neutral');
+                    if (trendNeutral) trendNeutral.innerHTML = '<i class="fas fa-minus"></i> ' + data.revenue.pending_count + ' invoices pending';
+                }
+
+                if (data.transactions && data.transactions.length > 0) {
+                    const tbody = document.querySelector('.transactions-table tbody');
+                    if (tbody) {
+                        tbody.innerHTML = '';
+                        data.transactions.forEach(tx => {
+                            const row = document.createElement('tr');
+                            const date = new Date(tx.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                            const statusClass = tx.status === 'completed' ? 'tx-status-completed' : tx.status === 'pending' ? 'tx-status-pending' : 'tx-status-failed';
+                            row.innerHTML = `
+                                <td>${tx.project_title || 'N/A'}</td>
+                                <td>${date}</td>
+                                <td>EGP ${Number(tx.amount).toLocaleString()}</td>
+                                <td><span class="tx-status ${statusClass}">${tx.status}</span></td>
+                            `;
+                            tbody.appendChild(row);
+                        });
+                    }
+                }
+
+            } catch (err) {
+                console.log('Dashboard: Using static data -', err.message);
+            }
+        }
+
+        // Logout handler
+        document.querySelector('.btn-logout')?.addEventListener('click', async () => {
+            try { await fetch('db/logout.php'); } catch(e) {}
+            window.location.href = 'landing.html';
+        });
+
+        document.addEventListener('DOMContentLoaded', loadDashboardData);
+    </script>
 </body>
 
 </html>

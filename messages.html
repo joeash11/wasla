@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="images/wasla-icon.png">
+    <script src="theme-init.js"></script>
 </head>
 <body>
     <!-- Top Navbar -->
@@ -192,39 +193,216 @@
     </div>
 
     <script>
-        function selectConversation(index) {
-            document.querySelectorAll('.conversation-item').forEach(item => item.classList.remove('active'));
-            document.querySelector(`[data-conv="${index}"]`).classList.add('active');
-            const names = ['Omar Hassan', 'Sara Ahmed', 'Khalid Al-Farsi', 'Fatima Zahra', 'Wasla Support'];
-            document.getElementById('chat-name').textContent = names[index];
+        const CURRENT_USER_ID = 2; // Abdullah Elsayed
+        let currentPartnerId = null;
+        let conversations = [];
+
+        // ===== LOAD CONVERSATIONS FROM BACKEND =====
+        async function loadConversations() {
+            try {
+                const res = await fetch(`db/get_conversations.php?user_id=${CURRENT_USER_ID}`);
+                const data = await res.json();
+                if (data.error) throw new Error(data.error);
+                conversations = data;
+                renderConversations(data);
+                if (data.length > 0) {
+                    selectConversation(data[0].partner_id);
+                }
+            } catch (err) {
+                console.log('Backend not available, using static data:', err.message);
+                // Fallback to static conversations
+                useFallbackData();
+            }
         }
 
-        // Send message
-        document.addEventListener('DOMContentLoaded', () => {
-            const input = document.getElementById('chat-input');
-            const sendBtn = document.getElementById('chat-send-btn');
-            const messages = document.getElementById('chat-messages');
+        // ===== RENDER CONVERSATIONS LIST =====
+        function renderConversations(convos) {
+            const list = document.getElementById('conversation-list');
+            const searchHTML = list.querySelector('.conversation-search').outerHTML;
+            list.innerHTML = searchHTML;
 
-            function sendMessage() {
-                const text = input.value.trim();
-                if (!text) return;
-                const msg = document.createElement('div');
-                msg.className = 'chat-msg chat-msg-sent';
-                const now = new Date();
-                const time = now.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
-                msg.innerHTML = `<div class="chat-msg-bubble"><p>${text}</p><span class="chat-msg-time">${time}</span></div>`;
-                messages.appendChild(msg);
-                input.value = '';
-                messages.scrollTop = messages.scrollHeight;
-                msg.style.opacity = '0';
-                msg.style.transform = 'translateY(10px)';
-                requestAnimationFrame(() => {
-                    msg.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-                    msg.style.opacity = '1';
-                    msg.style.transform = 'translateY(0)';
-                });
+            convos.forEach((conv, i) => {
+                const colors = ['', 'conv-avatar-purple', 'conv-avatar-green', 'conv-avatar-orange', ''];
+                const div = document.createElement('div');
+                div.className = 'conversation-item' + (i === 0 ? ' active' : '');
+                div.setAttribute('data-partner', conv.partner_id);
+                div.onclick = () => selectConversation(conv.partner_id);
+
+                const timeAgo = formatTimeAgo(conv.last_time);
+                const badgeHTML = conv.unread_count > 0 ? `<span class="conv-badge">${conv.unread_count}</span>` : '';
+
+                div.innerHTML = `
+                    <div class="conv-avatar ${colors[i % 5]}"><i class="fas fa-user-circle"></i></div>
+                    <div class="conv-info">
+                        <h4 class="conv-name">${conv.name}</h4>
+                        <p class="conv-preview">${truncate(conv.last_message, 30)}</p>
+                    </div>
+                    <div class="conv-meta">
+                        <span class="conv-time">${timeAgo}</span>
+                        ${badgeHTML}
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+
+            // Re-attach search
+            setupConvSearch();
+        }
+
+        // ===== SELECT CONVERSATION =====
+        async function selectConversation(partnerId) {
+            currentPartnerId = partnerId;
+
+            // Update active state
+            document.querySelectorAll('.conversation-item').forEach(el => el.classList.remove('active'));
+            const activeItem = document.querySelector(`[data-partner="${partnerId}"]`);
+            if (activeItem) activeItem.classList.add('active');
+
+            // Find partner name
+            const conv = conversations.find(c => c.partner_id == partnerId);
+            if (conv) {
+                document.getElementById('chat-name').textContent = conv.name;
             }
 
+            // Load messages
+            try {
+                const res = await fetch(`db/get_messages.php?user_id=${CURRENT_USER_ID}&partner_id=${partnerId}`);
+                const messages = await res.json();
+                if (messages.error) throw new Error(messages.error);
+                renderMessages(messages);
+            } catch (err) {
+                console.log('Could not load messages:', err.message);
+            }
+        }
+
+        // ===== RENDER MESSAGES =====
+        function renderMessages(messages) {
+            const container = document.getElementById('chat-messages');
+            container.innerHTML = '<div class="chat-date-divider"><span>Messages</span></div>';
+
+            let lastDate = '';
+            messages.forEach(msg => {
+                const msgDate = new Date(msg.sent_at).toLocaleDateString();
+                if (msgDate !== lastDate) {
+                    lastDate = msgDate;
+                    const isToday = msgDate === new Date().toLocaleDateString();
+                    const dateLabel = isToday ? 'Today' : msgDate;
+                    if (messages.indexOf(msg) > 0) {
+                        container.innerHTML += `<div class="chat-date-divider"><span>${dateLabel}</span></div>`;
+                    }
+                }
+
+                const time = new Date(msg.sent_at).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+                const cls = msg.is_mine ? 'chat-msg-sent' : 'chat-msg-received';
+                const div = document.createElement('div');
+                div.className = `chat-msg ${cls}`;
+                div.innerHTML = `<div class="chat-msg-bubble"><p>${escapeHTML(msg.message)}</p><span class="chat-msg-time">${time}</span></div>`;
+                container.appendChild(div);
+            });
+
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // ===== SEND MESSAGE =====
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const text = input.value.trim();
+            if (!text || !currentPartnerId) return;
+
+            // Show message immediately (optimistic)
+            const container = document.getElementById('chat-messages');
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+            const div = document.createElement('div');
+            div.className = 'chat-msg chat-msg-sent';
+            div.innerHTML = `<div class="chat-msg-bubble"><p>${escapeHTML(text)}</p><span class="chat-msg-time">${time}</span></div>`;
+            container.appendChild(div);
+            input.value = '';
+            container.scrollTop = container.scrollHeight;
+
+            // Animate in
+            div.style.opacity = '0';
+            div.style.transform = 'translateY(10px)';
+            requestAnimationFrame(() => {
+                div.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                div.style.opacity = '1';
+                div.style.transform = 'translateY(0)';
+            });
+
+            // Send to backend
+            try {
+                await fetch('db/send_message.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sender_id: CURRENT_USER_ID,
+                        receiver_id: currentPartnerId,
+                        message: text
+                    })
+                });
+            } catch (err) {
+                console.log('Message saved locally only:', err.message);
+            }
+        }
+
+        // ===== FALLBACK STATIC DATA =====
+        function useFallbackData() {
+            const staticConvos = [
+                { partner_id: 3, name: 'Omar Hassan', last_message: "Sure, I'll be there at 9 AM", last_time: new Date().toISOString(), unread_count: 2 },
+                { partner_id: 4, name: 'Sara Ahmed', last_message: 'The venue looks great!', last_time: new Date(Date.now()-3600000).toISOString(), unread_count: 0 },
+                { partner_id: 5, name: 'Khalid Al-Farsi', last_message: 'Can we schedule a meeting?', last_time: new Date(Date.now()-10800000).toISOString(), unread_count: 0 },
+            ];
+            conversations = staticConvos;
+            renderConversations(staticConvos);
+
+            // Select first conversation with static messages
+            currentPartnerId = 3;
+            document.getElementById('chat-name').textContent = 'Omar Hassan';
+        }
+
+        // ===== HELPERS =====
+        function formatTimeAgo(dateStr) {
+            const now = new Date();
+            const date = new Date(dateStr);
+            const diffMs = now - date;
+            const diffMin = Math.floor(diffMs / 60000);
+            if (diffMin < 1) return 'Just now';
+            if (diffMin < 60) return diffMin + 'm ago';
+            const diffHr = Math.floor(diffMin / 60);
+            if (diffHr < 24) return diffHr + 'h ago';
+            const diffDays = Math.floor(diffHr / 24);
+            if (diffDays === 1) return 'Yesterday';
+            return diffDays + 'd ago';
+        }
+
+        function truncate(str, len) {
+            return str && str.length > len ? str.substring(0, len) + '...' : (str || '');
+        }
+
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function setupConvSearch() {
+            const searchInput = document.getElementById('conv-search');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    const q = e.target.value.toLowerCase();
+                    document.querySelectorAll('.conversation-item').forEach(item => {
+                        const name = item.querySelector('.conv-name')?.textContent.toLowerCase() || '';
+                        item.style.display = name.includes(q) ? '' : 'none';
+                    });
+                });
+            }
+        }
+
+        // ===== INIT =====
+        document.addEventListener('DOMContentLoaded', () => {
+            loadConversations();
+
+            const input = document.getElementById('chat-input');
+            const sendBtn = document.getElementById('chat-send-btn');
             sendBtn.addEventListener('click', sendMessage);
             input.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
         });

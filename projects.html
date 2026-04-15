@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="images/wasla-icon.png">
+    <script src="theme-init.js"></script>
 </head>
 <body>
     <!-- Top Navbar -->
@@ -95,9 +96,9 @@
                 <div class="filter-select">
                     <select id="location-filter">
                         <option value="">Location</option>
-                        <option value="riyadh">Riyadh</option>
-                        <option value="cairo">Cairo</option>
-                        <option value="dubai">Dubai</option>
+                        <option value="cairo" selected>Cairo</option>
+                        <option value="alexandria">Alexandria</option>
+                        <option value="giza">Giza</option>
                     </select>
                 </div>
             </section>
@@ -129,12 +130,12 @@
     <script>
         // Project data with statuses
         const projects = [
-            { title: "Insomnia Egypt Gaming Festival 2026", date: "Nov 02, 2024", location: "The Ritz-Carlton, Riyadh", ushers: 3, image: "images/event_gaming.png", status: "active" },
-            { title: "Insomnia Egypt Gaming Festival 2026", date: "Nov 02, 2024", location: "The Ritz-Carlton, Riyadh", ushers: 3, image: "images/event_training.png", status: "active" },
-            { title: "Foundation training year 2025/26", date: "Nov 02, 2024", location: "The Ritz-Carlton, Riyadh", ushers: 3, image: "images/event_training.png", status: "completed" },
-            { title: "Insomnia Egypt Gaming Festival 2026", date: "Nov 02, 2024", location: "The Ritz-Carlton, Riyadh", ushers: 3, image: "images/event_gaming.png", status: "pending" },
-            { title: "Foundation training year 2025/26", date: "Nov 02, 2024", location: "The Ritz-Carlton, Riyadh", ushers: 7, image: "images/event_training.png", status: "active" },
-            { title: "Insomnia Egypt Gaming Festival 2026", date: "Dec 15, 2024", location: "The Ritz-Carlton, Riyadh", ushers: 5, image: "images/event_gaming.png", status: "completed" }
+            { title: "Insomnia Egypt Gaming Festival 2026", date: "Nov 02, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 3, image: "images/event_gaming.png", status: "active" },
+            { title: "Insomnia Egypt Gaming Festival 2026", date: "Nov 02, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 3, image: "images/event_training.png", status: "active" },
+            { title: "Foundation training year 2025/26", date: "Nov 02, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 3, image: "images/event_training.png", status: "completed" },
+            { title: "Insomnia Egypt Gaming Festival 2026", date: "Nov 02, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 3, image: "images/event_gaming.png", status: "pending" },
+            { title: "Foundation training year 2025/26", date: "Nov 02, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 7, image: "images/event_training.png", status: "active" },
+            { title: "Insomnia Egypt Gaming Festival 2026", date: "Dec 15, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 5, image: "images/event_gaming.png", status: "completed" }
         ];
 
         let currentFilter = 'all';
@@ -165,7 +166,7 @@
                         <div class="card-detail"><i class="far fa-calendar"></i><span>${project.date}</span></div>
                         <div class="card-detail"><i class="fas fa-map-marker-alt"></i><span>${project.location}</span></div>
                         <div class="card-detail"><i class="fas fa-users"></i><span>${project.ushers} ushers remaining</span></div>
-                        <button class="btn-manage">Manage Project</button>
+                        <button class="btn-manage" onclick="openManageModal(${index})">Manage Project</button>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -207,6 +208,100 @@
                     });
                 }, 250);
             });
+        }
+    </script>
+
+    <!-- Manage Project Modal -->
+    <div class="modal-overlay" id="manage-project-modal">
+        <div class="modal-container modal-lg">
+            <div class="modal-header">
+                <h2><i class="fas fa-tasks"></i> <span id="modal-project-title">Manage Project</span></h2>
+                <button class="modal-close" id="modal-close-project">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="manage-project-grid">
+                    <div class="manage-info-section">
+                        <h3 class="manage-section-title"><i class="fas fa-info-circle"></i> Project Details</h3>
+                        <div class="manage-detail-row">
+                            <span class="manage-label">Status</span>
+                            <span class="manage-value" id="modal-project-status"><span class="card-badge status-active">Active</span></span>
+                        </div>
+                        <div class="manage-detail-row">
+                            <span class="manage-label">Date</span>
+                            <span class="manage-value" id="modal-project-date">Nov 02, 2024</span>
+                        </div>
+                        <div class="manage-detail-row">
+                            <span class="manage-label">Location</span>
+                            <span class="manage-value" id="modal-project-location">Cairo International Convention Centre, Cairo</span>
+                        </div>
+                        <div class="manage-detail-row">
+                            <span class="manage-label">Ushers Needed</span>
+                            <span class="manage-value" id="modal-project-ushers">3</span>
+                        </div>
+                    </div>
+                    <div class="manage-ushers-section">
+                        <h3 class="manage-section-title"><i class="fas fa-users"></i> Assigned Ushers</h3>
+                        <div class="manage-usher-list" id="modal-usher-list">
+                            <div class="manage-usher-item">
+                                <div class="manage-usher-avatar"><i class="fas fa-user-circle"></i></div>
+                                <div class="manage-usher-info">
+                                    <span class="manage-usher-name">Omar Hassan</span>
+                                    <span class="manage-usher-role">Senior Usher</span>
+                                </div>
+                                <span class="manage-usher-status status-confirmed"><i class="fas fa-check-circle"></i> Confirmed</span>
+                            </div>
+                            <div class="manage-usher-item">
+                                <div class="manage-usher-avatar" style="color:var(--primary)"><i class="fas fa-user-circle"></i></div>
+                                <div class="manage-usher-info">
+                                    <span class="manage-usher-name">Sara Ahmed</span>
+                                    <span class="manage-usher-role">Coordinator</span>
+                                </div>
+                                <span class="manage-usher-status status-confirmed"><i class="fas fa-check-circle"></i> Confirmed</span>
+                            </div>
+                            <div class="manage-usher-item">
+                                <div class="manage-usher-avatar" style="color:var(--warning)"><i class="fas fa-user-circle"></i></div>
+                                <div class="manage-usher-info">
+                                    <span class="manage-usher-name">Khalid Al-Farsi</span>
+                                    <span class="manage-usher-role">Usher</span>
+                                </div>
+                                <span class="manage-usher-status status-pending-tag"><i class="fas fa-clock"></i> Pending</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal-cancel" id="btn-cancel-project" onclick="closeManageModal()">Close</button>
+                <button class="btn-modal-action btn-action-applicants" onclick="alert('Viewing applicants...')"><i class="fas fa-user-plus"></i> View Applicants</button>
+                <button class="btn-modal-action btn-action-edit" onclick="alert('Editing project...')"><i class="fas fa-edit"></i> Edit Project</button>
+                <button class="btn-modal-action btn-action-cancel" onclick="if(confirm('Cancel this project?')) alert('Project cancelled.')"><i class="fas fa-times-circle"></i> Cancel Project</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const manageModal = document.getElementById('manage-project-modal');
+        document.getElementById('modal-close-project').addEventListener('click', closeManageModal);
+        manageModal.addEventListener('click', (e) => { if (e.target === manageModal) closeManageModal(); });
+
+        function openManageModal(index) {
+            const project = projects[index];
+            document.getElementById('modal-project-title').textContent = project.title;
+            document.getElementById('modal-project-date').textContent = project.date;
+            document.getElementById('modal-project-location').textContent = project.location;
+            document.getElementById('modal-project-ushers').textContent = project.ushers;
+
+            const statusClass = project.status === 'active' ? 'status-active' : project.status === 'completed' ? 'status-completed' : 'status-pending';
+            const statusLabel = project.status.charAt(0).toUpperCase() + project.status.slice(1);
+            document.getElementById('modal-project-status').innerHTML = `<span class="card-badge ${statusClass}">${statusLabel}</span>`;
+
+            manageModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeManageModal() {
+            manageModal.classList.remove('active');
+            document.body.style.overflow = '';
         }
     </script>
 </body>
