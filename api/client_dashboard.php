@@ -48,7 +48,7 @@ if ($user_role === 'client') {
     $response['total_ushers_hired'] = $stmt->get_result()->fetch_assoc()['cnt'];
     $stmt->close();
 
-    // Upcoming events (active projects with event_date >= today)
+    // Upcoming events (projects with event_date >= today)
     $stmt = $conn->prepare(
         "SELECT COUNT(*) as cnt FROM projects 
          WHERE client_id = ? AND status IN ('active', 'pending') AND event_date >= CURDATE()"

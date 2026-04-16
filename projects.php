@@ -13,63 +13,11 @@
     <script src="theme-init.js"></script>
 </head>
 <body>
-    <!-- Top Navbar -->
-    <nav class="navbar" id="navbar">
-        <div class="navbar-left">
-            <a href="dashboard.php" class="logo">
-                <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36">
-                <span class="logo-text">Wasla</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="dashboard.php" id="nav-dashboard">Dashboard</a></li>
-                <li><a href="projects.php" class="active" id="nav-projects">My Projects</a></li>
-                <li><a href="profile.php" id="nav-profile">Profile</a></li>
-            </ul>
-        </div>
-        <div class="navbar-right">
-            <span class="welcome-text">Welcome Abdullah</span>
-            <a href="profile.php" class="user-avatar-small">
-                <i class="fas fa-user-circle"></i>
-            </a>
-            <a href="create-project.php" class="btn-create">Create Project</a>
-        </div>
-    </nav>
+    <?php $active_page = 'projects'; ?>
+    <?php include __DIR__ . '/includes/navbar.php'; ?>
 
     <div class="main-wrapper">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-profile">
-                <a href="profile.php" class="profile-avatar">
-                    <i class="fas fa-user-circle"></i>
-                </a>
-                <h3 class="profile-name">Abdullah<br>Elsayed</h3>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="dashboard.php" class="sidebar-link" id="side-dashboard">
-                    <i class="fas fa-th-large"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a href="projects.php" class="sidebar-link active" id="side-projects">
-                    <i class="fas fa-file-alt"></i>
-                    <span>My Projects</span>
-                </a>
-                <a href="messages.php" class="sidebar-link" id="side-messages">
-                    <i class="fas fa-envelope"></i>
-                    <span>Messages</span>
-                </a>
-                <a href="settings.php" class="sidebar-link" id="side-settings">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </a>
-            </nav>
-            <div class="sidebar-footer">
-                <a href="help.php" class="sidebar-link" id="help-center">
-                    <i class="fas fa-question-circle"></i>
-                    <span>Help Center</span>
-                </a>
-                <button class="btn-logout" id="btn-logout" onclick="window.location.href='auth_logout.php'">Log Out</button>
-            </div>
-        </aside>
+        <?php include __DIR__ . '/includes/sidebar.php'; ?>
 
         <!-- Main Content -->
         <main class="content" id="main-content">

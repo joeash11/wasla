@@ -1,52 +1,62 @@
 <?php
-// ============================================
-// Update User Profile
-// POST: { first_name, last_name, email, phone, bio, city }
-// ============================================
+session_start();
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
-header('Access-Control-Allow-Headers: Content-Type');
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(['error' => 'POST method required']);
+if (!isset($_SESSION['user_id'])) {
+    echo json_encode(['success' => false, 'error' => 'Not authenticated']);
     exit;
 }
 
-require_once 'connection.php';
-require_once 'session.php';
-requireAuth();
-
-$data = json_decode(file_get_contents('php://input'), true);
-$user_id = getCurrentUserId();
-
-$first_name = trim($data['first_name'] ?? '');
-$last_name = trim($data['last_name'] ?? '');
-$email = trim($data['email'] ?? '');
-$phone = trim($data['phone'] ?? '');
-$bio = trim($data['bio'] ?? '');
-$city = trim($data['city'] ?? '');
-
-if (empty($first_name) || empty($last_name)) {
-    echo json_encode(['error' => 'First name and last name are required']);
+$input = json_decode(file_get_contents('php://input'), true);
+if (!$input) {
+    echo json_encode(['success' => false, 'error' => 'Invalid input']);
     exit;
 }
 
-$sql = "UPDATE users SET first_name=?, last_name=?, email=?, phone=?, bio=?, city=?, updated_at=NOW() WHERE id=?";
+require_once __DIR__ . '/connection.php';
+
+$user_id = $_SESSION['user_id'];
+$first_name = $input['first_name'] ?? null;
+$last_name = $input['last_name'] ?? null;
+$email = $input['email'] ?? null;
+$phone = $input['phone'] ?? null;
+$bio = $input['bio'] ?? null;
+$city = $input['city'] ?? null;
+
+// Build dynamic update query
+$fields = [];
+$types = '';
+$values = [];
+
+if ($first_name !== null) { $fields[] = 'first_name = ?'; $types .= 's'; $values[] = $first_name; }
+if ($last_name !== null) { $fields[] = 'last_name = ?'; $types .= 's'; $values[] = $last_name; }
+if ($email !== null) { $fields[] = 'email = ?'; $types .= 's'; $values[] = $email; }
+if ($phone !== null) { $fields[] = 'phone = ?'; $types .= 's'; $values[] = $phone; }
+if ($city !== null) { $fields[] = 'city = ?'; $types .= 's'; $values[] = $city; }
+
+if (empty($fields)) {
+    echo json_encode(['success' => false, 'error' => 'No fields to update']);
+    exit;
+}
+
+$types .= 'i';
+$values[] = $user_id;
+
+$sql = "UPDATE users SET " . implode(', ', $fields) . " WHERE id = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ssssssi", $first_name, $last_name, $email, $phone, $bio, $city, $user_id);
+$stmt->bind_param($types, ...$values);
 
 if ($stmt->execute()) {
-    // Update session
-    $_SESSION['user_first_name'] = $first_name;
-    $_SESSION['user_last_name'] = $last_name;
-    $_SESSION['user_email'] = $email;
-    
-    echo json_encode(['success' => true, 'message' => 'Profile updated successfully']);
+    // Update session variables
+    if ($first_name !== null) $_SESSION['first_name'] = $first_name;
+    if ($last_name !== null) $_SESSION['last_name'] = $last_name;
+    if ($first_name !== null || $last_name !== null) {
+        $_SESSION['user_name'] = ($first_name ?? $_SESSION['first_name'] ?? '') . ' ' . ($last_name ?? $_SESSION['last_name'] ?? '');
+    }
+    echo json_encode(['success' => true]);
 } else {
-    echo json_encode(['error' => 'Failed to update profile: ' . $stmt->error]);
+    echo json_encode(['success' => false, 'error' => 'Update failed: ' . $stmt->error]);
 }
 
 $stmt->close();
 $conn->close();
-?>

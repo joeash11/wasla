@@ -12,75 +12,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="images/wasla-icon.png">
+    <script src="theme-init.js"></script>
 </head>
 
 <body>
-    <!-- Top Navbar -->
-    <nav class="navbar" id="navbar">
-        <div class="navbar-left">
-            <a href="dashboard.php" class="logo">
-                <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36">
-                <span class="logo-text">Wasla</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="dashboard.php" class="active" id="nav-dashboard">Dashboard</a></li>
-                <li><a href="projects.php" id="nav-projects">My Projects</a></li>
-                <li><a href="profile.php" id="nav-profile">Profile</a></li>
-            </ul>
-        </div>
-        <div class="navbar-right">
-            <span class="welcome-text">Welcome <?php echo htmlspecialchars($first_name); ?></span>
-            <a href="profile.php" class="user-avatar-small">
-                <i class="fas fa-user-circle"></i>
-            </a>
-            <a href="create-project.php" class="btn-create" id="btn-create-project">Create Project</a>
-        </div>
-    </nav>
+    <?php $active_page = 'dashboard'; ?>
+    <?php include __DIR__ . '/includes/navbar.php'; ?>
 
     <div class="main-wrapper">
-        <!-- Sidebar -->
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-profile">
-                <a href="profile.php" class="profile-avatar">
-                    <i class="fas fa-user-circle"></i>
-                </a>
-                <?php
-                    $name_parts = explode(' ', $user_name);
-                    $sidebar_first = $name_parts[0] ?? '';
-                    $sidebar_last = isset($name_parts[1]) ? $name_parts[1] : '';
-                ?>
-                <h3 class="profile-name"><?php echo htmlspecialchars($sidebar_first); ?><br><?php echo htmlspecialchars($sidebar_last); ?></h3>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="dashboard.php" class="sidebar-link active" id="side-dashboard">
-                    <i class="fas fa-th-large"></i>
-                    <span>Dashboard</span>
-                </a>
-                <a href="projects.php" class="sidebar-link" id="side-projects">
-                    <i class="fas fa-file-alt"></i>
-                    <span>My Projects</span>
-                </a>
-                <a href="messages.php" class="sidebar-link" id="side-messages">
-                    <i class="fas fa-envelope"></i>
-                    <span>Messages</span>
-                </a>
-                <a href="settings.php" class="sidebar-link" id="side-settings">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </a>
-            </nav>
-            <div class="sidebar-footer">
-                <a href="help.php" class="sidebar-link" id="help-center">
-                    <i class="fas fa-question-circle"></i>
-                    <span>Help Center</span>
-                </a>
-                <a href="contact.php" class="sidebar-link">
-                    <i class="fas fa-envelope"></i>
-                    <span>Contact Us</span>
-                </a>
-                <button class="btn-logout" id="btn-logout" onclick="window.location.href='auth_logout.php'">Log Out</button>
-            </div>
-        </aside>
+        <?php include __DIR__ . '/includes/sidebar.php'; ?>
 
         <!-- Main Content -->
         <main class="content" id="main-content">
@@ -220,19 +160,7 @@
     </div>
 
     <!-- Footer -->
-    <footer class="footer" id="footer">
-        <div class="footer-left">
-            <h3>Wasla</h3>
-            <p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p>
-        </div>
-        <div class="footer-links">
-            <a href="terms.php">TERMS OF SERVICE</a>
-            <a href="privacy.php">PRIVACY POLICY</a>
-            <a href="contact.php">CONTACT US</a>
-            <a href="#">TWITTER</a>
-            <a href="#">INSTAGRAM</a>
-        </div>
-    </footer>
+    <?php include __DIR__ . '/includes/footer.php'; ?>
 
     <script src="script.js"></script>
     <script>

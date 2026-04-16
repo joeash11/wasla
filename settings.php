@@ -1,4 +1,14 @@
 <?php require_once __DIR__ . '/includes/client_guard.php'; ?>
+<?php
+// Fetch user data from DB for settings
+require_once __DIR__ . '/db/connection.php';
+$stmt = $conn->prepare("SELECT first_name, last_name, email, phone FROM users WHERE id = ?");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$settings_user = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,41 +23,10 @@
     <script src="theme-init.js"></script>
 </head>
 <body>
-    <nav class="navbar" id="navbar">
-        <div class="navbar-left">
-            <a href="dashboard.php" class="logo">
-                <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36">
-                <span class="logo-text">Wasla</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="dashboard.php">Dashboard</a></li>
-                <li><a href="projects.php">My Projects</a></li>
-                <li><a href="profile.php">Profile</a></li>
-            </ul>
-        </div>
-        <div class="navbar-right">
-            <span class="welcome-text">Welcome Abdullah</span>
-            <a href="profile.php" class="user-avatar-small"><i class="fas fa-user-circle"></i></a>
-            <a href="create-project.php" class="btn-create">Create Project</a>
-        </div>
-    </nav>
+    <?php $active_page = 'settings'; ?>
+    <?php include __DIR__ . '/includes/navbar.php'; ?>
     <div class="main-wrapper">
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-profile">
-                <a href="profile.php" class="profile-avatar"><i class="fas fa-user-circle"></i></a>
-                <h3 class="profile-name">Abdullah<br>Elsayed</h3>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="dashboard.php" class="sidebar-link"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
-                <a href="projects.php" class="sidebar-link"><i class="fas fa-file-alt"></i><span>My Projects</span></a>
-                <a href="messages.php" class="sidebar-link"><i class="fas fa-envelope"></i><span>Messages</span></a>
-                <a href="settings.php" class="sidebar-link active"><i class="fas fa-cog"></i><span>Settings</span></a>
-            </nav>
-            <div class="sidebar-footer">
-                <a href="help.php" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a>
-                <button class="btn-logout" onclick="window.location.href='auth_logout.php'">Log Out</button>
-            </div>
-        </aside>
+        <?php include __DIR__ . '/includes/sidebar.php'; ?>
         <main class="content" id="main-content">
             <h1 class="section-title">Settings</h1>
             <div class="settings-page">
@@ -61,10 +40,10 @@
                     <div class="settings-card">
                         <h2 class="settings-card-title">Account Information</h2>
                         <div class="settings-form">
-                            <div class="form-row"><div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input" value="Abdullah"></div><div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input" value="Elsayed"></div></div>
-                            <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" value="abdullah.elsayed@wasla.com"></div>
-                            <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" id="settings-phone" value="+20 100 123 4567"></div>
-                            <button class="btn-save">Save Changes</button>
+                            <div class="form-row"><div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input" id="acct-first" value="<?php echo htmlspecialchars($settings_user['first_name'] ?? ''); ?>"></div><div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input" id="acct-last" value="<?php echo htmlspecialchars($settings_user['last_name'] ?? ''); ?>"></div></div>
+                            <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="acct-email" value="<?php echo htmlspecialchars($settings_user['email'] ?? ''); ?>"></div>
+                            <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-input" id="acct-phone" value="<?php echo htmlspecialchars($settings_user['phone'] ?? ''); ?>"></div>
+                            <button class="btn-save" id="btn-save-account">Save Changes</button>
                         </div>
                     </div>
                     <div class="settings-card">
@@ -126,10 +105,7 @@
             </div>
         </main>
     </div>
-    <footer class="footer" id="footer">
-        <div class="footer-left"><h3>Wasla</h3><p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p></div>
-        <div class="footer-links"><a href="terms.php">TERMS OF SERVICE</a><a href="privacy.php">PRIVACY POLICY</a><a href="contact.php">CONTACT US</a><a href="#">TWITTER</a><a href="#">INSTAGRAM</a></div>
-    </footer>
+    <?php include __DIR__ . '/includes/footer.php'; ?>
     <div class="toast-notification" id="settings-toast"><i class="fas fa-check-circle"></i> <span id="toast-text">Changes saved!</span></div>
     <script>
         // ===== TAB SWITCHING =====
@@ -148,50 +124,31 @@
             setTimeout(() => toast.classList.remove('show'), 2500);
         }
 
-        // ===== SAVE CHANGES (Account Info) =====
-        document.querySelectorAll('.btn-save').forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Gather form values from account panel
-                const panel = btn.closest('.settings-card');
-                const inputs = panel.querySelectorAll('.form-input');
-                const data = {};
-                inputs.forEach((input, i) => {
-                    data['field_' + i] = input.value;
+        // ===== SAVE ACCOUNT INFO =====
+        document.getElementById('btn-save-account').addEventListener('click', async () => {
+            const btn = document.getElementById('btn-save-account');
+            const data = {
+                first_name: document.getElementById('acct-first').value,
+                last_name: document.getElementById('acct-last').value,
+                email: document.getElementById('acct-email').value,
+                phone: document.getElementById('acct-phone').value
+            };
+            btn.textContent = '✓ Saving...';
+            btn.disabled = true;
+            try {
+                await fetch('db/update_profile.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
                 });
-
-                // Save to localStorage
-                const key = panel.querySelector('.settings-card-title')?.textContent?.trim() || 'settings';
-                localStorage.setItem('wasla_' + key.replace(/\s+/g, '_').toLowerCase(), JSON.stringify(data));
-
-                // Visual feedback
-                const origText = btn.textContent;
-                btn.textContent = '✓ Saved!';
-                btn.style.background = 'var(--accent)';
-                showToast(key + ' updated successfully!');
-                setTimeout(() => {
-                    btn.textContent = origText;
-                    btn.style.background = '';
-                }, 2000);
-            });
+            } catch(e) {}
+            btn.textContent = '✓ Saved!';
+            btn.style.background = 'var(--accent)';
+            showToast('Account information updated!');
+            setTimeout(() => { btn.textContent = 'Save Changes'; btn.style.background = ''; btn.disabled = false; }, 2000);
         });
 
-        // ===== LOAD SAVED SETTINGS =====
-        function loadSavedSettings() {
-            try {
-                const acctData = JSON.parse(localStorage.getItem('wasla_account_information'));
-                if (acctData) {
-                    const panel = document.getElementById('panel-account');
-                    const inputs = panel.querySelector('.settings-card')?.querySelectorAll('.form-input');
-                    if (inputs) {
-                        Object.keys(acctData).forEach((key, i) => {
-                            if (inputs[i]) inputs[i].value = acctData[key];
-                        });
-                    }
-                }
-            } catch(e) { /* ignore parse errors */ }
-        }
-
-        // ===== NOTIFICATION TOGGLE SAVE =====
+        // ===== NOTIFICATION TOGGLE =====
         document.querySelectorAll('.toggle-switch input').forEach(toggle => {
             toggle.addEventListener('change', () => {
                 const title = toggle.closest('.settings-toggle-row')?.querySelector('.toggle-title')?.textContent || 'setting';
@@ -199,13 +156,9 @@
                 localStorage.setItem('wasla_toggle_' + title.replace(/\s+/g, '_').toLowerCase(), state);
                 showToast(title + ' ' + state);
             });
-
-            // Load saved state
             const title = toggle.closest('.settings-toggle-row')?.querySelector('.toggle-title')?.textContent || '';
             const saved = localStorage.getItem('wasla_toggle_' + title.replace(/\s+/g, '_').toLowerCase());
-            if (saved !== null) {
-                toggle.checked = saved === 'enabled';
-            }
+            if (saved !== null) toggle.checked = saved === 'enabled';
         });
 
         // ===== THEME SWITCHING =====
@@ -216,7 +169,6 @@
             } else if (theme === 'light') {
                 document.documentElement.removeAttribute('data-theme');
             } else {
-                // System preference
                 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
                     document.documentElement.setAttribute('data-theme', 'dark');
                 } else {
@@ -224,92 +176,26 @@
                 }
             }
         }
-
         document.querySelectorAll('.theme-option').forEach(option => {
             option.addEventListener('click', () => {
                 document.querySelectorAll('.theme-option').forEach(x => x.classList.remove('active'));
                 option.classList.add('active');
-                const theme = option.dataset.theme;
-                applyTheme(theme);
-                showToast('Theme changed to ' + theme.charAt(0).toUpperCase() + theme.slice(1));
+                applyTheme(option.dataset.theme);
+                showToast('Theme changed to ' + option.dataset.theme.charAt(0).toUpperCase() + option.dataset.theme.slice(1));
             });
         });
-
-        // Load saved theme on settings page
         const savedTheme = localStorage.getItem('wasla_theme') || 'light';
-        document.querySelectorAll('.theme-option').forEach(o => {
-            o.classList.toggle('active', o.dataset.theme === savedTheme);
-        });
+        document.querySelectorAll('.theme-option').forEach(o => o.classList.toggle('active', o.dataset.theme === savedTheme));
         applyTheme(savedTheme);
 
-        // Listen for system theme changes
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-            if (localStorage.getItem('wasla_theme') === 'system') {
-                applyTheme('system');
-            }
-        });
-
-        // ===== LANGUAGE SWITCHING =====
-        const translations = {
-            en: { dashboard: 'Dashboard', myProjects: 'My Projects', profile: 'Profile', messages: 'Messages', settings: 'Settings', helpCenter: 'Help Center', logOut: 'Log Out', welcome: 'Welcome Abdullah', langChanged: 'Language changed to English' },
-            ar: { dashboard: 'لوحة التحكم', myProjects: 'مشاريعي', profile: 'الملف الشخصي', messages: 'الرسائل', settings: 'الإعدادات', helpCenter: 'مركز المساعدة', logOut: 'تسجيل الخروج', welcome: 'مرحباً عبدالله', langChanged: 'تم تغيير اللغة إلى العربية' },
-            fr: { dashboard: 'Tableau de bord', myProjects: 'Mes Projets', profile: 'Profil', messages: 'Messages', settings: 'Paramètres', helpCenter: "Centre d'aide", logOut: 'Déconnexion', welcome: 'Bienvenue Abdullah', langChanged: 'Langue changée en Français' }
-        };
-
+        // ===== LANGUAGE =====
         const langSelect = document.getElementById('settings-language');
-        const savedLang = localStorage.getItem('wasla_language') || 'en';
-        langSelect.value = savedLang;
-
+        langSelect.value = localStorage.getItem('wasla_language') || 'en';
         langSelect.addEventListener('change', () => {
-            const lang = langSelect.value;
-            localStorage.setItem('wasla_language', lang);
-            applyLanguage(lang);
-            showToast(translations[lang].langChanged);
-
-            // Set text direction for Arabic
-            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            localStorage.setItem('wasla_language', langSelect.value);
+            document.documentElement.dir = langSelect.value === 'ar' ? 'rtl' : 'ltr';
+            showToast('Language changed');
         });
-
-        function applyLanguage(lang) {
-            const t = translations[lang];
-            if (!t) return;
-
-            // Update nav links
-            const navLinks = document.querySelectorAll('.nav-links a');
-            if (navLinks[0]) navLinks[0].textContent = t.dashboard;
-            if (navLinks[1]) navLinks[1].textContent = t.myProjects;
-            if (navLinks[2]) navLinks[2].textContent = t.profile;
-
-            // Update sidebar
-            const sideLabels = document.querySelectorAll('.sidebar-link span');
-            if (sideLabels[0]) sideLabels[0].textContent = t.dashboard;
-            if (sideLabels[1]) sideLabels[1].textContent = t.myProjects;
-            if (sideLabels[2]) sideLabels[2].textContent = t.messages;
-            if (sideLabels[3]) sideLabels[3].textContent = t.settings;
-            if (sideLabels[4]) sideLabels[4].textContent = t.helpCenter;
-
-            // Update welcome text
-            const welcome = document.querySelector('.welcome-text');
-            if (welcome) welcome.textContent = t.welcome;
-
-            // Update logout button
-            const logout = document.querySelector('.btn-logout');
-            if (logout) logout.textContent = t.logOut;
-
-            // Update section title
-            const sectionTitle = document.querySelector('.section-title');
-            if (sectionTitle) sectionTitle.textContent = t.settings;
-
-            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-        }
-
-        // Apply saved language on load
-        if (savedLang !== 'en') {
-            applyLanguage(savedLang);
-        }
-
-        // Init
-        loadSavedSettings();
     </script>
 </body>
 </html>

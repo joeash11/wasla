@@ -10,43 +10,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="images/wasla-icon.png">
+    <script src="theme-init.js"></script>
 </head>
 <body>
-    <nav class="navbar" id="navbar">
-        <div class="navbar-left">
-            <a href="dashboard.php" class="logo">
-                <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36">
-                <span class="logo-text">Wasla</span>
-            </a>
-            <ul class="nav-links">
-                <li><a href="dashboard.php">Dashboard</a></li>
-                <li><a href="projects.php">My Projects</a></li>
-                <li><a href="profile.php">Profile</a></li>
-            </ul>
-        </div>
-        <div class="navbar-right">
-            <span class="welcome-text">Welcome Abdullah</span>
-            <a href="profile.php" class="user-avatar-small"><i class="fas fa-user-circle"></i></a>
-            <a href="create-project.php" class="btn-create">Create Project</a>
-        </div>
-    </nav>
+    <?php $active_page = 'projects'; ?>
+    <?php include __DIR__ . '/includes/navbar.php'; ?>
     <div class="main-wrapper">
-        <aside class="sidebar" id="sidebar">
-            <div class="sidebar-profile">
-                <a href="profile.php" class="profile-avatar"><i class="fas fa-user-circle"></i></a>
-                <h3 class="profile-name">Abdullah<br>Elsayed</h3>
-            </div>
-            <nav class="sidebar-nav">
-                <a href="dashboard.php" class="sidebar-link"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
-                <a href="projects.php" class="sidebar-link"><i class="fas fa-file-alt"></i><span>My Projects</span></a>
-                <a href="messages.php" class="sidebar-link"><i class="fas fa-envelope"></i><span>Messages</span></a>
-                <a href="settings.php" class="sidebar-link"><i class="fas fa-cog"></i><span>Settings</span></a>
-            </nav>
-            <div class="sidebar-footer">
-                <a href="help.php" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a>
-                <button class="btn-logout" onclick="window.location.href='auth_logout.php'">Log Out</button>
-            </div>
-        </aside>
+        <?php include __DIR__ . '/includes/sidebar.php'; ?>
         <main class="content" id="main-content">
             <div class="page-header">
                 <h1 class="section-title">Create New Project</h1>
@@ -164,10 +134,7 @@
             </div>
         </main>
     </div>
-    <footer class="footer" id="footer">
-        <div class="footer-left"><h3>Wasla</h3><p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p></div>
-        <div class="footer-links"><a href="terms.php">TERMS OF SERVICE</a><a href="privacy.php">PRIVACY POLICY</a><a href="contact.php">CONTACT US</a></div>
-    </footer>
+    <?php include __DIR__ . '/includes/footer.php'; ?>
     <script>
         function goToStep(n){
             document.querySelectorAll('.step-panel').forEach(p=>p.classList.remove('active'));

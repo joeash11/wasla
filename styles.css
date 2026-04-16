@@ -3423,3 +3423,24 @@ body {
         justify-content: center;
     }
 }
+
+/* ===== GLOBAL: NO UNDERLINES ===== */
+a, a:hover, a:focus, a:active, a:visited {
+    text-decoration: none;
+}
+.logo, .logo:hover, .logo:focus {
+    text-decoration: none;
+}
+.sidebar-link, .sidebar-link:hover,
+.nav-links a, .nav-links a:hover,
+.footer-links a, .footer-links a:hover,
+.landing-nav-links a, .landing-nav-links a:hover,
+.landing-footer-bottom-links a, .landing-footer-bottom-links a:hover {
+    text-decoration: none;
+}
+
+/* ===== HIDE TOP NAV LINKS (sidebar only) ===== */
+.nav-links {
+    display: none !important;
+}
+

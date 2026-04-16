@@ -17,33 +17,13 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="../images/wasla-icon.png">
+    <script src="../theme-init.js"></script>
 </head>
 <body>
-    <nav class="navbar"><div class="navbar-left">
-        <a href="dashboard.php" class="logo"><img src="../images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36"><span class="logo-text">Wasla</span></a>
-        <ul class="nav-links">
-            <li><a href="dashboard.php" class="active">Dashboard</a></li>
-            <li><a href="jobs.php">Available Jobs</a></li>
-            <li><a href="my-gigs.php">My Gigs</a></li>
-        </ul>
-    </div><div class="navbar-right">
-        <span class="welcome-text">Welcome <?php echo htmlspecialchars($user_name); ?></span>
-        <a href="profile.php" class="user-avatar-small"><i class="fas fa-user-circle"></i></a>
-    </div></nav>
+    <?php $active_page = 'dashboard'; ?>
+    <?php include __DIR__ . '/../includes/usher_navbar.php'; ?>
     <div class="main-wrapper">
-        <aside class="sidebar">
-            <div class="sidebar-profile"><a href="profile.php" class="profile-avatar"><i class="fas fa-user-circle"></i></a><h3 class="profile-name" id="sidebar-name">Loading...</h3><span class="usher-badge"><i class="fas fa-id-badge"></i> Usher</span></div>
-            <nav class="sidebar-nav">
-                <a href="dashboard.php" class="sidebar-link active"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
-                <a href="jobs.php" class="sidebar-link"><i class="fas fa-search"></i><span>Available Jobs</span></a>
-                <a href="my-gigs.php" class="sidebar-link"><i class="fas fa-calendar-check"></i><span>My Gigs</span></a>
-                <a href="profile.php" class="sidebar-link"><i class="fas fa-user"></i><span>Profile</span></a>
-            </nav>
-            <div class="sidebar-footer">
-                <a href="../help.php" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a>
-                <button class="btn-logout" onclick="window.location.href='../auth_logout.php'">Log Out</button>
-            </div>
-        </aside>
+        <?php include __DIR__ . '/../includes/usher_sidebar.php'; ?>
         <main class="content">
             <h1 class="section-title">Usher Dashboard</h1>
             <!-- Stats -->

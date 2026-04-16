@@ -28,10 +28,9 @@
     </nav>
     <div class="contact-page">
         <div class="landing-container">
-            <div class="section-header" style="padding-top:40px">
-                <span class="section-badge">Get in Touch</span>
-                <h1 class="landing-section-title">We'd Love to Hear<br>From You</h1>
-                <p class="landing-section-desc">Have a question, partnership proposal, or just want to say hello? Reach out and we'll get back to you within 24 hours.</p>
+            <div class="legal-header" style="padding-top:40px">
+                <h1>Contact Us</h1>
+                <p class="legal-updated">We'd love to hear from you — reach out and we'll get back within 24 hours.</p>
             </div>
             <div class="contact-grid">
                 <!-- Contact Cards -->
