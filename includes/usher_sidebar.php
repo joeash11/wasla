@@ -21,15 +21,18 @@ $sidebar_last = isset($name_parts[1]) ? $name_parts[1] : '';
         <a href="jobs.php" class="sidebar-link<?php echo ($active_page ?? '') === 'jobs' ? ' active' : ''; ?>">
             <i class="fas fa-search"></i><span>Available Jobs</span>
         </a>
-        <a href="my-gigs.php" class="sidebar-link<?php echo ($active_page ?? '') === 'my-gigs' ? ' active' : ''; ?>">
-            <i class="fas fa-calendar-check"></i><span>My Gigs</span>
+        <a href="projects.php" class="sidebar-link<?php echo ($active_page ?? '') === 'projects' ? ' active' : ''; ?>">
+            <i class="fas fa-calendar-check"></i><span>My Projects</span>
         </a>
         <a href="profile.php" class="sidebar-link<?php echo ($active_page ?? '') === 'profile' ? ' active' : ''; ?>">
             <i class="fas fa-user"></i><span>Profile</span>
         </a>
+        <a href="settings.php" class="sidebar-link<?php echo ($active_page ?? '') === 'settings' ? ' active' : ''; ?>">
+            <i class="fas fa-cog"></i><span>Settings</span>
+        </a>
     </nav>
     <div class="sidebar-footer">
-        <a href="../help.php" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a>
+        <a href="help.php" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a>
         <a href="../contact.php" class="sidebar-link"><i class="fas fa-envelope"></i><span>Contact Us</span></a>
         <button class="btn-logout" onclick="window.location.href='../auth_logout.php'">Log Out</button>
     </div>

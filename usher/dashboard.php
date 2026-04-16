@@ -28,10 +28,10 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
             <h1 class="section-title">Usher Dashboard</h1>
             <!-- Stats -->
             <section class="stats-row">
-                <div class="stat-card"><p class="stat-label">Completed Gigs</p><h2 class="stat-value" id="stat-gigs">--</h2></div>
+                <div class="stat-card"><p class="stat-label">Completed Projects</p><h2 class="stat-value" id="stat-gigs">--</h2></div>
                 <div class="stat-card"><p class="stat-label">Total Earnings</p><h2 class="stat-value" id="stat-earnings">--</h2></div>
                 <div class="stat-card"><p class="stat-label">Rating</p><h2 class="stat-value" id="stat-rating">--</h2></div>
-                <div class="stat-card"><p class="stat-label">Upcoming Shifts</p><h2 class="stat-value" id="stat-upcoming">--</h2></div>
+                <div class="stat-card"><p class="stat-label">Upcoming Projects</p><h2 class="stat-value" id="stat-upcoming">--</h2></div>
             </section>
             <!-- Revenue + Upcoming -->
             <section class="dashboard-grid-2col">
@@ -44,7 +44,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
                     </div>
                 </div>
                 <div class="dashboard-panel">
-                    <h3 class="panel-title"><i class="fas fa-calendar-alt"></i> Upcoming Gigs</h3>
+                    <h3 class="panel-title"><i class="fas fa-calendar-alt"></i> Upcoming Projects</h3>
                     <div class="upcoming-list" id="upcoming-list">
                         <p style="color:var(--gray-400);text-align:center">Loading...</p>
                     </div>
@@ -95,7 +95,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
                 // Upcoming gigs
                 const list = document.getElementById('upcoming-list');
                 if (data.upcoming_gigs.length === 0) {
-                    list.innerHTML = '<p style="color:var(--gray-400);text-align:center">No upcoming gigs</p>';
+                    list.innerHTML = '<p style="color:var(--gray-400);text-align:center">No upcoming projects</p>';
                 } else {
                     list.innerHTML = data.upcoming_gigs.map(g => `
                         <div class="upcoming-item">
@@ -115,7 +115,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
                         let icon, iconClass, text;
                         if (a.type === 'gig_completed') {
                             icon = 'fa-check'; iconClass = 'activity-icon-green';
-                            text = `Completed gig at <strong>${a.detail}</strong>`;
+                            text = `Completed project at <strong>${a.detail}</strong>`;
                         } else if (a.type === 'payment') {
                             icon = 'fa-money-bill'; iconClass = 'activity-icon-blue';
                             text = `Received payment <strong>SAR ${Number(a.amount).toLocaleString()}</strong>`;

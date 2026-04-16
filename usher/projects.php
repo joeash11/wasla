@@ -11,7 +11,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wasla - My Gigs</title>
+    <title>Wasla - My Projects</title>
     <link rel="stylesheet" href="../styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -19,17 +19,17 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
     <script src="../theme-init.js"></script>
 </head>
 <body>
-    <?php $active_page = 'my-gigs'; ?>
+    <?php $active_page = 'projects'; ?>
     <?php include __DIR__ . '/../includes/usher_navbar.php'; ?>
     <div class="main-wrapper">
         <?php include __DIR__ . '/../includes/usher_sidebar.php'; ?>
         <main class="content">
-            <h1 class="section-title">My Gigs</h1>
+            <h1 class="section-title">My Projects</h1>
             <!-- Earnings Summary -->
             <section class="stats-row" id="earnings-summary">
                 <div class="stat-card"><p class="stat-label">This Month</p><h2 class="stat-value" id="sum-month">--</h2></div>
                 <div class="stat-card"><p class="stat-label">Month Change</p><h2 class="stat-value" id="sum-change">--</h2></div>
-                <div class="stat-card"><p class="stat-label">Gigs This Month</p><h2 class="stat-value" id="sum-gigs">--</h2></div>
+                <div class="stat-card"><p class="stat-label">Projects This Month</p><h2 class="stat-value" id="sum-gigs">--</h2></div>
                 <div class="stat-card"><p class="stat-label">Avg Rating</p><h2 class="stat-value" id="sum-rating">--</h2></div>
             </section>
             <!-- Tab Filters -->
@@ -40,7 +40,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
                 <button class="tab-btn" data-filter="cancelled">Cancelled</button>
             </div>
             <div class="gigs-list" id="gigs-list">
-                <p style="color:var(--gray-400);text-align:center">Loading gigs...</p>
+                <p style="color:var(--gray-400);text-align:center">Loading projects...</p>
             </div>
         </main>
     </div>
@@ -50,13 +50,13 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
     const USHER_ID = <?php echo $usher_id; ?>;
 
     document.addEventListener('DOMContentLoaded', () => {
-        fetch(`/wasla/api/usher_gigs.php?usher_id=${USHER_ID}`)
+        fetch(`../api/usher_gigs.php?usher_id=${USHER_ID}`)
             .then(r => r.json())
             .then(data => {
                 if (!data.success) return;
 
                 const s = data.summary;
-                document.getElementById('sum-month').textContent = 'SAR ' + Number(s.this_month_earnings).toLocaleString();
+                document.getElementById('sum-month').textContent = 'EGP ' + Number(s.month_earned).toLocaleString();
                 document.getElementById('sum-change').innerHTML = (s.month_change_pct >= 0 ? '<span style="color:var(--accent)">↑ ' : '<span style="color:#ef4444">↓ ') + Math.abs(s.month_change_pct) + '%</span>';
                 document.getElementById('sum-gigs').textContent = s.gigs_this_month;
                 document.getElementById('sum-rating').textContent = s.avg_rating + ' / 5';
@@ -77,7 +77,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
 
     function renderGigs(gigs) {
         const list = document.getElementById('gigs-list');
-        if (gigs.length === 0) { list.innerHTML = '<p style="color:var(--gray-400);text-align:center">No gigs found</p>'; return; }
+        if (gigs.length === 0) { list.innerHTML = '<p style="color:var(--gray-400);text-align:center">No projects found</p>'; return; }
         list.innerHTML = gigs.map(g => {
             const statusClass = g.status === 'completed' ? 'status-completed' : g.status === 'cancelled' ? 'status-cancelled' : 'status-active';
             const statusLabel = g.status.charAt(0).toUpperCase() + g.status.slice(1);
@@ -94,7 +94,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
                     </div>
                 </div>
                 <div class="gig-pay-col">
-                    <span class="gig-pay">SAR ${Number(g.pay).toLocaleString()}</span>
+                    <span class="gig-pay">EGP ${Number(g.pay).toLocaleString()}</span>
                     ${ratingHtml}
                 </div>
             </div>`;

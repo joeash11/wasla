@@ -27,7 +27,17 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
             <div class="page-header"><h1 class="section-title">Available Jobs</h1></div>
             <section class="filters-row">
                 <div class="filter-search"><i class="fas fa-search"></i><input type="text" placeholder="Search jobs..." id="job-search"></div>
-                <div class="filter-select"><select id="filter-location"><option value="">Location</option><option>Riyadh</option><option>Jeddah</option><option>Cairo</option><option>Dubai</option></select></div>
+                <div class="filter-select"><select id="filter-location">
+                    <option value="">Location</option>
+                    <option>Cairo</option>
+                    <option>Alexandria</option>
+                    <option>Jeddah</option>
+                    <option>Dubai</option>
+                    <option>Sharm Elsheikh</option>
+                    <option>Riyadh</option>
+                    <option>North Coast</option>
+                    <option>El Gouna</option>
+                </select></div>
                 <div class="filter-select"><select id="filter-pay"><option value="">Pay Range</option><option value="200-400">SAR 200-400</option><option value="400-600">SAR 400-600</option><option value="600+">SAR 600+</option></select></div>
             </section>
             <div class="projects-grid" id="jobs-grid">
@@ -41,7 +51,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
     const USHER_ID = <?php echo $usher_id; ?>;
 
     document.addEventListener('DOMContentLoaded', () => {
-        fetch(`/wasla/api/usher_jobs.php?usher_id=${USHER_ID}`)
+        fetch(`../api/usher_jobs.php?usher_id=${USHER_ID}`)
             .then(r => r.json())
             .then(data => {
                 if (!data.success) return;
@@ -70,7 +80,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
             return `
                 <div class="project-card" data-location="${j.location}" data-pay="${j.pay}">
                     ${badge}
-                    <div class="card-header"><h3>${j.title}</h3><p class="card-company"><i class="fas fa-building"></i> ${j.company}</p></div>
+                    <div class="card-header"><h3 style="font-weight:700; font-size:1.25rem; color:var(--primary); font-family: 'Inter', sans-serif;">${j.title}</h3><p class="card-company" style="font-weight:500; margin-top:4px;"><i class="fas fa-building"></i> ${j.company}</p></div>
                     <div class="card-body">
                         <div class="card-detail"><i class="fas fa-map-marker-alt"></i><span>${j.location}</span></div>
                         <div class="card-detail"><i class="fas fa-calendar"></i><span>${j.date}</span></div>
@@ -89,7 +99,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
     function applyJob(btn, projectId) {
         btn.textContent = 'Applying...';
         btn.style.opacity = '0.7';
-        fetch('/wasla/api/apply_job.php', {
+        fetch('../api/apply_job.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ project_id: projectId })

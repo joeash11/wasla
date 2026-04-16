@@ -1,7 +1,7 @@
-<?php require_once __DIR__ . '/includes/client_guard.php'; ?>
+<?php require_once __DIR__ . '/../includes/usher_guard.php'; ?>
 <?php
 // Fetch user data from DB for settings
-require_once __DIR__ . '/db/connection.php';
+require_once __DIR__ . '/../db/connection.php';
 $stmt = $conn->prepare("SELECT first_name, last_name, email, phone FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -16,17 +16,17 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wasla - Settings</title>
     <meta name="description" content="Manage your Wasla account settings.">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="icon" type="image/png" href="images/wasla-icon.png">
-    <script src="theme-init.js"></script>
+    <link rel="icon" type="image/png" href="../images/wasla-icon.png">
+    <script src="../theme-init.js"></script>
 </head>
 <body>
     <?php $active_page = 'settings'; ?>
-    <?php include __DIR__ . '/includes/navbar.php'; ?>
+    <?php include __DIR__ . '/../includes/usher_navbar.php'; ?>
     <div class="main-wrapper">
-        <?php include __DIR__ . '/includes/sidebar.php'; ?>
+        <?php include __DIR__ . '/../includes/usher_sidebar.php'; ?>
         <main class="content" id="main-content">
             <h1 class="section-title">Settings</h1>
             <div class="settings-page">
@@ -105,7 +105,7 @@ $conn->close();
             </div>
         </main>
     </div>
-    <?php include __DIR__ . '/includes/footer.php'; ?>
+    <?php include __DIR__ . '/../includes/footer.php'; ?>
     <div class="toast-notification" id="settings-toast"><i class="fas fa-check-circle"></i> <span id="toast-text">Changes saved!</span></div>
     <script>
         // ===== TAB SWITCHING =====
@@ -136,7 +136,7 @@ $conn->close();
             btn.textContent = '✓ Saving...';
             btn.disabled = true;
             try {
-                await fetch('db/update_profile.php', {
+                await fetch('../db/update_profile.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)

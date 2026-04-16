@@ -3444,3 +3444,10 @@ a, a:hover, a:focus, a:active, a:visited {
     display: none !important;
 }
 
+/* ===== LOGO DARK MODE FIX ===== */
+[data-theme="dark"] .logo-text {
+    color: var(--white) !important;
+}
+[data-theme="dark"] .logo-icon {
+    filter: drop-shadow(0 0 4px var(--accent)) brightness(1.2);
+}

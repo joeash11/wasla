@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . '/includes/client_guard.php'; ?>
+<?php require_once __DIR__ . '/../includes/usher_guard.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,17 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wasla - Help Center</title>
     <meta name="description" content="Get help and support for Wasla.">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="icon" type="image/png" href="images/wasla-icon.png">
-    <script src="theme-init.js"></script>
+    <link rel="icon" type="image/png" href="../images/wasla-icon.png">
+    <script src="../theme-init.js"></script>
 </head>
 <body>
     <?php $active_page = 'help'; ?>
-    <?php include __DIR__ . '/includes/navbar.php'; ?>
+    <?php include __DIR__ . '/../includes/usher_navbar.php'; ?>
     <div class="main-wrapper">
-        <?php include __DIR__ . '/includes/sidebar.php'; ?>
+        <?php include __DIR__ . '/../includes/usher_sidebar.php'; ?>
         <main class="content" id="main-content">
             <h1 class="section-title">Help Center</h1>
             <!-- Help Search -->
@@ -87,7 +87,7 @@
         </main>
     </div>
     </div>
-    <?php include __DIR__ . '/includes/footer.php'; ?>
+    <?php include __DIR__ . '/../includes/footer.php'; ?>
     <script>
         function toggleFaq(btn){
             const item=btn.parentElement;
