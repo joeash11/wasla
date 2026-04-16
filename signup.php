@@ -14,7 +14,7 @@
     <div class="auth-wrapper">
         <div class="auth-left">
             <div class="auth-left-content">
-                <a href="landing.html" class="logo">
+                <a href="index.php" class="logo">
                     <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="48" height="48">
                     <span class="logo-text" style="color:#fff;font-size:1.6rem">Wasla</span>
                 </a>
@@ -53,7 +53,7 @@
                     <div class="form-group"><label class="form-label">Email Address</label><div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" name="email" class="form-input auth-input" placeholder="email@company.com" required></div></div>
                     <div class="form-group"><label class="form-label">Phone Number</label><div class="auth-input-wrap"><i class="fas fa-phone"></i><input type="tel" name="phone" class="form-input auth-input" placeholder="+966 5XX XXX XXXX" required></div></div>
                     <div class="form-group"><label class="form-label">Password</label><div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" name="password" class="form-input auth-input" id="signup-pass-client" placeholder="Min 8 characters" required><button type="button" class="auth-eye-btn" onclick="togglePassword('signup-pass-client',this)"><i class="fas fa-eye"></i></button></div></div>
-                    <label class="auth-terms-check"><input type="checkbox" required> I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></label>
+                    <label class="auth-terms-check"><input type="checkbox" required> I agree to the <a href="terms.php">Terms of Service</a> and <a href="privacy.php">Privacy Policy</a></label>
                     <button type="submit" class="btn-auth-submit"><i class="fas fa-rocket"></i> Create Client Account</button>
                 </form>
                 <!-- Usher Signup -->
@@ -84,7 +84,7 @@
                     </div>
                     <div class="form-group"><label class="form-label">Skills</label><div class="auth-input-wrap"><i class="fas fa-star"></i><input type="text" name="skills" class="form-input auth-input" placeholder="e.g. Customer Service, Bilingual, VIP Handling"></div></div>
                     <div class="form-group"><label class="form-label">Password</label><div class="auth-input-wrap"><i class="fas fa-lock"></i><input type="password" name="password" class="form-input auth-input" id="signup-pass-usher" placeholder="Min 8 characters" required><button type="button" class="auth-eye-btn" onclick="togglePassword('signup-pass-usher',this)"><i class="fas fa-eye"></i></button></div></div>
-                    <label class="auth-terms-check"><input type="checkbox" required> I agree to the <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a></label>
+                    <label class="auth-terms-check"><input type="checkbox" required> I agree to the <a href="terms.php">Terms of Service</a> and <a href="privacy.php">Privacy Policy</a></label>
                     <button type="submit" class="btn-auth-submit btn-auth-usher"><i class="fas fa-id-badge"></i> Create Usher Account</button>
                 </form>
                 <div class="auth-divider"><span>or sign up with</span></div>
@@ -92,7 +92,7 @@
                     <button class="auth-social-btn" type="button" onclick="handleSocialSignup()"><i class="fab fa-google"></i> Google</button>
                     <button class="auth-social-btn" type="button" onclick="handleSocialSignup()"><i class="fab fa-apple"></i> Apple</button>
                 </div>
-                <p class="auth-switch">Already have an account? <a href="login.html">Log in</a></p>
+                <p class="auth-switch">Already have an account? <a href="login.php">Log in</a></p>
             </div>
         </div>
     </div>

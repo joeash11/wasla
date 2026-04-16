@@ -63,17 +63,17 @@ $_SESSION['user_name'] = $user['first_name'] . ' ' . $user['last_name'];
 $_SESSION['first_name'] = $user['first_name'];
 
 // Determine redirect URL based on role
-$redirect = '/wasla/index.html';
+$redirect = '/wasla/dashboard.php';
 switch ($user['role']) {
     case 'usher':
         $redirect = '/wasla/usher/dashboard.php';
         break;
     case 'admin':
-        $redirect = '/wasla/admin/dashboard.html';
+        $redirect = '/wasla/admin/dashboard.php';
         break;
     case 'client':
     default:
-        $redirect = '/wasla/index.html';
+        $redirect = '/wasla/dashboard.php';
         break;
 }
 

@@ -1,6 +1,6 @@
 <?php session_start();
 if (!isset($_SESSION['user_id']) || !isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'usher') {
-    header('Location: ../login.html');
+    header('Location: ../login.php');
     exit;
 }
 $usher_id = $_SESSION['user_id'];
@@ -40,7 +40,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
                 <a href="profile.php" class="sidebar-link"><i class="fas fa-user"></i><span>Profile</span></a>
             </nav>
             <div class="sidebar-footer">
-                <a href="../help.html" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a>
+                <a href="../help.php" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a>
                 <button class="btn-logout" onclick="window.location.href='../api/logout.php'">Log Out</button>
             </div>
         </aside>
@@ -79,7 +79,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
             </section>
         </main>
     </div>
-    <footer class="footer"><div class="footer-left"><h3>Wasla</h3><p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p></div><div class="footer-links"><a href="../terms.html">TERMS OF SERVICE</a><a href="../privacy.html">PRIVACY POLICY</a><a href="../contact.html">CONTACT US</a></div></footer>
+    <footer class="footer"><div class="footer-left"><h3>Wasla</h3><p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p></div><div class="footer-links"><a href="../terms.php">TERMS OF SERVICE</a><a href="../privacy.php">PRIVACY POLICY</a><a href="../contact.php">CONTACT US</a></div></footer>
 
     <script>
     const USHER_ID = <?php echo $usher_id; ?>;

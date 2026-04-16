@@ -6,7 +6,7 @@ session_start();
 require_once __DIR__ . '/db/connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: signup.html');
+    header('Location: signup.php');
     exit;
 }
 
@@ -23,7 +23,7 @@ $category     = trim($_POST['category'] ?? '');
 
 // Validate required fields
 if (empty($first_name) || empty($last_name) || empty($email) || empty($password)) {
-    header('Location: signup.html?error=empty');
+    header('Location: signup.php?error=empty');
     exit;
 }
 
@@ -32,7 +32,7 @@ $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 if ($stmt->get_result()->num_rows > 0) {
-    header('Location: signup.html?error=exists');
+    header('Location: signup.php?error=exists');
     exit;
 }
 $stmt->close();
@@ -58,10 +58,10 @@ if ($stmt->execute()) {
     if ($role === 'usher') {
         header('Location: usher/dashboard.php');
     } else {
-        header('Location: index.html');
+        header('Location: dashboard.php');
     }
 } else {
-    header('Location: signup.html?error=failed');
+    header('Location: signup.php?error=failed');
 }
 
 $stmt->close();

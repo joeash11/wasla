@@ -13,14 +13,27 @@
 </head>
 <body class="landing-body">
     <nav class="landing-nav">
+<<<<<<< HEAD:contact.html
         <a href="index.html" class="logo">
+=======
+        <a href="index.php" class="logo">
+>>>>>>> fdded6d (kosomk):contact.php
             <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36">
             <span class="logo-text">Wasla</span>
         </a>
         <div class="landing-nav-links">
+<<<<<<< HEAD:contact.html
         </div>
         <div class="landing-nav-actions">
             <a href="index.html" class="btn-landing-signup">Dashboard</a>
+=======
+            <a href="index.php#features">Features</a>
+            <a href="contact.php" class="active">Contact</a>
+        </div>
+        <div class="landing-nav-actions">
+            <a href="dashboard.php" class="btn-landing-login">Log In</a>
+            <a href="dashboard.php" class="btn-landing-signup">Get Started</a>
+>>>>>>> fdded6d (kosomk):contact.php
         </div>
     </nav>
     <div class="contact-page">
@@ -91,9 +104,9 @@
     <footer class="landing-footer-simple">
         <p>&copy; 2024 Wasla Digital Conduit. All rights reserved.</p>
         <div class="landing-footer-bottom-links">
-            <a href="terms.html">Terms</a>
-            <a href="privacy.html">Privacy</a>
-            <a href="contact.html">Contact</a>
+            <a href="terms.php">Terms</a>
+            <a href="privacy.php">Privacy</a>
+            <a href="contact.php">Contact</a>
         </div>
     </footer>
     <script>

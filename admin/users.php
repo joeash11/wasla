@@ -44,17 +44,17 @@
 </head>
 <body>
     <nav class="navbar admin-navbar"><div class="navbar-left">
-        <a href="dashboard.html" class="logo"><img src="../images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36"><span class="logo-text">Wasla</span> <span class="admin-tag">Admin</span></a>
-        <ul class="nav-links"><li><a href="dashboard.html">Dashboard</a></li><li><a href="users.html" class="active">Users</a></li><li><a href="projects.html">Projects</a></li><li><a href="reports.html">Reports</a></li></ul>
+        <a href="dashboard.php" class="logo"><img src="../images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36"><span class="logo-text">Wasla</span> <span class="admin-tag">Admin</span></a>
+        <ul class="nav-links"><li><a href="dashboard.php">Dashboard</a></li><li><a href="users.php" class="active">Users</a></li><li><a href="projects.php">Projects</a></li><li><a href="reports.php">Reports</a></li></ul>
     </div><div class="navbar-right"><span class="welcome-text">Admin Panel</span><div class="user-avatar-small"><i class="fas fa-user-shield"></i></div></div></nav>
     <div class="main-wrapper">
         <aside class="sidebar admin-sidebar">
             <div class="sidebar-profile"><div class="profile-avatar"><i class="fas fa-user-shield"></i></div><h3 class="profile-name">System<br>Admin</h3></div>
             <nav class="sidebar-nav">
-                <a href="dashboard.html" class="sidebar-link"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
-                <a href="users.html" class="sidebar-link active"><i class="fas fa-users"></i><span>Users</span></a>
-                <a href="projects.html" class="sidebar-link"><i class="fas fa-folder-open"></i><span>Projects</span></a>
-                <a href="reports.html" class="sidebar-link"><i class="fas fa-flag"></i><span>Reports</span></a>
+                <a href="dashboard.php" class="sidebar-link"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                <a href="users.php" class="sidebar-link active"><i class="fas fa-users"></i><span>Users</span></a>
+                <a href="projects.php" class="sidebar-link"><i class="fas fa-folder-open"></i><span>Projects</span></a>
+                <a href="reports.php" class="sidebar-link"><i class="fas fa-flag"></i><span>Reports</span></a>
             </nav>
             <div class="sidebar-footer"><button class="btn-logout" onclick="window.location.href='../auth_logout.php'">Log Out</button></div>
         </aside>
@@ -132,7 +132,7 @@
     <!-- Toast -->
     <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toast-text"></span></div>
 
-    <footer class="footer"><div class="footer-left"><h3>Wasla</h3><p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p></div><div class="footer-links"><a href="../terms.html">TERMS OF SERVICE</a><a href="../privacy.html">PRIVACY POLICY</a><a href="../contact.html">CONTACT US</a></div></footer>
+    <footer class="footer"><div class="footer-left"><h3>Wasla</h3><p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p></div><div class="footer-links"><a href="../terms.php">TERMS OF SERVICE</a><a href="../privacy.php">PRIVACY POLICY</a><a href="../contact.php">CONTACT US</a></div></footer>
 
     <script>
     let pendingSuspendRow = null;

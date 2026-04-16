@@ -6,7 +6,7 @@ session_start();
 require_once __DIR__ . '/db/connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: login.html');
+    header('Location: login.php');
     exit;
 }
 
@@ -16,7 +16,7 @@ $role     = $_POST['role'] ?? 'client';
 
 // Validate inputs
 if (empty($email) || empty($password)) {
-    header('Location: login.html?error=empty');
+    header('Location: login.php?error=empty');
     exit;
 }
 
@@ -27,7 +27,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows === 0) {
-    header('Location: login.html?error=invalid');
+    header('Location: login.php?error=invalid');
     exit;
 }
 
@@ -36,23 +36,23 @@ $stmt->close();
 
 // Verify password
 if (!password_verify($password, $user['password'])) {
-    header('Location: login.html?error=invalid');
+    header('Location: login.php?error=invalid');
     exit;
 }
 
 // Check if account is active
 if (!$user['is_active']) {
-    header('Location: login.html?error=inactive');
+    header('Location: login.php?error=inactive');
     exit;
 }
 
 // Verify role matches
 if ($role === 'admin' && $user['role'] !== 'admin') {
-    header('Location: login.html?error=role');
+    header('Location: login.php?error=role');
     exit;
 }
 if ($role !== 'admin' && $user['role'] !== $role && $user['role'] !== 'admin') {
-    header('Location: login.html?error=role');
+    header('Location: login.php?error=role');
     exit;
 }
 
@@ -71,14 +71,14 @@ if ($is_localhost) {
     // Redirect based on role
     switch ($user['role']) {
         case 'admin':
-            header('Location: admin/dashboard.html');
+            header('Location: admin/dashboard.php');
             break;
         case 'usher':
             header('Location: usher/dashboard.php');
             break;
         case 'client':
         default:
-            header('Location: index.html');
+            header('Location: dashboard.php');
             break;
     }
     exit;
@@ -110,6 +110,6 @@ $_SESSION['pending_code']      = $code;
 $_SESSION['pending_code_time'] = time();
 
 // Redirect to verification page
-header('Location: verify-email.html');
+header('Location: verify-email.php');
 exit;
 ?>

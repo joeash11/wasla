@@ -6,12 +6,12 @@
 session_start();
 
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header('Location: ../login.html?error=auth');
+    header('Location: ../login.php?error=auth');
     exit;
 }
 
 if ($_SESSION['user_role'] !== 'admin') {
-    header('Location: ../login.html?error=unauthorized');
+    header('Location: ../login.php?error=unauthorized');
     exit;
 }
 

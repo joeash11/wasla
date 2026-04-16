@@ -18,7 +18,7 @@
     <div class="auth-wrapper">
         <div class="auth-left">
             <div class="auth-left-content">
-                <a href="landing.html" class="logo">
+                <a href="index.php" class="logo">
                     <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="48" height="48">
                     <span class="logo-text" style="color:#fff;font-size:1.6rem">Wasla</span>
                 </a>
@@ -78,7 +78,7 @@
                     <button class="auth-social-btn" onclick="handleSocialLogin()"><i class="fab fa-apple"></i>
                         Apple</button>
                 </div>
-                <p class="auth-switch">Don't have an account? <a href="signup.html">Sign up</a></p>
+                <p class="auth-switch">Don't have an account? <a href="signup.php">Sign up</a></p>
             </div>
         </div>
     </div>

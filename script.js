@@ -264,7 +264,7 @@ function setupSearch() {
 
 // ===== MANAGE PROJECT HANDLER =====
 function handleManageProject(index) {
-    window.location.href = 'projects.html';
+    window.location.href = 'projects.php';
 }
 
 // ===== RIPPLE EFFECT =====

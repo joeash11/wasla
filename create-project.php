@@ -13,43 +13,43 @@
 <body>
     <nav class="navbar" id="navbar">
         <div class="navbar-left">
-            <a href="index.html" class="logo">
+            <a href="dashboard.php" class="logo">
                 <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36">
                 <span class="logo-text">Wasla</span>
             </a>
             <ul class="nav-links">
-                <li><a href="index.html">Dashboard</a></li>
-                <li><a href="projects.html">My Projects</a></li>
-                <li><a href="profile.html">Profile</a></li>
+                <li><a href="dashboard.php">Dashboard</a></li>
+                <li><a href="projects.php">My Projects</a></li>
+                <li><a href="profile.php">Profile</a></li>
             </ul>
         </div>
         <div class="navbar-right">
             <span class="welcome-text">Welcome Abdullah</span>
-            <a href="profile.html" class="user-avatar-small"><i class="fas fa-user-circle"></i></a>
-            <a href="create-project.html" class="btn-create">Create Project</a>
+            <a href="profile.php" class="user-avatar-small"><i class="fas fa-user-circle"></i></a>
+            <a href="create-project.php" class="btn-create">Create Project</a>
         </div>
     </nav>
     <div class="main-wrapper">
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-profile">
-                <a href="profile.html" class="profile-avatar"><i class="fas fa-user-circle"></i></a>
+                <a href="profile.php" class="profile-avatar"><i class="fas fa-user-circle"></i></a>
                 <h3 class="profile-name">Abdullah<br>Elsayed</h3>
             </div>
             <nav class="sidebar-nav">
-                <a href="index.html" class="sidebar-link"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
-                <a href="projects.html" class="sidebar-link"><i class="fas fa-file-alt"></i><span>My Projects</span></a>
-                <a href="messages.html" class="sidebar-link"><i class="fas fa-envelope"></i><span>Messages</span></a>
-                <a href="settings.html" class="sidebar-link"><i class="fas fa-cog"></i><span>Settings</span></a>
+                <a href="dashboard.php" class="sidebar-link"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
+                <a href="projects.php" class="sidebar-link"><i class="fas fa-file-alt"></i><span>My Projects</span></a>
+                <a href="messages.php" class="sidebar-link"><i class="fas fa-envelope"></i><span>Messages</span></a>
+                <a href="settings.php" class="sidebar-link"><i class="fas fa-cog"></i><span>Settings</span></a>
             </nav>
             <div class="sidebar-footer">
-                <a href="help.html" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a>
+                <a href="help.php" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a>
                 <button class="btn-logout" onclick="window.location.href='auth_logout.php'">Log Out</button>
             </div>
         </aside>
         <main class="content" id="main-content">
             <div class="page-header">
                 <h1 class="section-title">Create New Project</h1>
-                <a href="projects.html" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Projects</a>
+                <a href="projects.php" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Projects</a>
             </div>
             <div class="create-project-form">
                 <!-- Step Indicator -->
@@ -165,7 +165,7 @@
     </div>
     <footer class="footer" id="footer">
         <div class="footer-left"><h3>Wasla</h3><p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p></div>
-        <div class="footer-links"><a href="terms.html">TERMS OF SERVICE</a><a href="privacy.html">PRIVACY POLICY</a><a href="contact.html">CONTACT US</a></div>
+        <div class="footer-links"><a href="terms.php">TERMS OF SERVICE</a><a href="privacy.php">PRIVACY POLICY</a><a href="contact.php">CONTACT US</a></div>
     </footer>
     <script>
         function goToStep(n){
@@ -228,7 +228,7 @@
                     msg.style.cssText = 'margin-top:16px;padding:16px 20px;border-radius:12px;background:rgba(255,152,0,0.1);border:1px solid rgba(255,152,0,0.3);color:#ff9800;display:flex;align-items:center;gap:10px;font-size:0.92rem;';
                     msg.innerHTML = '<i class="fas fa-clock" style="font-size:1.2rem"></i> Your project is <strong>pending admin approval</strong>. You\'ll be notified once it\'s reviewed.';
                     btn.parentElement.appendChild(msg);
-                    setTimeout(()=>{window.location.href='projects.html';},3000);
+                    setTimeout(()=>{window.location.href='projects.php';},3000);
                 } else {
                     btn.innerHTML='<i class="fas fa-check"></i> Create Project';
                     btn.disabled = false;
@@ -243,7 +243,7 @@
                 msg.style.cssText = 'margin-top:16px;padding:16px 20px;border-radius:12px;background:rgba(255,152,0,0.1);border:1px solid rgba(255,152,0,0.3);color:#ff9800;display:flex;align-items:center;gap:10px;font-size:0.92rem;';
                 msg.innerHTML = '<i class="fas fa-clock" style="font-size:1.2rem"></i> Your project is <strong>pending admin approval</strong>. You\'ll be notified once it\'s reviewed.';
                 btn.parentElement.appendChild(msg);
-                setTimeout(()=>{window.location.href='projects.html';},3000);
+                setTimeout(()=>{window.location.href='projects.php';},3000);
             });
         }
         document.getElementById('file-upload-area').addEventListener('click',()=>document.getElementById('file-input').click());

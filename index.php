@@ -13,7 +13,7 @@
 <body class="landing-body">
     <!-- Landing Navbar -->
     <nav class="landing-nav">
-        <a href="landing.html" class="logo">
+        <a href="index.php" class="logo">
             <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36">
             <span class="logo-text">Wasla</span>
         </a>
@@ -21,11 +21,11 @@
             <a href="#features">Features</a>
             <a href="#how-it-works">How It Works</a>
             <a href="#testimonials">Testimonials</a>
-            <a href="contact.html">Contact</a>
+            <a href="contact.php">Contact</a>
         </div>
         <div class="landing-nav-actions">
-            <a href="login.html" class="btn-landing-login">Log In</a>
-            <a href="signup.html" class="btn-landing-signup">Get Started</a>
+            <a href="login.php" class="btn-landing-login">Log In</a>
+            <a href="signup.php" class="btn-landing-signup">Get Started</a>
         </div>
     </nav>
 
@@ -41,7 +41,7 @@
             <h1 class="hero-title">Connect Your Events<br>With <span class="hero-gradient-text">Top Talent</span></h1>
             <p class="hero-subtitle">Wasla bridges the gap between event managers and professional ushers. Find, hire, and manage event staff seamlessly — all in one powerful platform.</p>
             <div class="hero-actions">
-                <a href="signup.html" class="btn-hero-primary"><i class="fas fa-rocket"></i> Start For Free</a>
+                <a href="signup.php" class="btn-hero-primary"><i class="fas fa-rocket"></i> Start For Free</a>
                 <a href="#how-it-works" class="btn-hero-secondary"><i class="fas fa-play-circle"></i> See How It Works</a>
             </div>
             <div class="hero-stats-row">
@@ -167,7 +167,7 @@
         <div class="landing-container">
             <h2 class="cta-title">Ready to Elevate Your Events?</h2>
             <p class="cta-desc">Join thousands of event managers who trust Wasla to deliver exceptional results.</p>
-            <a href="signup.html" class="btn-hero-primary btn-cta"><i class="fas fa-arrow-right"></i> Get Started Today</a>
+            <a href="signup.php" class="btn-hero-primary btn-cta"><i class="fas fa-arrow-right"></i> Get Started Today</a>
         </div>
     </section>
 
@@ -190,17 +190,17 @@
                 </div>
                 <div class="landing-footer-col">
                     <h4>Platform</h4>
-                    <a href="index.html">Dashboard</a>
-                    <a href="projects.html">My Projects</a>
-                    <a href="create-project.html">Create Project</a>
-                    <a href="messages.html">Messages</a>
+                    <a href="dashboard.php">Dashboard</a>
+                    <a href="projects.php">My Projects</a>
+                    <a href="create-project.php">Create Project</a>
+                    <a href="messages.php">Messages</a>
                 </div>
                 <div class="landing-footer-col">
                     <h4>Company</h4>
-                    <a href="contact.html">Contact Us</a>
-                    <a href="help.html">Help Center</a>
-                    <a href="terms.html">Terms of Service</a>
-                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="contact.php">Contact Us</a>
+                    <a href="help.php">Help Center</a>
+                    <a href="terms.php">Terms of Service</a>
+                    <a href="privacy.php">Privacy Policy</a>
                 </div>
                 <div class="landing-footer-col">
                     <h4>Connect</h4>
@@ -212,9 +212,9 @@
             <div class="landing-footer-bottom">
                 <p>&copy; 2024 Wasla Digital Conduit. All rights reserved.</p>
                 <div class="landing-footer-bottom-links">
-                    <a href="terms.html">Terms</a>
-                    <a href="privacy.html">Privacy</a>
-                    <a href="contact.html">Contact</a>
+                    <a href="terms.php">Terms</a>
+                    <a href="privacy.php">Privacy</a>
+                    <a href="contact.php">Contact</a>
                 </div>
             </div>
         </div>

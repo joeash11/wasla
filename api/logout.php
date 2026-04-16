@@ -6,6 +6,6 @@
 session_start();
 session_unset();
 session_destroy();
-header('Location: /wasla/landing.html');
+header('Location: /wasla/index.php');
 exit;
 ?>

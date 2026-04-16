@@ -63,7 +63,7 @@
 
             <p class="verify-timer" id="timer">Code expires in <strong>10:00</strong></p>
             <p class="verify-resend">Didn't receive the code? <a onclick="resendCode()">Resend Code</a></p>
-            <p class="verify-resend" style="margin-top:8px"><a href="login.html"><i class="fas fa-arrow-left"></i> Back to Login</a></p>
+            <p class="verify-resend" style="margin-top:8px"><a href="login.php"><i class="fas fa-arrow-left"></i> Back to Login</a></p>
 
             <!-- Dev note: shows the code for testing on localhost -->
             <div class="verify-dev-note" id="dev-note" style="display:none">

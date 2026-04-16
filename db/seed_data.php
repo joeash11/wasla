@@ -144,6 +144,6 @@ $conn->query("UPDATE users SET rating = 4.63, skills = 'Customer Service, Biling
 echo "<p>✅ Updated profile: rating 4.63, skills, bio</p>";
 
 echo "<br><h2>🎉 Done! Your account is now loaded with data.</h2>";
-echo "<p><a href='/wasla/login.html'>Go to Login →</a></p>";
+echo "<p><a href='/wasla/login.php'>Go to Login →</a></p>";
 $conn->close();
 ?>

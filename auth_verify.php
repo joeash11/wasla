@@ -7,7 +7,7 @@ session_start();
 require_once __DIR__ . '/db/connection.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: login.html');
+    header('Location: login.php');
     exit;
 }
 
@@ -15,7 +15,7 @@ $entered_code = trim($_POST['code'] ?? '');
 
 // Check if there's a pending verification
 if (!isset($_SESSION['pending_user_id']) || !isset($_SESSION['pending_code'])) {
-    header('Location: login.html?error=expired');
+    header('Location: login.php?error=expired');
     exit;
 }
 
@@ -23,13 +23,13 @@ if (!isset($_SESSION['pending_user_id']) || !isset($_SESSION['pending_code'])) {
 if (time() - $_SESSION['pending_code_time'] > 600) {
     // Clear pending data
     unset($_SESSION['pending_user_id'], $_SESSION['pending_code'], $_SESSION['pending_code_time']);
-    header('Location: login.html?error=expired');
+    header('Location: login.php?error=expired');
     exit;
 }
 
 // Verify the code
 if ($entered_code !== $_SESSION['pending_code']) {
-    header('Location: verify-email.html?error=wrong_code');
+    header('Location: verify-email.php?error=wrong_code');
     exit;
 }
 
@@ -54,14 +54,14 @@ unset($_SESSION['pending_user_id'], $_SESSION['pending_user_name'], $_SESSION['p
 // Redirect based on role
 switch ($role) {
     case 'admin':
-        header('Location: admin/dashboard.html');
+        header('Location: admin/dashboard.php');
         break;
     case 'usher':
         header('Location: usher/dashboard.php');
         break;
     case 'client':
     default:
-        header('Location: index.html');
+        header('Location: dashboard.php');
         break;
 }
 exit;
