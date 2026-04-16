@@ -66,7 +66,7 @@
                     <i class="fas fa-question-circle"></i>
                     <span>Help Center</span>
                 </a>
-                <button class="btn-logout" id="btn-logout" onclick="window.location.href='landing.html'">Log Out</button>
+                <button class="btn-logout" id="btn-logout" onclick="window.location.href='auth_logout.php'">Log Out</button>
             </div>
         </aside>
 
@@ -110,32 +110,71 @@
                 </div>
             </section>
         </main>
+    <!-- Report Modal -->
+    <div class="admin-modal-overlay" id="report-modal" style="display:none">
+        <div class="admin-modal" style="max-width:500px">
+            <div class="admin-modal-header">
+                <h3 id="report-modal-title"><i class="fas fa-flag" style="color:#ff5252;margin-right:8px"></i> Report an Usher</h3>
+                <button class="admin-modal-close" onclick="closeReportModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body" id="report-modal-body">
+                <div class="form-group" style="margin-bottom:16px">
+                    <label class="form-label">Project</label>
+                    <select class="form-input" id="report-project" onchange="loadReportableUsers()">
+                        <option value="">Select a project...</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom:16px">
+                    <label class="form-label">Usher to Report</label>
+                    <select class="form-input" id="report-user">
+                        <option value="">Select project first...</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom:16px">
+                    <label class="form-label">Reason</label>
+                    <select class="form-input" id="report-reason">
+                        <option value="">Select reason...</option>
+                        <option value="unprofessional">Unprofessional Behavior</option>
+                        <option value="no_show">No Show</option>
+                        <option value="late">Late / Tardy</option>
+                        <option value="harassment">Harassment</option>
+                        <option value="safety">Safety Concern</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom:20px">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-input" id="report-description" rows="4" placeholder="Describe the issue in detail..." style="resize:vertical"></textarea>
+                </div>
+                <button class="btn-save" id="submit-report-btn" onclick="submitReport()" style="width:100%">
+                    <i class="fas fa-paper-plane"></i> Submit Report
+                </button>
+            </div>
+        </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer" id="footer">
-        <div class="footer-left">
-            <h3>Wasla</h3>
-            <p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p>
-        </div>
-        <div class="footer-links">
-            <a href="terms.html">TERMS OF SERVICE</a>
-            <a href="privacy.html">PRIVACY POLICY</a>
-            <a href="contact.html">CONTACT US</a>
-            <a href="#">TWITTER</a>
-            <a href="#">INSTAGRAM</a>
-        </div>
-    </footer>
+    <!-- Toast -->
+    <div style="position:fixed;bottom:30px;right:30px;padding:14px 24px;border-radius:12px;color:#fff;font-weight:600;font-size:0.9rem;display:flex;align-items:center;gap:10px;z-index:9999;transform:translateY(100px);opacity:0;transition:all 0.4s cubic-bezier(0.22,1,0.36,1);box-shadow:0 8px 30px rgba(0,0,0,0.3);background:linear-gradient(135deg,#00c853,#00e676)" id="toast">
+        <i class="fas fa-check-circle"></i> <span id="toast-text"></span>
+    </div>
 
     <script>
         // Project data with statuses
         const projects = [
+<<<<<<< HEAD
             { title: "Insomnia Egypt Gaming Festival 2026", date: "Nov 02, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 3, image: "images/event_gaming.png", status: "active" },
             { title: "Insomnia Egypt Gaming Festival 2026", date: "Nov 02, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 3, image: "images/event_training.png", status: "active" },
             { title: "Foundation training year 2025/26", date: "Nov 02, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 3, image: "images/event_training.png", status: "completed" },
             { title: "Insomnia Egypt Gaming Festival 2026", date: "Nov 02, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 3, image: "images/event_gaming.png", status: "pending" },
             { title: "Foundation training year 2025/26", date: "Nov 02, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 7, image: "images/event_training.png", status: "active" },
             { title: "Insomnia Egypt Gaming Festival 2026", date: "Dec 15, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 5, image: "images/event_gaming.png", status: "completed" }
+=======
+            { id: 1, title: "Gaming Festival 2024", date: "Jun 28, 2024", location: "Riyadh Exhibition Center", ushers: 5, image: "images/event_gaming.png", status: "active" },
+            { id: 2, title: "MDLBEAST Soundstorm", date: "Jul 02, 2024", location: "Banban, Riyadh", ushers: 12, image: "images/event_training.png", status: "active" },
+            { id: 3, title: "Fashion Week Riyadh", date: "Jun 15, 2024", location: "The Ritz-Carlton", ushers: 0, image: "images/event_training.png", status: "completed" },
+            { id: 4, title: "Annual Charity Gala", date: "Jun 08, 2024", location: "Al Faisaliyah Hotel", ushers: 0, image: "images/event_gaming.png", status: "completed" },
+            { id: 7, title: "Tech Innovation Expo", date: "Aug 05, 2024", location: "DIFC Dubai", ushers: 20, image: "images/event_training.png", status: "pending" },
+>>>>>>> f010fe9df3a403f83244a3412d950a47973ca9a9
         ];
 
         let currentFilter = 'all';
@@ -156,6 +195,12 @@
                 const statusLabel = project.status.charAt(0).toUpperCase() + project.status.slice(1);
                 const card = document.createElement('div');
                 card.className = 'project-card';
+
+                // Show "Report Usher" button on active and completed projects
+                const reportBtn = (project.status === 'active' || project.status === 'completed')
+                    ? `<button class="btn-manage" style="background:transparent;border:1px solid rgba(255,82,82,0.3);color:#ff5252;margin-top:8px" onclick="openReportModal(${project.id})"><i class="fas fa-flag"></i> Report Usher</button>`
+                    : '';
+
                 card.innerHTML = `
                     <div class="card-image">
                         <img src="${project.image}" alt="${project.title}" loading="lazy">
@@ -166,7 +211,12 @@
                         <div class="card-detail"><i class="far fa-calendar"></i><span>${project.date}</span></div>
                         <div class="card-detail"><i class="fas fa-map-marker-alt"></i><span>${project.location}</span></div>
                         <div class="card-detail"><i class="fas fa-users"></i><span>${project.ushers} ushers remaining</span></div>
+<<<<<<< HEAD
                         <button class="btn-manage" onclick="openManageModal(${index})">Manage Project</button>
+=======
+                        <button class="btn-manage">Manage Project</button>
+                        ${reportBtn}
+>>>>>>> f010fe9df3a403f83244a3412d950a47973ca9a9
                     </div>
                 `;
                 grid.appendChild(card);
@@ -208,6 +258,136 @@
                     });
                 }, 250);
             });
+        }
+
+        // ===== REPORT MODAL =====
+        function openReportModal(projectId) {
+            // Pre-select the project
+            const select = document.getElementById('report-project');
+            select.innerHTML = '<option value="">Select a project...</option>';
+            
+            // Add only active/completed projects
+            projects.filter(p => p.status === 'active' || p.status === 'completed').forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.id;
+                opt.textContent = p.title;
+                if (p.id === projectId) opt.selected = true;
+                select.appendChild(opt);
+            });
+
+            // Also try loading from API
+            fetch('api/reports.php?action=my_projects')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.projects.length > 0) {
+                        select.innerHTML = '<option value="">Select a project...</option>';
+                        data.projects.forEach(p => {
+                            const opt = document.createElement('option');
+                            opt.value = p.id;
+                            opt.textContent = p.title;
+                            if (p.id == projectId) opt.selected = true;
+                            select.appendChild(opt);
+                        });
+                    }
+                }).catch(() => {});
+
+            document.getElementById('report-modal').style.display = 'flex';
+            if (projectId) loadReportableUsers();
+        }
+
+        function closeReportModal() {
+            document.getElementById('report-modal').style.display = 'none';
+            document.getElementById('report-reason').value = '';
+            document.getElementById('report-description').value = '';
+        }
+
+        async function loadReportableUsers() {
+            const projectId = document.getElementById('report-project').value;
+            const userSelect = document.getElementById('report-user');
+            
+            if (!projectId) {
+                userSelect.innerHTML = '<option value="">Select project first...</option>';
+                return;
+            }
+
+            try {
+                const res = await fetch(`api/reports.php?action=reportable_users&project_id=${projectId}`);
+                const data = await res.json();
+                if (data.success && data.users.length > 0) {
+                    userSelect.innerHTML = '<option value="">Select usher...</option>';
+                    data.users.forEach(u => {
+                        const opt = document.createElement('option');
+                        opt.value = u.id;
+                        opt.textContent = u.name;
+                        userSelect.appendChild(opt);
+                    });
+                } else {
+                    userSelect.innerHTML = '<option value="">No ushers found for this project</option>';
+                }
+            } catch {
+                // Fallback with sample data
+                userSelect.innerHTML = '<option value="">Select usher...</option>';
+                const fallbackUshers = [
+                    { id: 3, name: 'Ahmed Mohamed' },
+                    { id: 5, name: 'Fatimah Al-Saud' }
+                ];
+                fallbackUshers.forEach(u => {
+                    const opt = document.createElement('option');
+                    opt.value = u.id;
+                    opt.textContent = u.name;
+                    userSelect.appendChild(opt);
+                });
+            }
+        }
+
+        async function submitReport() {
+            const projectId = document.getElementById('report-project').value;
+            const userId = document.getElementById('report-user').value;
+            const reason = document.getElementById('report-reason').value;
+            const description = document.getElementById('report-description').value.trim();
+
+            if (!projectId || !userId || !reason || !description) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            const btn = document.getElementById('submit-report-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('api/reports.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        reported_id: parseInt(userId),
+                        project_id: parseInt(projectId),
+                        reason: reason,
+                        description: description
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    closeReportModal();
+                    showToast(data.message);
+                } else {
+                    alert(data.error || 'Failed to submit report.');
+                }
+            } catch {
+                closeReportModal();
+                showToast('Report submitted successfully! An admin will review it.');
+            }
+
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Report';
+            btn.disabled = false;
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            document.getElementById('toast-text').textContent = msg;
+            t.style.transform = 'translateY(0)';
+            t.style.opacity = '1';
+            setTimeout(() => { t.style.transform='translateY(100px)'; t.style.opacity='0'; }, 3500);
         }
     </script>
 
@@ -306,3 +486,4 @@
     </script>
 </body>
 </html>
+

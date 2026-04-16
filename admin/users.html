@@ -8,11 +8,44 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="../images/wasla-icon.png">
+    <style>
+        /* Suspend Modal */
+        .suspend-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(6px); z-index:9998; display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transition:all 0.3s ease; }
+        .suspend-overlay.show { opacity:1; visibility:visible; }
+        .suspend-modal { background:var(--glass-bg,#1a1a2e); border:1px solid rgba(255,255,255,0.1); border-radius:16px; max-width:480px; width:90%; transform:scale(0.85); transition:transform 0.3s cubic-bezier(0.22,1,0.36,1); }
+        .suspend-overlay.show .suspend-modal { transform:scale(1); }
+        .suspend-header { padding:24px 28px 16px; border-bottom:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; gap:12px; }
+        .suspend-header-icon { width:44px; height:44px; border-radius:12px; background:rgba(255,152,0,0.15); color:#ff9800; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+        .suspend-header h3 { color:#fff; font-size:1.05rem; font-weight:700; }
+        .suspend-header h3 span { display:block; font-size:0.82rem; font-weight:400; color:rgba(255,255,255,0.5); margin-top:2px; }
+        .suspend-body { padding:20px 28px 28px; }
+        .suspend-body label { display:block; color:rgba(255,255,255,0.7); font-size:0.85rem; font-weight:600; margin-bottom:8px; }
+        .suspend-body select, .suspend-body textarea { width:100%; padding:10px 14px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:10px; color:#fff; font-size:0.88rem; font-family:inherit; }
+        .suspend-body select { margin-bottom:16px; }
+        .suspend-body textarea { resize:vertical; min-height:80px; margin-bottom:20px; }
+        .suspend-body select:focus, .suspend-body textarea:focus { outline:none; border-color:rgba(255,152,0,0.5); }
+        .suspend-body textarea::placeholder { color:rgba(255,255,255,0.25); }
+        .suspend-actions { display:flex; gap:10px; }
+        .suspend-actions button { flex:1; padding:11px; border-radius:10px; border:none; cursor:pointer; font-weight:600; font-size:0.88rem; transition:all 0.2s ease; }
+        .btn-confirm-suspend { background:linear-gradient(135deg,#ff9800,#ffc107); color:#fff; }
+        .btn-confirm-suspend:hover { transform:translateY(-1px); box-shadow:0 4px 15px rgba(255,152,0,0.4); }
+        .btn-cancel-suspend { background:transparent; color:rgba(255,255,255,0.6); border:1px solid rgba(255,255,255,0.15) !important; }
+        .btn-cancel-suspend:hover { border-color:rgba(255,255,255,0.3) !important; color:#fff; }
+
+        /* Suspension reason badge in table */
+        .suspension-reason-tag { display:block; font-size:0.72rem; color:#ff9800; margin-top:2px; max-width:160px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+        /* Toast */
+        .toast { position:fixed; bottom:30px; right:30px; padding:14px 24px; border-radius:12px; color:#fff; font-weight:600; font-size:0.9rem; display:flex; align-items:center; gap:10px; z-index:9999; transform:translateY(100px); opacity:0; transition:all 0.4s cubic-bezier(0.22,1,0.36,1); box-shadow:0 8px 30px rgba(0,0,0,0.3); }
+        .toast.show { transform:translateY(0); opacity:1; }
+        .toast-success { background:linear-gradient(135deg,#00c853,#00e676); }
+        .toast-warning { background:linear-gradient(135deg,#ff9800,#ffc107); }
+    </style>
 </head>
 <body>
     <nav class="navbar admin-navbar"><div class="navbar-left">
         <a href="dashboard.html" class="logo"><img src="../images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36"><span class="logo-text">Wasla</span> <span class="admin-tag">Admin</span></a>
-        <ul class="nav-links"><li><a href="dashboard.html">Dashboard</a></li><li><a href="users.html" class="active">Users</a></li><li><a href="projects.html">Projects</a></li></ul>
+        <ul class="nav-links"><li><a href="dashboard.html">Dashboard</a></li><li><a href="users.html" class="active">Users</a></li><li><a href="projects.html">Projects</a></li><li><a href="reports.html">Reports</a></li></ul>
     </div><div class="navbar-right"><span class="welcome-text">Admin Panel</span><div class="user-avatar-small"><i class="fas fa-user-shield"></i></div></div></nav>
     <div class="main-wrapper">
         <aside class="sidebar admin-sidebar">
@@ -21,8 +54,9 @@
                 <a href="dashboard.html" class="sidebar-link"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
                 <a href="users.html" class="sidebar-link active"><i class="fas fa-users"></i><span>Users</span></a>
                 <a href="projects.html" class="sidebar-link"><i class="fas fa-folder-open"></i><span>Projects</span></a>
+                <a href="reports.html" class="sidebar-link"><i class="fas fa-flag"></i><span>Reports</span></a>
             </nav>
-            <div class="sidebar-footer"><button class="btn-logout" onclick="window.location.href='../landing.html'">Log Out</button></div>
+            <div class="sidebar-footer"><button class="btn-logout" onclick="window.location.href='../auth_logout.php'">Log Out</button></div>
         </aside>
         <main class="content">
             <div class="page-header"><h1 class="section-title">User Management</h1></div>
@@ -43,22 +77,227 @@
                 <table class="admin-table" id="users-table">
                     <thead><tr><th>User</th><th>Role</th><th>Email</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead>
                     <tbody>
-                        <tr data-role="client" data-status="active"><td class="user-cell"><div class="table-avatar"><i class="fas fa-user-circle"></i></div><strong>Abdullah Elsayed</strong></td><td><span class="role-badge role-client">Client</span></td><td>abdullah@company.com</td><td>Jan 12, 2024</td><td><span class="status-dot status-dot-active"></span> Active</td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Suspend" onclick="this.closest('tr').querySelector('.status-dot').className='status-dot status-dot-suspended';this.closest('tr').querySelector('td:nth-child(5)').innerHTML='<span class=\'status-dot status-dot-suspended\'></span> Suspended'"><i class="fas fa-ban"></i></button><button class="table-action-btn table-action-danger" title="Delete"><i class="fas fa-trash"></i></button></td></tr>
+                        <tr data-role="client" data-status="active"><td class="user-cell"><div class="table-avatar"><i class="fas fa-user-circle"></i></div><strong>Abdullah Elsayed</strong></td><td><span class="role-badge role-client">Client</span></td><td>abdullah@company.com</td><td>Jan 12, 2024</td><td><span class="status-dot status-dot-active"></span> Active</td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Suspend"><i class="fas fa-ban"></i></button><button class="table-action-btn table-action-danger" title="Delete"><i class="fas fa-trash"></i></button></td></tr>
                         <tr data-role="usher" data-status="active"><td class="user-cell"><div class="table-avatar table-avatar-blue"><i class="fas fa-user-circle"></i></div><strong>Ahmed Mohamed</strong></td><td><span class="role-badge role-usher">Usher</span></td><td>ahmed@email.com</td><td>Feb 5, 2024</td><td><span class="status-dot status-dot-active"></span> Active</td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Suspend"><i class="fas fa-ban"></i></button><button class="table-action-btn table-action-danger" title="Delete"><i class="fas fa-trash"></i></button></td></tr>
                         <tr data-role="client" data-status="active"><td class="user-cell"><div class="table-avatar table-avatar-green"><i class="fas fa-user-circle"></i></div><strong>Sara Ahmed</strong></td><td><span class="role-badge role-client">Client</span></td><td>sara@mdlbeast.com</td><td>Mar 18, 2024</td><td><span class="status-dot status-dot-active"></span> Active</td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Suspend"><i class="fas fa-ban"></i></button><button class="table-action-btn table-action-danger" title="Delete"><i class="fas fa-trash"></i></button></td></tr>
                         <tr data-role="usher" data-status="active"><td class="user-cell"><div class="table-avatar table-avatar-purple"><i class="fas fa-user-circle"></i></div><strong>Fatimah Al-Saud</strong></td><td><span class="role-badge role-usher">Usher</span></td><td>fatimah@email.com</td><td>Apr 2, 2024</td><td><span class="status-dot status-dot-active"></span> Active</td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Suspend"><i class="fas fa-ban"></i></button><button class="table-action-btn table-action-danger" title="Delete"><i class="fas fa-trash"></i></button></td></tr>
-                        <tr data-role="usher" data-status="suspended"><td class="user-cell"><div class="table-avatar table-avatar-orange"><i class="fas fa-user-circle"></i></div><strong>Youssef Nabil</strong></td><td><span class="role-badge role-usher">Usher</span></td><td>youssef@email.com</td><td>Jan 28, 2024</td><td><span class="status-dot status-dot-suspended"></span> Suspended</td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Reactivate"><i class="fas fa-undo"></i></button><button class="table-action-btn table-action-danger" title="Delete"><i class="fas fa-trash"></i></button></td></tr>
+                        <tr data-role="usher" data-status="suspended" data-suspend-reason="Multiple no-shows at events"><td class="user-cell"><div class="table-avatar table-avatar-orange"><i class="fas fa-user-circle"></i></div><strong>Youssef Nabil</strong></td><td><span class="role-badge role-usher">Usher</span></td><td>youssef@email.com</td><td>Jan 28, 2024</td><td><span class="status-dot status-dot-suspended"></span> Suspended<span class="suspension-reason-tag"><i class="fas fa-info-circle"></i> Multiple no-shows at events</span></td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Reactivate"><i class="fas fa-undo"></i></button><button class="table-action-btn table-action-danger" title="Delete"><i class="fas fa-trash"></i></button></td></tr>
                         <tr data-role="client" data-status="active"><td class="user-cell"><div class="table-avatar"><i class="fas fa-user-circle"></i></div><strong>Khalid Al-Farsi</strong></td><td><span class="role-badge role-client">Client</span></td><td>khalid@gulfevents.com</td><td>May 10, 2024</td><td><span class="status-dot status-dot-active"></span> Active</td><td class="action-cell"><button class="table-action-btn" title="View"><i class="fas fa-eye"></i></button><button class="table-action-btn table-action-warn" title="Suspend"><i class="fas fa-ban"></i></button><button class="table-action-btn table-action-danger" title="Delete"><i class="fas fa-trash"></i></button></td></tr>
                     </tbody>
                 </table>
             </div>
         </main>
     </div>
+
+    <!-- User Detail Modal -->
+    <div class="admin-modal-overlay" id="user-modal" style="display:none">
+        <div class="admin-modal">
+            <div class="admin-modal-header">
+                <h3 id="user-modal-title">User Details</h3>
+                <button class="admin-modal-close" onclick="closeUserModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body" id="user-modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Suspend Reason Modal -->
+    <div class="suspend-overlay" id="suspend-overlay">
+        <div class="suspend-modal">
+            <div class="suspend-header">
+                <div class="suspend-header-icon"><i class="fas fa-ban"></i></div>
+                <h3>Suspend User<span id="suspend-user-name"></span></h3>
+            </div>
+            <div class="suspend-body">
+                <label>Reason for Suspension</label>
+                <select id="suspend-reason-select">
+                    <option value="">Select a reason...</option>
+                    <option value="Multiple no-shows at events">Multiple no-shows at events</option>
+                    <option value="Unprofessional behavior reported">Unprofessional behavior reported</option>
+                    <option value="Harassment complaints received">Harassment complaints received</option>
+                    <option value="Violation of terms of service">Violation of terms of service</option>
+                    <option value="Fraudulent activity detected">Fraudulent activity detected</option>
+                    <option value="Payment disputes unresolved">Payment disputes unresolved</option>
+                    <option value="other">Other (specify below)</option>
+                </select>
+                <label>Additional Details</label>
+                <textarea id="suspend-reason-text" placeholder="Provide details about the suspension reason..."></textarea>
+                <div class="suspend-actions">
+                    <button class="btn-cancel-suspend" onclick="closeSuspendModal()">Cancel</button>
+                    <button class="btn-confirm-suspend" id="btn-confirm-suspend" onclick="confirmSuspend()"><i class="fas fa-ban"></i> Suspend User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"><i class="fas fa-check-circle"></i> <span id="toast-text"></span></div>
+
     <footer class="footer"><div class="footer-left"><h3>Wasla</h3><p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p></div><div class="footer-links"><a href="../terms.html">TERMS OF SERVICE</a><a href="../privacy.html">PRIVACY POLICY</a><a href="../contact.html">CONTACT US</a></div></footer>
+
     <script>
+    let pendingSuspendRow = null;
+    let pendingSuspendBtn = null;
+
+    // Search & Filters
     document.getElementById('user-search').addEventListener('input',e=>{const q=e.target.value.toLowerCase();document.querySelectorAll('#users-table tbody tr').forEach(r=>{r.style.display=r.textContent.toLowerCase().includes(q)?'':'none';});});
     document.getElementById('role-filter').addEventListener('change',e=>{const v=e.target.value;document.querySelectorAll('#users-table tbody tr').forEach(r=>{r.style.display=(!v||r.dataset.role===v)?'':'none';});});
     document.getElementById('status-filter').addEventListener('change',e=>{const v=e.target.value;document.querySelectorAll('#users-table tbody tr').forEach(r=>{r.style.display=(!v||r.dataset.status===v)?'':'none';});});
+
+    // Wire up all action buttons
+    document.querySelectorAll('#users-table .table-action-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const row = this.closest('tr');
+            const title = this.getAttribute('title');
+            if (title === 'View') viewUser(row);
+            else if (title === 'Suspend') openSuspendModal(row, this);
+            else if (title === 'Reactivate') reactivateUser(row, this);
+            else if (title === 'Delete') deleteUser(row);
+        });
+    });
+
+    // ===== VIEW USER =====
+    function viewUser(row) {
+        const cells = row.querySelectorAll('td');
+        const name = cells[0].querySelector('strong').textContent;
+        const role = cells[1].textContent.trim();
+        const email = cells[2].textContent;
+        const joined = cells[3].textContent;
+        const status = row.dataset.status;
+        const reason = row.dataset.suspendReason || '';
+
+        let statusHtml = status === 'suspended'
+            ? '<span style="color:#ff9800;font-weight:600">Suspended</span>'
+            : '<span style="color:#00c853;font-weight:600">Active</span>';
+
+        let reasonHtml = '';
+        if (status === 'suspended' && reason) {
+            reasonHtml = `
+                <div class="modal-detail" style="margin-top:12px;padding:14px;background:rgba(255,152,0,0.08);border:1px solid rgba(255,152,0,0.2);border-radius:10px">
+                    <strong style="color:#ff9800"><i class="fas fa-exclamation-triangle"></i> Suspension Reason:</strong><br>
+                    <span style="color:rgba(255,255,255,0.7)">${escapeHtml(reason)}</span>
+                </div>
+            `;
+        }
+
+        document.getElementById('user-modal-title').textContent = name;
+        document.getElementById('user-modal-body').innerHTML = `
+            <div class="modal-detail"><strong>Role:</strong> ${role}</div>
+            <div class="modal-detail"><strong>Email:</strong> ${email}</div>
+            <div class="modal-detail"><strong>Joined:</strong> ${joined}</div>
+            <div class="modal-detail"><strong>Status:</strong> ${statusHtml}</div>
+            ${reasonHtml}
+        `;
+        document.getElementById('user-modal').style.display = 'flex';
+    }
+
+    function closeUserModal() {
+        document.getElementById('user-modal').style.display = 'none';
+    }
+    document.getElementById('user-modal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeUserModal();
+    });
+
+    // ===== SUSPEND USER (with reason modal) =====
+    function openSuspendModal(row, btn) {
+        pendingSuspendRow = row;
+        pendingSuspendBtn = btn;
+        const name = row.querySelector('strong').textContent;
+        document.getElementById('suspend-user-name').textContent = name;
+        document.getElementById('suspend-reason-select').value = '';
+        document.getElementById('suspend-reason-text').value = '';
+        document.getElementById('suspend-overlay').classList.add('show');
+    }
+
+    function closeSuspendModal() {
+        document.getElementById('suspend-overlay').classList.remove('show');
+        pendingSuspendRow = null;
+        pendingSuspendBtn = null;
+    }
+
+    document.getElementById('suspend-overlay').addEventListener('click', e => {
+        if (e.target === e.currentTarget) closeSuspendModal();
+    });
+
+    function confirmSuspend() {
+        const selectVal = document.getElementById('suspend-reason-select').value;
+        const textVal = document.getElementById('suspend-reason-text').value.trim();
+
+        if (!selectVal) {
+            alert('Please select a suspension reason.');
+            return;
+        }
+
+        // Build the full reason
+        let reason = selectVal === 'other' ? textVal : selectVal;
+        if (selectVal !== 'other' && textVal) {
+            reason += ' — ' + textVal;
+        }
+        if (!reason) {
+            alert('Please provide a suspension reason.');
+            return;
+        }
+
+        const row = pendingSuspendRow;
+        const btn = pendingSuspendBtn;
+        if (!row || !btn) return;
+
+        const name = row.querySelector('strong').textContent;
+
+        // Update the row
+        row.dataset.status = 'suspended';
+        row.dataset.suspendReason = reason;
+        row.querySelector('td:nth-child(5)').innerHTML = `<span class="status-dot status-dot-suspended"></span> Suspended<span class="suspension-reason-tag"><i class="fas fa-info-circle"></i> ${escapeHtml(reason)}</span>`;
+
+        // Change button to Reactivate
+        btn.setAttribute('title', 'Reactivate');
+        btn.innerHTML = '<i class="fas fa-undo"></i>';
+
+        closeSuspendModal();
+        showToast(`${name} has been suspended. Reason: ${reason}`, 'warning');
+    }
+
+    // ===== REACTIVATE USER =====
+    function reactivateUser(row, btn) {
+        const name = row.querySelector('strong').textContent;
+        if (confirm(`Reactivate user "${name}"? They will be able to log in again.`)) {
+            row.dataset.status = 'active';
+            delete row.dataset.suspendReason;
+            row.querySelector('td:nth-child(5)').innerHTML = '<span class="status-dot status-dot-active"></span> Active';
+            btn.setAttribute('title', 'Suspend');
+            btn.innerHTML = '<i class="fas fa-ban"></i>';
+            showToast(`${name} has been reactivated.`, 'success');
+        }
+    }
+
+    // ===== DELETE USER =====
+    function deleteUser(row) {
+        const name = row.querySelector('strong').textContent;
+        if (confirm(`Permanently delete user "${name}"? This cannot be undone.`)) {
+            row.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+            row.style.opacity = '0';
+            row.style.transform = 'translateX(30px)';
+            setTimeout(() => row.remove(), 400);
+            showToast(`${name} has been deleted.`, 'success');
+        }
+    }
+
+    // ===== TOAST =====
+    function showToast(msg, type = 'success') {
+        const t = document.getElementById('toast');
+        t.className = `toast toast-${type}`;
+        document.getElementById('toast-text').textContent = msg;
+        t.querySelector('i').className = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-triangle';
+        requestAnimationFrame(() => t.classList.add('show'));
+        setTimeout(() => t.classList.remove('show'), 4000);
+    }
+
+    // ===== HELPERS =====
+    function escapeHtml(text) {
+        if (!text) return '';
+        const d = document.createElement('div');
+        d.textContent = text;
+        return d.innerHTML;
+    }
     </script>
 </body>
 </html>

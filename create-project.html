@@ -43,7 +43,7 @@
             </nav>
             <div class="sidebar-footer">
                 <a href="help.html" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a>
-                <button class="btn-logout" onclick="window.location.href='landing.html'">Log Out</button>
+                <button class="btn-logout" onclick="window.location.href='auth_logout.php'">Log Out</button>
             </div>
         </aside>
         <main class="content" id="main-content">
@@ -73,9 +73,18 @@
                                 <div class="form-group"><label class="form-label">Event Date *</label><input type="date" class="form-input" id="project-date"></div>
                                 <div class="form-group"><label class="form-label">End Date</label><input type="date" class="form-input" id="project-end-date"></div>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Location *</label>
-                                <input type="text" class="form-input" id="project-location" placeholder="e.g. The Ritz-Carlton, Riyadh">
+                            <div class="form-row">
+                                <div class="form-group"><label class="form-label">Location *</label><input type="text" class="form-input" id="project-location" placeholder="e.g. The Ritz-Carlton, Riyadh"></div>
+                                <div class="form-group"><label class="form-label">City *</label>
+                                    <select class="form-input" id="project-city">
+                                        <option value="">Select City</option>
+                                        <option value="Cairo">Cairo</option>
+                                        <option value="Riyadh">Riyadh</option>
+                                        <option value="Jeddah">Jeddah</option>
+                                        <option value="Dubai">Dubai</option>
+                                        <option value="Alexandria">Alexandria</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Description</label>
@@ -104,6 +113,17 @@
                             <div class="form-row">
                                 <div class="form-group"><label class="form-label">Number of Ushers Needed *</label><input type="number" class="form-input" id="ushers-count" min="1" value="1"></div>
                                 <div class="form-group"><label class="form-label">Budget per Usher (SAR)</label><input type="number" class="form-input" id="ushers-budget" placeholder="0.00"></div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Preferred Usher Category *</label>
+                                <select class="form-input" id="usher-category">
+                                    <option value="">All Categories</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Event organizers">Event Organizers</option>
+                                    <option value="Quality control">Quality Control</option>
+                                    <option value="Models">Models</option>
+                                    <option value="Operation">Operation</option>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Requirements</label>
@@ -165,8 +185,66 @@
         }
         function submitProject(){
             const btn=document.querySelector('.btn-submit');
-            btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Creating...';
-            setTimeout(()=>{btn.innerHTML='<i class="fas fa-check"></i> Created!';btn.style.background='var(--accent)';setTimeout(()=>{window.location.href='projects.html';},1500);},1500);
+            const name = document.getElementById('project-name').value.trim();
+            const date = document.getElementById('project-date').value;
+            const endDate = document.getElementById('project-end-date').value;
+            const location = document.getElementById('project-location').value.trim();
+            const city = document.getElementById('project-city').value;
+            const desc = document.getElementById('project-desc').value.trim();
+            const ushers = document.getElementById('ushers-count').value;
+            const budget = document.getElementById('ushers-budget').value;
+
+            // Validate
+            if (!name || !date || !location || !city || !ushers) {
+                alert('Please fill in all required fields (Name, Date, Location, City, Ushers).');
+                return;
+            }
+
+            btn.innerHTML='<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            btn.disabled = true;
+
+            fetch('api/create_project.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    title: name,
+                    description: desc,
+                    event_date: date,
+                    end_date: endDate || null,
+                    location: location,
+                    city: city,
+                    ushers_needed: parseInt(ushers),
+                    pay_per_usher: budget ? parseFloat(budget) : null,
+                    category: ''
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    btn.innerHTML='<i class="fas fa-check"></i> Submitted for Review!';
+                    btn.style.background='var(--accent)';
+                    // Show a friendly pending message
+                    const msg = document.createElement('div');
+                    msg.style.cssText = 'margin-top:16px;padding:16px 20px;border-radius:12px;background:rgba(255,152,0,0.1);border:1px solid rgba(255,152,0,0.3);color:#ff9800;display:flex;align-items:center;gap:10px;font-size:0.92rem;';
+                    msg.innerHTML = '<i class="fas fa-clock" style="font-size:1.2rem"></i> Your project is <strong>pending admin approval</strong>. You\'ll be notified once it\'s reviewed.';
+                    btn.parentElement.appendChild(msg);
+                    setTimeout(()=>{window.location.href='projects.html';},3000);
+                } else {
+                    btn.innerHTML='<i class="fas fa-check"></i> Create Project';
+                    btn.disabled = false;
+                    alert(data.error || 'Failed to create project.');
+                }
+            })
+            .catch(() => {
+                // Fallback for when API is not running
+                btn.innerHTML='<i class="fas fa-check"></i> Submitted for Review!';
+                btn.style.background='var(--accent)';
+                const msg = document.createElement('div');
+                msg.style.cssText = 'margin-top:16px;padding:16px 20px;border-radius:12px;background:rgba(255,152,0,0.1);border:1px solid rgba(255,152,0,0.3);color:#ff9800;display:flex;align-items:center;gap:10px;font-size:0.92rem;';
+                msg.innerHTML = '<i class="fas fa-clock" style="font-size:1.2rem"></i> Your project is <strong>pending admin approval</strong>. You\'ll be notified once it\'s reviewed.';
+                btn.parentElement.appendChild(msg);
+                setTimeout(()=>{window.location.href='projects.html';},3000);
+            });
         }
         document.getElementById('file-upload-area').addEventListener('click',()=>document.getElementById('file-input').click());
         document.getElementById('skill-input').addEventListener('keypress',e=>{

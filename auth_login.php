@@ -1,0 +1,115 @@
+<?php
+// ============================================
+// Login Handler - With Email Verification Code
+// ============================================
+session_start();
+require_once __DIR__ . '/db/connection.php';
+
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Location: login.html');
+    exit;
+}
+
+$email    = trim($_POST['email'] ?? '');
+$password = $_POST['password'] ?? '';
+$role     = $_POST['role'] ?? 'client';
+
+// Validate inputs
+if (empty($email) || empty($password)) {
+    header('Location: login.html?error=empty');
+    exit;
+}
+
+// Look up user by email
+$stmt = $conn->prepare("SELECT id, first_name, last_name, email, password, role, is_active FROM users WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows === 0) {
+    header('Location: login.html?error=invalid');
+    exit;
+}
+
+$user = $result->fetch_assoc();
+$stmt->close();
+
+// Verify password
+if (!password_verify($password, $user['password'])) {
+    header('Location: login.html?error=invalid');
+    exit;
+}
+
+// Check if account is active
+if (!$user['is_active']) {
+    header('Location: login.html?error=inactive');
+    exit;
+}
+
+// Verify role matches
+if ($role === 'admin' && $user['role'] !== 'admin') {
+    header('Location: login.html?error=role');
+    exit;
+}
+if ($role !== 'admin' && $user['role'] !== $role && $user['role'] !== 'admin') {
+    header('Location: login.html?error=role');
+    exit;
+}
+
+// On localhost, skip email verification and log in directly
+$is_localhost = in_array($_SERVER['HTTP_HOST'], ['localhost', '127.0.0.1']);
+
+if ($is_localhost) {
+    // Direct login - no verification needed on localhost
+    $_SESSION['user_id']    = $user['id'];
+    $_SESSION['user_name']  = $user['first_name'] . ' ' . $user['last_name'];
+    $_SESSION['first_name'] = $user['first_name'];
+    $_SESSION['user_email'] = $user['email'];
+    $_SESSION['user_role']  = $user['role'];
+    $_SESSION['logged_in']  = true;
+
+    // Redirect based on role
+    switch ($user['role']) {
+        case 'admin':
+            header('Location: admin/dashboard.html');
+            break;
+        case 'usher':
+            header('Location: usher/dashboard.php');
+            break;
+        case 'client':
+        default:
+            header('Location: index.html');
+            break;
+    }
+    exit;
+}
+
+// ---- Production: Generate 6-digit verification code ----
+$code = str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
+
+// Save code to database
+$stmt = $conn->prepare("UPDATE users SET email_verification_code = ? WHERE id = ?");
+$stmt->bind_param("si", $code, $user['id']);
+$stmt->execute();
+$stmt->close();
+
+// Send email
+$to = $user['email'];
+$subject = "Wasla - Your Login Verification Code";
+$message = "Your Wasla verification code is: $code\n\nThis code expires in 10 minutes.\nIf you didn't request this, please ignore this email.";
+$headers = "From: noreply@wasla.com\r\nContent-Type: text/plain; charset=UTF-8";
+
+@mail($to, $subject, $message, $headers);
+
+// Store pending login data in session
+$_SESSION['pending_user_id']   = $user['id'];
+$_SESSION['pending_user_name'] = $user['first_name'] . ' ' . $user['last_name'];
+$_SESSION['pending_user_email']= $user['email'];
+$_SESSION['pending_user_role'] = $user['role'];
+$_SESSION['pending_code']      = $code;
+$_SESSION['pending_code_time'] = time();
+
+// Redirect to verification page
+header('Location: verify-email.html');
+exit;
+?>

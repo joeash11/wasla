@@ -12,7 +12,7 @@
 <body>
     <nav class="navbar admin-navbar"><div class="navbar-left">
         <a href="dashboard.html" class="logo"><img src="../images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36"><span class="logo-text">Wasla</span> <span class="admin-tag">Admin</span></a>
-        <ul class="nav-links"><li><a href="dashboard.html" class="active">Dashboard</a></li><li><a href="users.html">Users</a></li><li><a href="projects.html">Projects</a></li></ul>
+        <ul class="nav-links"><li><a href="dashboard.html" class="active">Dashboard</a></li><li><a href="users.html">Users</a></li><li><a href="projects.html">Projects</a></li><li><a href="reports.html">Reports</a></li></ul>
     </div><div class="navbar-right"><span class="welcome-text">Admin Panel</span><div class="user-avatar-small"><i class="fas fa-user-shield"></i></div></div></nav>
     <div class="main-wrapper">
         <aside class="sidebar admin-sidebar">
@@ -21,8 +21,9 @@
                 <a href="dashboard.html" class="sidebar-link active"><i class="fas fa-th-large"></i><span>Dashboard</span></a>
                 <a href="users.html" class="sidebar-link"><i class="fas fa-users"></i><span>Users</span></a>
                 <a href="projects.html" class="sidebar-link"><i class="fas fa-folder-open"></i><span>Projects</span></a>
+                <a href="reports.html" class="sidebar-link"><i class="fas fa-flag"></i><span>Reports</span></a>
             </nav>
-            <div class="sidebar-footer"><button class="btn-logout" onclick="window.location.href='../landing.html'">Log Out</button></div>
+            <div class="sidebar-footer"><button class="btn-logout" onclick="window.location.href='../auth_logout.php'">Log Out</button></div>
         </aside>
         <main class="content">
             <h1 class="section-title">Admin Dashboard</h1>
@@ -30,7 +31,7 @@
             <section class="stats-row">
                 <div class="stat-card"><p class="stat-label">Total Users</p><h2 class="stat-value">1,247</h2></div>
                 <div class="stat-card"><p class="stat-label">Active Projects</p><h2 class="stat-value">38</h2></div>
-                <div class="stat-card"><p class="stat-label">Platform Revenue</p><h2 class="stat-value">SAR 245K</h2></div>
+                <div class="stat-card"><p class="stat-label">Platform Revenue</p><h2 class="stat-value">EGP 245K</h2></div>
                 <div class="stat-card"><p class="stat-label">New Signups (30d)</p><h2 class="stat-value">89</h2></div>
             </section>
             <!-- Revenue + User Growth -->
@@ -62,7 +63,7 @@
                         <div class="activity-item"><div class="activity-icon activity-icon-blue"><i class="fas fa-folder-plus"></i></div><div><span class="activity-text">New project created: <strong>National Day Festival</strong></span><span class="activity-time">22 min ago</span></div></div>
                         <div class="activity-item"><div class="activity-icon activity-icon-orange"><i class="fas fa-flag"></i></div><div><span class="activity-text">Content flagged in project: <strong>Private Event #129</strong></span><span class="activity-time">1 hour ago</span></div></div>
                         <div class="activity-item"><div class="activity-icon activity-icon-purple"><i class="fas fa-check-circle"></i></div><div><span class="activity-text">Usher verified: <strong>Fatimah Al-Saud</strong></span><span class="activity-time">2 hours ago</span></div></div>
-                        <div class="activity-item"><div class="activity-icon activity-icon-green"><i class="fas fa-money-bill"></i></div><div><span class="activity-text">Payment processed: <strong>SAR 12,500</strong></span><span class="activity-time">3 hours ago</span></div></div>
+                        <div class="activity-item"><div class="activity-icon activity-icon-green"><i class="fas fa-money-bill"></i></div><div><span class="activity-text">Payment processed: <strong>EGP 12,500</strong></span><span class="activity-time">3 hours ago</span></div></div>
                     </div>
                 </div>
             </section>
