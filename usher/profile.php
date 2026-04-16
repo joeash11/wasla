@@ -31,7 +31,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
                 <a href="my-gigs.php" class="sidebar-link"><i class="fas fa-calendar-check"></i><span>My Gigs</span></a>
                 <a href="profile.php" class="sidebar-link active"><i class="fas fa-user"></i><span>Profile</span></a>
             </nav>
-            <div class="sidebar-footer"><a href="../help.php" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a><button class="btn-logout" onclick="window.location.href='../api/logout.php'">Log Out</button></div>
+            <div class="sidebar-footer"><a href="../help.php" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a><button class="btn-logout" onclick="window.location.href='../auth_logout.php'">Log Out</button></div>
         </aside>
         <main class="content">
             <h1 class="section-title">My Profile</h1>

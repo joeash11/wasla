@@ -129,62 +129,8 @@
             document.getElementById('signup-client').style.display = selectedRole === 'client' ? '' : 'none';
             document.getElementById('signup-usher').style.display = selectedRole === 'usher' ? '' : 'none';
         }
-<<<<<<< HEAD
-        function redirectByRole(role) {
-            if (role === 'client') window.location.href = 'index.html';
-            else window.location.href = 'usher/dashboard.html';
-        }
-        async function handleSignup(e, role) {
-            e.preventDefault();
-            const form = e.target;
-            const btn = form.querySelector('.btn-auth-submit');
-            const inputs = form.querySelectorAll('.auth-input');
-            
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating account...';
-            btn.disabled = true;
 
-            const payload = { role };
-            if (role === 'client') {
-                payload.first_name = inputs[0].value;
-                payload.last_name = inputs[1].value;
-                payload.company_name = inputs[2].value;
-                payload.email = inputs[3].value;
-                payload.phone = inputs[4].value;
-                payload.password = inputs[5].value;
-            } else {
-                payload.first_name = inputs[0].value;
-                payload.last_name = inputs[1].value;
-                payload.email = inputs[2].value;
-                payload.phone = inputs[3].value;
-                payload.city = inputs[4].value;
-                payload.skills = inputs[5]?.value || '';
-                payload.password = inputs[6].value;
-            }
 
-            try {
-                const res = await fetch('db/signup.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const data = await res.json();
-                
-                if (data.success) {
-                    btn.innerHTML = '<i class="fas fa-check"></i> Account Created!';
-                    btn.style.background = 'var(--accent)';
-                    setTimeout(() => redirectByRole(role), 800);
-                } else {
-                    btn.innerHTML = role === 'client' ? '<i class="fas fa-rocket"></i> Create Client Account' : '<i class="fas fa-id-badge"></i> Create Usher Account';
-                    btn.disabled = false;
-                    showAuthError(form, data.error || 'Signup failed');
-                }
-            } catch (err) {
-                console.log('Backend unavailable, using demo signup');
-                setTimeout(() => redirectByRole(role), 1500);
-            }
-        }
-=======
->>>>>>> f010fe9df3a403f83244a3412d950a47973ca9a9
         function handleSocialSignup() {
             alert('Social signup is not yet available. Please use email/password.');
         }

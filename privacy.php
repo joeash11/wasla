@@ -13,27 +13,17 @@
 </head>
 <body class="landing-body">
     <nav class="landing-nav">
-<<<<<<< HEAD:privacy.html
-        <a href="index.html" class="logo">
-=======
         <a href="index.php" class="logo">
->>>>>>> fdded6d (kosomk):privacy.php
             <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36">
             <span class="logo-text">Wasla</span>
         </a>
         <div class="landing-nav-links">
-<<<<<<< HEAD:privacy.html
-        </div>
-        <div class="landing-nav-actions">
-            <a href="index.html" class="btn-landing-signup">Dashboard</a>
-=======
             <a href="index.php#features">Features</a>
             <a href="contact.php">Contact</a>
         </div>
         <div class="landing-nav-actions">
-            <a href="dashboard.php" class="btn-landing-login">Log In</a>
-            <a href="dashboard.php" class="btn-landing-signup">Get Started</a>
->>>>>>> fdded6d (kosomk):privacy.php
+            <a href="login.php" class="btn-landing-login">Log In</a>
+            <a href="signup.php" class="btn-landing-signup">Get Started</a>
         </div>
     </nav>
     <div class="legal-page">

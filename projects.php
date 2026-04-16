@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/includes/client_guard.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -161,20 +162,11 @@
     <script>
         // Project data with statuses
         const projects = [
-<<<<<<< HEAD
-            { title: "Insomnia Egypt Gaming Festival 2026", date: "Nov 02, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 3, image: "images/event_gaming.png", status: "active" },
-            { title: "Insomnia Egypt Gaming Festival 2026", date: "Nov 02, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 3, image: "images/event_training.png", status: "active" },
-            { title: "Foundation training year 2025/26", date: "Nov 02, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 3, image: "images/event_training.png", status: "completed" },
-            { title: "Insomnia Egypt Gaming Festival 2026", date: "Nov 02, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 3, image: "images/event_gaming.png", status: "pending" },
-            { title: "Foundation training year 2025/26", date: "Nov 02, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 7, image: "images/event_training.png", status: "active" },
-            { title: "Insomnia Egypt Gaming Festival 2026", date: "Dec 15, 2024", location: "Cairo International Convention Centre, Cairo", ushers: 5, image: "images/event_gaming.png", status: "completed" }
-=======
             { id: 1, title: "Gaming Festival 2024", date: "Jun 28, 2024", location: "Riyadh Exhibition Center", ushers: 5, image: "images/event_gaming.png", status: "active" },
             { id: 2, title: "MDLBEAST Soundstorm", date: "Jul 02, 2024", location: "Banban, Riyadh", ushers: 12, image: "images/event_training.png", status: "active" },
             { id: 3, title: "Fashion Week Riyadh", date: "Jun 15, 2024", location: "The Ritz-Carlton", ushers: 0, image: "images/event_training.png", status: "completed" },
             { id: 4, title: "Annual Charity Gala", date: "Jun 08, 2024", location: "Al Faisaliyah Hotel", ushers: 0, image: "images/event_gaming.png", status: "completed" },
             { id: 7, title: "Tech Innovation Expo", date: "Aug 05, 2024", location: "DIFC Dubai", ushers: 20, image: "images/event_training.png", status: "pending" },
->>>>>>> f010fe9df3a403f83244a3412d950a47973ca9a9
         ];
 
         let currentFilter = 'all';
@@ -211,12 +203,8 @@
                         <div class="card-detail"><i class="far fa-calendar"></i><span>${project.date}</span></div>
                         <div class="card-detail"><i class="fas fa-map-marker-alt"></i><span>${project.location}</span></div>
                         <div class="card-detail"><i class="fas fa-users"></i><span>${project.ushers} ushers remaining</span></div>
-<<<<<<< HEAD
                         <button class="btn-manage" onclick="openManageModal(${index})">Manage Project</button>
-=======
-                        <button class="btn-manage">Manage Project</button>
                         ${reportBtn}
->>>>>>> f010fe9df3a403f83244a3412d950a47973ca9a9
                     </div>
                 `;
                 grid.appendChild(card);

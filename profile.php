@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/includes/client_guard.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -192,17 +193,11 @@
             <p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p>
         </div>
         <div class="footer-links">
-<<<<<<< HEAD:profile.html
-            <a href="terms.html">TERMS OF SERVICE</a>
-            <a href="privacy.html">PRIVACY POLICY</a>
-            <a href="contact.html">CONTACT US</a>
-=======
             <a href="terms.php">TERMS OF SERVICE</a>
             <a href="privacy.php">PRIVACY POLICY</a>
             <a href="contact.php">CONTACT US</a>
             <a href="#">TWITTER</a>
             <a href="#">INSTAGRAM</a>
->>>>>>> fdded6d (kosomk):profile.php
         </div>
     </footer>
 
@@ -347,7 +342,7 @@
         // Logout
         document.querySelector('.btn-logout')?.addEventListener('click', async () => {
             try { await fetch('db/logout.php'); } catch(e) {}
-            window.location.href = 'landing.html';
+            window.location.href = 'index.php';
         });
 
         loadProfile();

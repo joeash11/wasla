@@ -110,13 +110,9 @@
             document.getElementById('role-input').value = selectedRole;
 
             const knob = document.querySelector('.toggle-knob');
-<<<<<<< HEAD
-            knob.style.transform = selectedRole === 'usher' ? 'translateX(100%)' : 'translateX(0)';
-=======
             const options = document.querySelectorAll('.toggle-option');
             const index = Array.from(options).indexOf(option);
             knob.style.transform = `translateX(${index * 100}%)`;
->>>>>>> f010fe9df3a403f83244a3412d950a47973ca9a9
         }
 
         function togglePassword(id, btn) {
@@ -125,47 +121,8 @@
             if (input.type === 'password') { input.type = 'text'; icon.className = 'fas fa-eye-slash'; }
             else { input.type = 'password'; icon.className = 'fas fa-eye'; }
         }
-<<<<<<< HEAD
-        function redirectByRole() {
-            if (selectedRole === 'client') window.location.href = 'index.html';
-            else if (selectedRole === 'usher') window.location.href = 'usher/dashboard.html';
-        }
-        async function handleLogin(e) {
-            e.preventDefault();
-            const btn = document.getElementById('login-submit');
-            const form = document.getElementById('login-form');
-            const email = form.querySelector('input[type="email"]').value;
-            const password = form.querySelector('input[type="password"]').value;
-            
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
-            btn.disabled = true;
 
-            try {
-                const res = await fetch('db/login.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password, role: selectedRole })
-                });
-                const data = await res.json();
-                
-                if (data.success) {
-                    btn.innerHTML = '<i class="fas fa-check"></i> Success!';
-                    btn.style.background = 'var(--accent)';
-                    setTimeout(redirectByRole, 800);
-                } else {
-                    btn.innerHTML = '<i class="fas fa-arrow-right"></i> Log In';
-                    btn.disabled = false;
-                    showAuthError(data.error || 'Login failed');
-                }
-            } catch (err) {
-                // Fallback: allow login without backend for demo
-                console.log('Backend unavailable, using demo login');
-                setTimeout(redirectByRole, 1200);
-            }
-        }
-=======
 
->>>>>>> f010fe9df3a403f83244a3412d950a47973ca9a9
         function handleSocialLogin() {
             alert('Social login is not yet available. Please use email/password.');
         }

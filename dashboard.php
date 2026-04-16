@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/includes/client_guard.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,7 +12,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="images/wasla-icon.png">
-    <script src="theme-init.js"></script>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
             </ul>
         </div>
         <div class="navbar-right">
-            <span class="welcome-text">Welcome Abdullah</span>
+            <span class="welcome-text">Welcome <?php echo htmlspecialchars($first_name); ?></span>
             <a href="profile.php" class="user-avatar-small">
                 <i class="fas fa-user-circle"></i>
             </a>
@@ -44,7 +44,12 @@
                 <a href="profile.php" class="profile-avatar">
                     <i class="fas fa-user-circle"></i>
                 </a>
-                <h3 class="profile-name">Abdullah<br>Elsayed</h3>
+                <?php
+                    $name_parts = explode(' ', $user_name);
+                    $sidebar_first = $name_parts[0] ?? '';
+                    $sidebar_last = isset($name_parts[1]) ? $name_parts[1] : '';
+                ?>
+                <h3 class="profile-name"><?php echo htmlspecialchars($sidebar_first); ?><br><?php echo htmlspecialchars($sidebar_last); ?></h3>
             </div>
             <nav class="sidebar-nav">
                 <a href="dashboard.php" class="sidebar-link active" id="side-dashboard">
@@ -83,15 +88,15 @@
             <section class="stats-row" id="stats-section">
                 <div class="stat-card" id="stat-active">
                     <p class="stat-label">Active Projects:</p>
-                    <h2 class="stat-value" data-target="2">0</h2>
+                    <h2 class="stat-value" data-target="0" id="stat-active-val">0</h2>
                 </div>
                 <div class="stat-card" id="stat-ushers">
                     <p class="stat-label">Total Ushers Hired:</p>
-                    <h2 class="stat-value" data-target="15">0</h2>
+                    <h2 class="stat-value" data-target="0" id="stat-ushers-val">0</h2>
                 </div>
                 <div class="stat-card" id="stat-events">
                     <p class="stat-label">Upcoming Events:</p>
-                    <h2 class="stat-value" data-target="1">0</h2>
+                    <h2 class="stat-value" data-target="0" id="stat-events-val">0</h2>
                 </div>
             </section>
 
@@ -101,7 +106,7 @@
                     <div class="revenue-card-icon revenue-icon-green"><i class="fas fa-chart-line"></i></div>
                     <div class="revenue-card-info">
                         <p class="revenue-label">Total Revenue</p>
-                        <h3 class="revenue-value">EGP 124,500</h3>
+                        <h3 class="revenue-value" id="rev-total">SAR 0</h3>
                         <span class="revenue-trend trend-up"><i class="fas fa-arrow-up"></i> 12.5% vs last month</span>
                     </div>
                 </div>
@@ -109,24 +114,24 @@
                     <div class="revenue-card-icon revenue-icon-orange"><i class="fas fa-clock"></i></div>
                     <div class="revenue-card-info">
                         <p class="revenue-label">Pending Payments</p>
-                        <h3 class="revenue-value">EGP 18,200</h3>
-                        <span class="revenue-trend trend-neutral"><i class="fas fa-minus"></i> 3 invoices pending</span>
+                        <h3 class="revenue-value" id="rev-pending">SAR 0</h3>
+                        <span class="revenue-trend trend-neutral"><i class="fas fa-minus"></i> Loading...</span>
                     </div>
                 </div>
                 <div class="revenue-card">
                     <div class="revenue-card-icon revenue-icon-blue"><i class="fas fa-wallet"></i></div>
                     <div class="revenue-card-info">
                         <p class="revenue-label">Total Spent</p>
-                        <h3 class="revenue-value">EGP 67,800</h3>
-                        <span class="revenue-trend trend-down"><i class="fas fa-arrow-down"></i> 4.2% vs last month</span>
+                        <h3 class="revenue-value" id="rev-spent">SAR 0</h3>
+                        <span class="revenue-trend trend-down"><i class="fas fa-arrow-down"></i> Loading...</span>
                     </div>
                 </div>
                 <div class="revenue-card">
                     <div class="revenue-card-icon revenue-icon-purple"><i class="fas fa-user-tag"></i></div>
                     <div class="revenue-card-info">
                         <p class="revenue-label">Avg Cost / Usher</p>
-                        <h3 class="revenue-value">EGP 450</h3>
-                        <span class="revenue-trend trend-up"><i class="fas fa-arrow-up"></i> 2.1% efficiency gain</span>
+                        <h3 class="revenue-value" id="rev-avg">SAR 0</h3>
+                        <span class="revenue-trend trend-up"><i class="fas fa-arrow-up"></i> Efficiency</span>
                     </div>
                 </div>
             </section>
@@ -137,38 +142,31 @@
                     <h3 class="panel-title"><i class="fas fa-chart-bar"></i> Monthly Revenue</h3>
                     <div class="chart-container">
                         <div class="bar-chart">
-                            <div class="bar-group"><div class="bar" style="height:45%"></div><span>Jan</span></div>
-                            <div class="bar-group"><div class="bar" style="height:62%"></div><span>Feb</span></div>
-                            <div class="bar-group"><div class="bar" style="height:38%"></div><span>Mar</span></div>
-                            <div class="bar-group"><div class="bar" style="height:75%"></div><span>Apr</span></div>
-                            <div class="bar-group"><div class="bar" style="height:58%"></div><span>May</span></div>
-                            <div class="bar-group"><div class="bar bar-accent" style="height:90%"></div><span>Jun</span></div>
+                            <div class="bar-group">
+                                <div class="bar" style="height:45%"></div><span>Jan</span>
+                            </div>
+                            <div class="bar-group">
+                                <div class="bar" style="height:62%"></div><span>Feb</span>
+                            </div>
+                            <div class="bar-group">
+                                <div class="bar" style="height:38%"></div><span>Mar</span>
+                            </div>
+                            <div class="bar-group">
+                                <div class="bar" style="height:75%"></div><span>Apr</span>
+                            </div>
+                            <div class="bar-group">
+                                <div class="bar" style="height:58%"></div><span>May</span>
+                            </div>
+                            <div class="bar-group">
+                                <div class="bar bar-accent" style="height:90%"></div><span>Jun</span>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="dashboard-panel">
                     <h3 class="panel-title"><i class="fas fa-receipt"></i> Recent Transactions</h3>
-                    <div class="transactions-list">
-                        <div class="transaction-item">
-                            <div class="transaction-icon tx-expense"><i class="fas fa-arrow-up"></i></div>
-                            <div class="transaction-info"><strong>Gaming Festival Ushers</strong><span>Jun 28, 2024</span></div>
-                            <span class="transaction-amount tx-expense">- EGP 4,500</span>
-                        </div>
-                        <div class="transaction-item">
-                            <div class="transaction-icon tx-income"><i class="fas fa-arrow-down"></i></div>
-                            <div class="transaction-info"><strong>Client Payment - MDLBEAST</strong><span>Jun 25, 2024</span></div>
-                            <span class="transaction-amount tx-income">+ EGP 18,000</span>
-                        </div>
-                        <div class="transaction-item">
-                            <div class="transaction-icon tx-expense"><i class="fas fa-arrow-up"></i></div>
-                            <div class="transaction-info"><strong>Corporate Summit Staff</strong><span>Jun 20, 2024</span></div>
-                            <span class="transaction-amount tx-expense">- EGP 2,800</span>
-                        </div>
-                        <div class="transaction-item">
-                            <div class="transaction-icon tx-income"><i class="fas fa-arrow-down"></i></div>
-                            <div class="transaction-info"><strong>Client Payment - Gulf Events</strong><span>Jun 18, 2024</span></div>
-                            <span class="transaction-amount tx-income">+ EGP 12,500</span>
-                        </div>
+                    <div class="transactions-list" id="transactions-list">
+                        <p style="color: var(--gray-500); text-align:center; padding:2rem;">Loading transactions...</p>
                     </div>
                 </div>
             </section>
@@ -194,9 +192,9 @@
                 <div class="filter-select">
                     <select id="location-filter">
                         <option value="">Location</option>
-                        <option value="cairo" selected>Cairo</option>
-                        <option value="alexandria">Alexandria</option>
-                        <option value="giza">Giza</option>
+                        <option value="riyadh">Riyadh</option>
+                        <option value="jeddah">Jeddah</option>
+                        <option value="dubai">Dubai</option>
                     </select>
                 </div>
             </section>
@@ -238,73 +236,121 @@
 
     <script src="script.js"></script>
     <script>
-        // ===== Dashboard Backend Integration =====
-        async function loadDashboardData() {
-            try {
-                // Load user session
-                const userRes = await fetch('db/get_user.php');
-                const userData = await userRes.json();
-                if (userData.logged_in && userData.user) {
-                    const u = userData.user;
-                    document.querySelector('.welcome-text').textContent = 'Welcome ' + u.first_name;
-                    document.querySelector('.profile-name').innerHTML = u.first_name + '<br>' + u.last_name;
+    // ===== SESSION-AWARE DASHBOARD LOADER =====
+    (function() {
+        const fmt = (n) => 'SAR ' + Number(n || 0).toLocaleString();
+
+        fetch('api/client_dashboard.php')
+            .then(res => res.json())
+            .then(data => {
+                if (!data.logged_in) {
+                    window.location.href = 'login.php';
+                    return;
                 }
 
-                // Load dashboard stats
-                const res = await fetch('db/get_dashboard.php');
-                const data = await res.json();
+                // Update stat cards
+                const activeEl = document.getElementById('stat-active-val');
+                const ushersEl = document.getElementById('stat-ushers-val');
+                const eventsEl = document.getElementById('stat-events-val');
 
-                if (data.stats) {
-                    const statActive = document.querySelector('#stat-active .stat-value');
-                    const statUshers = document.querySelector('#stat-ushers .stat-value');
-                    const statEvents = document.querySelector('#stat-events .stat-value');
-                    if (statActive) { statActive.dataset.target = data.stats.active_projects; statActive.textContent = data.stats.active_projects; }
-                    if (statUshers) { statUshers.dataset.target = data.stats.ushers_hired; statUshers.textContent = data.stats.ushers_hired; }
-                    if (statEvents) { statEvents.dataset.target = data.stats.upcoming_events; statEvents.textContent = data.stats.upcoming_events; }
+                if (activeEl) { activeEl.setAttribute('data-target', data.active_projects || 0); activeEl.textContent = data.active_projects || 0; }
+                if (ushersEl) { ushersEl.setAttribute('data-target', data.total_ushers_hired || 0); ushersEl.textContent = data.total_ushers_hired || 0; }
+                if (eventsEl) { eventsEl.setAttribute('data-target', data.upcoming_events || 0); eventsEl.textContent = data.upcoming_events || 0; }
+
+                // Re-run count-up animation
+                if (typeof countUpAnimation === 'function') countUpAnimation();
+
+                // Update revenue cards
+                const revTotal = document.getElementById('rev-total');
+                const revPending = document.getElementById('rev-pending');
+                const revSpent = document.getElementById('rev-spent');
+                const revAvg = document.getElementById('rev-avg');
+
+                if (revTotal) revTotal.textContent = fmt(data.total_revenue);
+                if (revPending) revPending.textContent = fmt(data.pending_payments);
+                if (revSpent) revSpent.textContent = fmt(data.total_spent);
+                if (revAvg) {
+                    const avgCost = (data.total_ushers_hired > 0)
+                        ? Math.round(data.total_spent / data.total_ushers_hired)
+                        : 0;
+                    revAvg.textContent = fmt(avgCost);
                 }
 
-                if (data.revenue) {
-                    const revenueValues = document.querySelectorAll('.revenue-value');
-                    if (revenueValues[0]) revenueValues[0].textContent = 'EGP ' + Number(data.revenue.total).toLocaleString();
-                    if (revenueValues[1]) revenueValues[1].textContent = 'EGP ' + Number(data.revenue.pending).toLocaleString();
-                    if (revenueValues[2]) revenueValues[2].textContent = 'EGP ' + Number(data.revenue.spent).toLocaleString();
-
-                    const trendNeutral = document.querySelector('.trend-neutral');
-                    if (trendNeutral) trendNeutral.innerHTML = '<i class="fas fa-minus"></i> ' + data.revenue.pending_count + ' invoices pending';
-                }
-
-                if (data.transactions && data.transactions.length > 0) {
-                    const tbody = document.querySelector('.transactions-table tbody');
-                    if (tbody) {
-                        tbody.innerHTML = '';
-                        data.transactions.forEach(tx => {
-                            const row = document.createElement('tr');
-                            const date = new Date(tx.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-                            const statusClass = tx.status === 'completed' ? 'tx-status-completed' : tx.status === 'pending' ? 'tx-status-pending' : 'tx-status-failed';
-                            row.innerHTML = `
-                                <td>${tx.project_title || 'N/A'}</td>
-                                <td>${date}</td>
-                                <td>EGP ${Number(tx.amount).toLocaleString()}</td>
-                                <td><span class="tx-status ${statusClass}">${tx.status}</span></td>
-                            `;
-                            tbody.appendChild(row);
-                        });
+                // Update transactions
+                const txList = document.getElementById('transactions-list');
+                if (txList && data.recent_transactions) {
+                    if (data.recent_transactions.length === 0) {
+                        txList.innerHTML = '<p style="color: var(--gray-500); text-align:center; padding:2rem;">No transactions yet</p>';
+                    } else {
+                        txList.innerHTML = data.recent_transactions.map(tx => {
+                            const date = new Date(tx.created_at).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
+                            const isExpense = tx.type === 'payout' || tx.type === 'payment';
+                            const cls = isExpense ? 'tx-expense' : 'tx-income';
+                            const icon = isExpense ? 'fa-arrow-up' : 'fa-arrow-down';
+                            const sign = isExpense ? '-' : '+';
+                            return `<div class="transaction-item">
+                                <div class="transaction-icon ${cls}"><i class="fas ${icon}"></i></div>
+                                <div class="transaction-info"><strong>${tx.description || 'Transaction'}</strong><span>${date}</span></div>
+                                <span class="transaction-amount ${cls}">${sign} SAR ${Number(tx.amount).toLocaleString()}</span>
+                            </div>`;
+                        }).join('');
                     }
                 }
 
-            } catch (err) {
-                console.log('Dashboard: Using static data -', err.message);
-            }
-        }
+                // Update project cards
+                if (data.projects && data.projects.length > 0) {
+                    const grid = document.getElementById('projects-grid');
+                    if (grid) {
+                        grid.innerHTML = '';
+                        data.projects.forEach((project, index) => {
+                            const card = document.createElement('div');
+                            card.className = 'project-card';
+                            const eventDate = new Date(project.event_date).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
+                            const statusClass = project.status === 'active' ? 'status-active' : project.status === 'completed' ? 'status-completed' : 'status-pending';
+                            const statusLabel = project.status.charAt(0).toUpperCase() + project.status.slice(1);
+                            card.innerHTML = `
+                                <div class="card-image">
+                                    <img src="${project.image || 'images/event_gaming.png'}" alt="${project.title}" loading="lazy">
+                                    <span class="card-badge ${statusClass}">${statusLabel}</span>
+                                </div>
+                                <div class="card-body">
+                                    <h3 class="card-title">${project.title}</h3>
+                                    <div class="card-detail"><i class="far fa-calendar"></i><span>${eventDate}</span></div>
+                                    <div class="card-detail"><i class="fas fa-map-marker-alt"></i><span>${project.location}, ${project.city}</span></div>
+                                    <div class="card-detail"><i class="fas fa-users"></i><span>${project.ushers_remaining} ushers remaining</span></div>
+                                    <button class="btn-manage" onclick="window.location.href='projects.php'">Manage Project</button>
+                                </div>
+                            `;
+                            grid.appendChild(card);
+                            card.style.opacity = '0';
+                            card.style.transform = 'translateY(30px)';
+                            setTimeout(() => {
+                                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                                card.style.opacity = '1';
+                                card.style.transform = 'translateY(0)';
+                            }, index * 100);
+                        });
+                    }
+                }
+            })
+            .catch(err => {
+                console.warn('Dashboard API error:', err);
+            });
 
-        // Logout handler
-        document.querySelector('.btn-logout')?.addEventListener('click', async () => {
-            try { await fetch('db/logout.php'); } catch(e) {}
-            window.location.href = 'landing.html';
-        });
-
-        document.addEventListener('DOMContentLoaded', loadDashboardData);
+        // Session keep-alive check every 5 minutes
+        setInterval(() => {
+            fetch('api/session_check.php')
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.logged_in) {
+                        alert('Your session has expired. Please log in again.');
+                        window.location.href = 'login.php';
+                    }
+                })
+                .catch(() => console.warn('Session check failed'));
+        }, 5 * 60 * 1000);
+    })();
     </script>
 </body>
 
-</html>
+</html>

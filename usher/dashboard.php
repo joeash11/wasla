@@ -41,7 +41,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
             </nav>
             <div class="sidebar-footer">
                 <a href="../help.php" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a>
-                <button class="btn-logout" onclick="window.location.href='../api/logout.php'">Log Out</button>
+                <button class="btn-logout" onclick="window.location.href='../auth_logout.php'">Log Out</button>
             </div>
         </aside>
         <main class="content">
