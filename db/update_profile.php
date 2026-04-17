@@ -22,6 +22,8 @@ $email = $input['email'] ?? null;
 $phone = $input['phone'] ?? null;
 $bio = $input['bio'] ?? null;
 $city = $input['city'] ?? null;
+$skills_array = $input['skills'] ?? null;
+$skills = $skills_array ? implode(', ', $skills_array) : null;
 
 // Build dynamic update query
 $fields = [];
@@ -33,6 +35,8 @@ if ($last_name !== null) { $fields[] = 'last_name = ?'; $types .= 's'; $values[]
 if ($email !== null) { $fields[] = 'email = ?'; $types .= 's'; $values[] = $email; }
 if ($phone !== null) { $fields[] = 'phone = ?'; $types .= 's'; $values[] = $phone; }
 if ($city !== null) { $fields[] = 'city = ?'; $types .= 's'; $values[] = $city; }
+if ($bio !== null) { $fields[] = 'bio = ?'; $types .= 's'; $values[] = $bio; }
+if ($skills !== null) { $fields[] = 'skills = ?'; $types .= 's'; $values[] = $skills; }
 
 if (empty($fields)) {
     echo json_encode(['success' => false, 'error' => 'No fields to update']);

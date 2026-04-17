@@ -75,8 +75,6 @@
                 <div class="auth-social-row">
                     <button class="auth-social-btn" onclick="handleSocialLogin()"><i class="fab fa-google"></i>
                         Google</button>
-                    <button class="auth-social-btn" onclick="handleSocialLogin()"><i class="fab fa-apple"></i>
-                        Apple</button>
                 </div>
                 <p class="auth-switch">Don't have an account? <a href="signup.php">Sign up</a></p>
             </div>

@@ -1,3 +1,15 @@
+<?php
+session_start();
+$is_logged_in = isset($_SESSION['user_id']);
+$dashboard_link = 'index.php';
+if ($is_logged_in) {
+    if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'usher') {
+        $dashboard_link = 'usher/dashboard.php';
+    } else {
+        $dashboard_link = 'dashboard.php';
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +25,7 @@
 </head>
 <body class="landing-body">
     <nav class="landing-nav">
-        <a href="index.php" class="logo">
+        <a href="<?php echo $dashboard_link; ?>" class="logo">
             <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36">
             <span class="logo-text">Wasla</span>
         </a>
@@ -22,8 +34,12 @@
             <a href="contact.php" class="active">Contact</a>
         </div>
         <div class="landing-nav-actions">
-            <a href="login.php" class="btn-landing-login">Log In</a>
-            <a href="signup.php" class="btn-landing-signup">Get Started</a>
+            <?php if ($is_logged_in): ?>
+                <a href="<?php echo $dashboard_link; ?>" class="btn-landing-login">Dashboard</a>
+            <?php else: ?>
+                <a href="login.php" class="btn-landing-login">Log In</a>
+                <a href="signup.php" class="btn-landing-signup">Get Started</a>
+            <?php endif; ?>
         </div>
     </nav>
     <div class="contact-page">
@@ -44,14 +60,14 @@
                     <div class="contact-info-card">
                         <div class="contact-info-icon contact-info-icon-green"><i class="fas fa-phone-alt"></i></div>
                         <h3>Call Us</h3>
-                        <p>+966 11 234 5678</p>
+                        <p>+201060037198</p>
                         <span class="contact-info-hint">Sun-Thu, 9AM-6PM (AST)</span>
                     </div>
                     <div class="contact-info-card">
                         <div class="contact-info-icon contact-info-icon-purple"><i class="fas fa-map-marker-alt"></i></div>
                         <h3>Visit Us</h3>
-                        <p>King Fahd Road, Olaya District</p>
-                        <span class="contact-info-hint">Riyadh, Saudi Arabia</span>
+                        <p>badr university in cairo</p>
+                        <span class="contact-info-hint">Cairo, Egypt</span>
                     </div>
                 </div>
                 <!-- Contact Form -->
@@ -86,7 +102,7 @@
         <div class="landing-container">
             <div class="contact-map-placeholder">
                 <i class="fas fa-map-marked-alt"></i>
-                <p>Wasla Headquarters — King Fahd Road, Olaya District, Riyadh</p>
+                <p>Wasla Headquarters — badr university in cairo</p>
             </div>
         </div>
     </div>
@@ -106,9 +122,13 @@
                 btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
                 btn.style.background = 'var(--accent)';
                 setTimeout(() => {
+                    <?php if ($is_logged_in): ?>
+                    window.location.href = '<?php echo $dashboard_link; ?>';
+                    <?php else: ?>
                     btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
                     btn.style.background = '';
-                }, 3000);
+                    <?php endif; ?>
+                }, 1000);
             }, 1500);
         });
     </script>

@@ -59,11 +59,8 @@ $stmt->close();
 // Upcoming shifts
 $stmt = $conn->prepare("
     SELECT COUNT(*) as count 
-    FROM project_applications pa 
-    JOIN projects p ON pa.project_id = p.id 
-    WHERE pa.usher_id = ? AND pa.status = 'accepted' AND p.event_date >= CURDATE()
+    FROM projects WHERE status IN ('active', 'pending')
 ");
-$stmt->bind_param("i", $usher_id);
 $stmt->execute();
 $upcoming_shifts = $stmt->get_result()->fetch_assoc()['count'];
 $stmt->close();

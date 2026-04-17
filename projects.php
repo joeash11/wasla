@@ -45,9 +45,12 @@
                 <div class="filter-select">
                     <select id="location-filter">
                         <option value="">Location</option>
-                        <option value="cairo" selected>Cairo</option>
-                        <option value="alexandria">Alexandria</option>
-                        <option value="giza">Giza</option>
+                        <option value="Cairo">Cairo</option>
+                        <option value="Sharm Elsheikh">Sharm Elsheikh</option>
+                        <option value="North Coast">North Coast</option>
+                        <option value="Riyadh">Riyadh</option>
+                        <option value="Jeddah">Jeddah</option>
+                        <option value="Dubai">Dubai</option>
                     </select>
                 </div>
             </section>
@@ -114,7 +117,7 @@
             { id: 2, title: "MDLBEAST Soundstorm", date: "Jul 02, 2024", location: "Banban, Riyadh", ushers: 12, image: "images/event_training.png", status: "active" },
             { id: 3, title: "Fashion Week Riyadh", date: "Jun 15, 2024", location: "The Ritz-Carlton", ushers: 0, image: "images/event_training.png", status: "completed" },
             { id: 4, title: "Annual Charity Gala", date: "Jun 08, 2024", location: "Al Faisaliyah Hotel", ushers: 0, image: "images/event_gaming.png", status: "completed" },
-            { id: 7, title: "Tech Innovation Expo", date: "Aug 05, 2024", location: "DIFC Dubai", ushers: 20, image: "images/event_training.png", status: "pending" },
+            { id: 7, title: "Tech Innovation Expo", date: "Aug 05, 2024", location: "DIFC Dubai", ushers: 20, image: "images/event_training.png", status: "active" },
         ];
 
         let currentFilter = 'all';
@@ -263,7 +266,11 @@
             } catch {
                 // Fallback with sample data
                 userSelect.innerHTML = '<option value="">Select usher...</option>';
-                const fallbackUshers = [
+                const fallbackUshers = (projectId == 7) ? [
+                    { id: 10, name: 'Samer Ali' },
+                    { id: 11, name: 'Nour Emad' },
+                    { id: 12, name: 'Layla Tarek' }
+                ] : [
                     { id: 3, name: 'Ahmed Mohamed' },
                     { id: 5, name: 'Fatimah Al-Saud' }
                 ];

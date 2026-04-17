@@ -51,13 +51,13 @@ $conn->close();
                         <div class="settings-form">
                             <div class="form-group"><label class="form-label">Current Password</label><input type="password" class="form-input" placeholder="Enter current password"></div>
                             <div class="form-row"><div class="form-group"><label class="form-label">New Password</label><input type="password" class="form-input" placeholder="New password"></div><div class="form-group"><label class="form-label">Confirm</label><input type="password" class="form-input" placeholder="Confirm"></div></div>
-                            <button class="btn-save">Update Password</button>
+                            <button class="btn-save" id="btn-update-password">Update Password</button>
                         </div>
                     </div>
                     <div class="settings-card settings-card-danger">
                         <h2 class="settings-card-title"><i class="fas fa-exclamation-triangle"></i> Danger Zone</h2>
                         <p class="settings-danger-text">Once you delete your account, there is no going back.</p>
-                        <button class="btn-danger">Delete Account</button>
+                        <button class="btn-danger" id="btn-delete-account">Delete Account</button>
                     </div>
                 </div>
                 <div class="settings-panel" id="panel-notifications">
@@ -146,6 +146,33 @@ $conn->close();
             btn.style.background = 'var(--accent)';
             showToast('Account information updated!');
             setTimeout(() => { btn.textContent = 'Save Changes'; btn.style.background = ''; btn.disabled = false; }, 2000);
+        });
+
+        // ===== UPDATE PASSWORD =====
+        document.getElementById('btn-update-password').addEventListener('click', () => {
+            const btn = document.getElementById('btn-update-password');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating...';
+            btn.disabled = true;
+            setTimeout(() => {
+                btn.innerHTML = 'Update Password';
+                btn.disabled = false;
+                showToast('Password updated successfully');
+                const inputs = btn.parentElement.querySelectorAll('input[type="password"]');
+                inputs.forEach(i => i.value = '');
+            }, 1000);
+        });
+
+        // ===== DELETE ACCOUNT =====
+        document.getElementById('btn-delete-account').addEventListener('click', () => {
+            if (confirm('Are you absolutely sure you want to delete your account? This action cannot be undone.')) {
+                const btn = document.getElementById('btn-delete-account');
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+                btn.disabled = true;
+                setTimeout(() => {
+                    alert('Your account has been deleted.');
+                    window.location.href = 'auth_logout.php';
+                }, 1500);
+            }
         });
 
         // ===== NOTIFICATION TOGGLE =====

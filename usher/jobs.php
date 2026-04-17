@@ -11,7 +11,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wasla - Available Jobs</title>
+    <title>Wasla - Available Projects</title>
     <link rel="stylesheet" href="../styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -24,9 +24,9 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
     <div class="main-wrapper">
         <?php include __DIR__ . '/../includes/usher_sidebar.php'; ?>
         <main class="content">
-            <div class="page-header"><h1 class="section-title">Available Jobs</h1></div>
+            <div class="page-header"><h1 class="section-title">Available Projects</h1></div>
             <section class="filters-row">
-                <div class="filter-search"><i class="fas fa-search"></i><input type="text" placeholder="Search jobs..." id="job-search"></div>
+                <div class="filter-search"><i class="fas fa-search"></i><input type="text" placeholder="Search projects..." id="job-search"></div>
                 <div class="filter-select"><select id="filter-location">
                     <option value="">Location</option>
                     <option>Cairo</option>
@@ -38,10 +38,10 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
                     <option>North Coast</option>
                     <option>El Gouna</option>
                 </select></div>
-                <div class="filter-select"><select id="filter-pay"><option value="">Pay Range</option><option value="200-400">SAR 200-400</option><option value="400-600">SAR 400-600</option><option value="600+">SAR 600+</option></select></div>
+                <div class="filter-select"><select id="filter-pay"><option value="">Pay Range</option><option value="200-400">EGP 200-400</option><option value="400-600">EGP 400-600</option><option value="600+">EGP 600+</option></select></div>
             </section>
             <div class="projects-grid" id="jobs-grid">
-                <p style="color:var(--gray-400);text-align:center;grid-column:1/-1">Loading jobs...</p>
+                <p style="color:var(--gray-400);text-align:center;grid-column:1/-1">Loading projects...</p>
             </div>
         </main>
     </div>
@@ -63,7 +63,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
     function renderJobs(jobs) {
         const grid = document.getElementById('jobs-grid');
         if (jobs.length === 0) {
-            grid.innerHTML = '<p style="color:var(--gray-400);text-align:center;grid-column:1/-1">No jobs found</p>';
+            grid.innerHTML = '<p style="color:var(--gray-400);text-align:center;grid-column:1/-1">No projects found</p>';
             return;
         }
         grid.innerHTML = jobs.map(j => {
@@ -85,7 +85,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
                         <div class="card-detail"><i class="fas fa-map-marker-alt"></i><span>${j.location}</span></div>
                         <div class="card-detail"><i class="fas fa-calendar"></i><span>${j.date}</span></div>
                         <div class="card-detail"><i class="fas fa-clock"></i><span>${j.hours} hours</span></div>
-                        <div class="card-detail"><i class="fas fa-money-bill"></i><span>SAR ${j.pay}/day</span></div>
+                        <div class="card-detail"><i class="fas fa-money-bill"></i><span>EGP ${j.pay}/day</span></div>
                     </div>
                     <div class="card-tags"><span class="card-tag">${j.category || 'Event'}</span></div>
                     <div class="card-footer">

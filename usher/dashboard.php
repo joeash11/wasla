@@ -77,7 +77,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
                 // Stats
                 const s = data.stats;
                 document.getElementById('stat-gigs').textContent = s.completed_gigs;
-                document.getElementById('stat-earnings').textContent = 'SAR ' + Number(s.total_earnings).toLocaleString();
+                document.getElementById('stat-earnings').textContent = 'EGP ' + Number(s.total_earnings).toLocaleString();
                 document.getElementById('stat-rating').innerHTML = `${s.avg_rating} <small style="font-size:0.6em;color:var(--gray-400)">/ 5</small>`;
                 document.getElementById('stat-upcoming').textContent = s.upcoming_shifts;
 
@@ -101,7 +101,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
                         <div class="upcoming-item">
                             <div class="upcoming-date"><span class="upcoming-day">${g.day}</span><span class="upcoming-month">${g.month}</span></div>
                             <div class="upcoming-info"><strong>${g.title}</strong><span><i class="fas fa-map-marker-alt"></i> ${g.location}</span></div>
-                            <span class="upcoming-pay">SAR ${Number(g.pay).toLocaleString()}</span>
+                            <span class="upcoming-pay">EGP ${Number(g.pay).toLocaleString()}</span>
                         </div>
                     `).join('');
                 }
@@ -118,7 +118,7 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
                             text = `Completed project at <strong>${a.detail}</strong>`;
                         } else if (a.type === 'payment') {
                             icon = 'fa-money-bill'; iconClass = 'activity-icon-blue';
-                            text = `Received payment <strong>SAR ${Number(a.amount).toLocaleString()}</strong>`;
+                            text = `Received payment <strong>EGP ${Number(a.amount).toLocaleString()}</strong>`;
                         } else if (a.type === 'review') {
                             icon = 'fa-star'; iconClass = 'activity-icon-purple';
                             text = `New ${a.amount}-star review from <strong>${a.detail}</strong>`;

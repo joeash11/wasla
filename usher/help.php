@@ -65,9 +65,9 @@
             <section id="guides" class="help-section">
                 <h2 class="help-section-title">Getting Started</h2>
                 <div class="guides-grid">
-                    <div class="guide-card"><div class="guide-icon"><i class="fas fa-rocket"></i></div><h3>Quick Start Guide</h3><p>Learn the basics of Wasla in 5 minutes</p></div>
-                    <div class="guide-card"><div class="guide-icon"><i class="fas fa-project-diagram"></i></div><h3>Managing Projects</h3><p>Best practices for project management</p></div>
-                    <div class="guide-card"><div class="guide-icon"><i class="fas fa-user-check"></i></div><h3>Working with Ushers</h3><p>How to find and hire the best ushers</p></div>
+                    <div class="guide-card" style="cursor:pointer" onclick="window.location.href='#faq'"><div class="guide-icon"><i class="fas fa-rocket"></i></div><h3>Quick Start Guide</h3><p>Learn the basics of Wasla in 5 minutes</p></div>
+                    <div class="guide-card" style="cursor:pointer" onclick="window.location.href='#faq'; setTimeout(() => document.querySelectorAll('.faq-item button')[2].click(), 300);"><div class="guide-icon"><i class="fas fa-project-diagram"></i></div><h3>Managing Projects</h3><p>Best practices for project management</p></div>
+                    <div class="guide-card" style="cursor:pointer" onclick="window.location.href='#faq'; setTimeout(() => document.querySelectorAll('.faq-item button')[1].click(), 300);"><div class="guide-icon"><i class="fas fa-user-check"></i></div><h3>Working with Ushers</h3><p>How to find and hire the best ushers</p></div>
                 </div>
             </section>
             <!-- Contact Support -->
@@ -80,7 +80,7 @@
                             <select class="form-input"><option>General</option><option>Account Issues</option><option>Billing</option><option>Technical Problem</option><option>Feature Request</option></select>
                         </div>
                         <div class="form-group"><label class="form-label">Message</label><textarea class="form-input form-textarea" rows="5" placeholder="Describe your issue in detail..."></textarea></div>
-                        <button class="btn-save" onclick="this.textContent='✓ Sent!';this.style.background='var(--accent)';setTimeout(()=>{this.textContent='Send Message';this.style.background='';},2000)">Send Message</button>
+                        <button class="btn-save" onclick="this.textContent='✓ Sent!';this.style.background='var(--accent)';setTimeout(()=>{ alert('Your message have been delivered to our customer services and our staff is going to text you back soon.'); window.location.href='dashboard.php'; }, 500)">Send Message</button>
                     </div>
                 </div>
             </section>

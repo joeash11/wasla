@@ -32,7 +32,7 @@
             <section class="stats-row">
                 <div class="stat-card"><p class="stat-label">Total Users</p><h2 class="stat-value">1,247</h2></div>
                 <div class="stat-card"><p class="stat-label">Active Projects</p><h2 class="stat-value">38</h2></div>
-                <div class="stat-card"><p class="stat-label">Platform Revenue</p><h2 class="stat-value">SAR 245K</h2></div>
+                <div class="stat-card"><p class="stat-label">Platform Revenue</p><h2 class="stat-value">EGP 245K</h2></div>
                 <div class="stat-card"><p class="stat-label">New Signups (30d)</p><h2 class="stat-value">89</h2></div>
             </section>
             <!-- Revenue + User Growth -->
@@ -64,7 +64,7 @@
                         <div class="activity-item"><div class="activity-icon activity-icon-blue"><i class="fas fa-folder-plus"></i></div><div><span class="activity-text">New project created: <strong>National Day Festival</strong></span><span class="activity-time">22 min ago</span></div></div>
                         <div class="activity-item"><div class="activity-icon activity-icon-orange"><i class="fas fa-flag"></i></div><div><span class="activity-text">Content flagged in project: <strong>Private Event #129</strong></span><span class="activity-time">1 hour ago</span></div></div>
                         <div class="activity-item"><div class="activity-icon activity-icon-purple"><i class="fas fa-check-circle"></i></div><div><span class="activity-text">Usher verified: <strong>Fatimah Al-Saud</strong></span><span class="activity-time">2 hours ago</span></div></div>
-                        <div class="activity-item"><div class="activity-icon activity-icon-green"><i class="fas fa-money-bill"></i></div><div><span class="activity-text">Payment processed: <strong>SAR 12,500</strong></span><span class="activity-time">3 hours ago</span></div></div>
+                        <div class="activity-item"><div class="activity-icon activity-icon-green"><i class="fas fa-money-bill"></i></div><div><span class="activity-text">Payment processed: <strong>EGP 12,500</strong></span><span class="activity-time">3 hours ago</span></div></div>
                     </div>
                 </div>
             </section>

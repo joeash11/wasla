@@ -83,7 +83,7 @@
                         <div class="settings-form">
                             <div class="form-row">
                                 <div class="form-group"><label class="form-label">Number of Ushers Needed *</label><input type="number" class="form-input" id="ushers-count" min="1" value="1"></div>
-                                <div class="form-group"><label class="form-label">Budget per Usher (SAR)</label><input type="number" class="form-input" id="ushers-budget" placeholder="0.00"></div>
+                                <div class="form-group"><label class="form-label">Budget per Usher (EGP)</label><input type="number" class="form-input" id="ushers-budget" placeholder="0.00"></div>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Preferred Usher Category *</label>

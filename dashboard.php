@@ -46,7 +46,7 @@
                     <div class="revenue-card-icon revenue-icon-green"><i class="fas fa-chart-line"></i></div>
                     <div class="revenue-card-info">
                         <p class="revenue-label">Total Revenue</p>
-                        <h3 class="revenue-value" id="rev-total">SAR 0</h3>
+                        <h3 class="revenue-value" id="rev-total">EGP 0</h3>
                         <span class="revenue-trend trend-up"><i class="fas fa-arrow-up"></i> 12.5% vs last month</span>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                     <div class="revenue-card-icon revenue-icon-orange"><i class="fas fa-clock"></i></div>
                     <div class="revenue-card-info">
                         <p class="revenue-label">Pending Payments</p>
-                        <h3 class="revenue-value" id="rev-pending">SAR 0</h3>
+                        <h3 class="revenue-value" id="rev-pending">EGP 0</h3>
                         <span class="revenue-trend trend-neutral"><i class="fas fa-minus"></i> Loading...</span>
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                     <div class="revenue-card-icon revenue-icon-blue"><i class="fas fa-wallet"></i></div>
                     <div class="revenue-card-info">
                         <p class="revenue-label">Total Spent</p>
-                        <h3 class="revenue-value" id="rev-spent">SAR 0</h3>
+                        <h3 class="revenue-value" id="rev-spent">EGP 0</h3>
                         <span class="revenue-trend trend-down"><i class="fas fa-arrow-down"></i> Loading...</span>
                     </div>
                 </div>
@@ -70,7 +70,7 @@
                     <div class="revenue-card-icon revenue-icon-purple"><i class="fas fa-user-tag"></i></div>
                     <div class="revenue-card-info">
                         <p class="revenue-label">Avg Cost / Usher</p>
-                        <h3 class="revenue-value" id="rev-avg">SAR 0</h3>
+                        <h3 class="revenue-value" id="rev-avg">EGP 0</h3>
                         <span class="revenue-trend trend-up"><i class="fas fa-arrow-up"></i> Efficiency</span>
                     </div>
                 </div>
@@ -166,7 +166,7 @@
     <script>
     // ===== SESSION-AWARE DASHBOARD LOADER =====
     (function() {
-        const fmt = (n) => 'SAR ' + Number(n || 0).toLocaleString();
+        const fmt = (n) => 'EGP ' + Number(n || 0).toLocaleString();
 
         fetch('api/client_dashboard.php')
             .then(res => res.json())
@@ -219,7 +219,7 @@
                             return `<div class="transaction-item">
                                 <div class="transaction-icon ${cls}"><i class="fas ${icon}"></i></div>
                                 <div class="transaction-info"><strong>${tx.description || 'Transaction'}</strong><span>${date}</span></div>
-                                <span class="transaction-amount ${cls}">${sign} SAR ${Number(tx.amount).toLocaleString()}</span>
+                                <span class="transaction-amount ${cls}">${sign} EGP ${Number(tx.amount).toLocaleString()}</span>
                             </div>`;
                         }).join('');
                     }
