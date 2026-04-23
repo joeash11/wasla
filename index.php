@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wasla - Connect Events with Talent</title>
     <meta name="description" content="Wasla is the leading platform connecting event managers with professional ushers and coordinators across the MENA region.">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=<?= time() ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="images/wasla-icon.png">
+    <script src="wasla-theme.js"></script>
 </head>
-<body class="landing-body">
+<body class="landing-body page-transition">
     <!-- Landing Navbar -->
     <nav class="landing-nav">
         <a href="index.php" class="logo">

@@ -7,10 +7,10 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$input = json_decode(file_get_contents('php://input'), true);
-if (!$input) {
-    echo json_encode(['success' => false, 'error' => 'Invalid input']);
-    exit;
+// Read input (support JSON for backward compatibility or POST for FormData)
+$input = $_POST;
+if (empty($input)) {
+    $input = json_decode(file_get_contents('php://input'), true) ?: [];
 }
 
 require_once __DIR__ . '/connection.php';
@@ -25,6 +25,24 @@ $city = $input['city'] ?? null;
 $skills_array = $input['skills'] ?? null;
 $skills = $skills_array ? implode(', ', $skills_array) : null;
 
+// Handle CV Upload
+$cv_url = null;
+if (isset($_FILES['cv']) && $_FILES['cv']['error'] === UPLOAD_ERR_OK) {
+    if (!is_dir(__DIR__ . '/../uploads/cvs')) {
+        mkdir(__DIR__ . '/../uploads/cvs', 0777, true);
+    }
+    
+    $fileInfo = pathinfo($_FILES['cv']['name']);
+    $ext = strtolower($fileInfo['extension']);
+    if (in_array($ext, ['pdf', 'doc', 'docx'])) {
+        $filename = 'cv_user_' . $user_id . '_' . time() . '.' . $ext;
+        $dest = __DIR__ . '/../uploads/cvs/' . $filename;
+        if (move_uploaded_file($_FILES['cv']['tmp_name'], $dest)) {
+            $cv_url = '/uploads/cvs/' . $filename;
+        }
+    }
+}
+
 // Build dynamic update query
 $fields = [];
 $types = '';
@@ -37,6 +55,7 @@ if ($phone !== null) { $fields[] = 'phone = ?'; $types .= 's'; $values[] = $phon
 if ($city !== null) { $fields[] = 'city = ?'; $types .= 's'; $values[] = $city; }
 if ($bio !== null) { $fields[] = 'bio = ?'; $types .= 's'; $values[] = $bio; }
 if ($skills !== null) { $fields[] = 'skills = ?'; $types .= 's'; $values[] = $skills; }
+if ($cv_url !== null) { $fields[] = 'cv_path = ?'; $types .= 's'; $values[] = $cv_url; }
 
 if (empty($fields)) {
     echo json_encode(['success' => false, 'error' => 'No fields to update']);
@@ -57,7 +76,7 @@ if ($stmt->execute()) {
     if ($first_name !== null || $last_name !== null) {
         $_SESSION['user_name'] = ($first_name ?? $_SESSION['first_name'] ?? '') . ' ' . ($last_name ?? $_SESSION['last_name'] ?? '');
     }
-    echo json_encode(['success' => true]);
+    echo json_encode(['success' => true, 'cv_url' => $cv_url]);
 } else {
     echo json_encode(['success' => false, 'error' => 'Update failed: ' . $stmt->error]);
 }

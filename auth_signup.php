@@ -20,6 +20,9 @@ $company_name = trim($_POST['company_name'] ?? '');
 $city         = trim($_POST['city'] ?? '');
 $skills       = trim($_POST['skills'] ?? '');
 $category     = trim($_POST['category'] ?? '');
+if ($category === '') {
+    $category = null;
+}
 
 // Validate required fields
 if (empty($first_name) || empty($last_name) || empty($email) || empty($password)) {
@@ -45,21 +48,27 @@ $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, passwor
 $stmt->bind_param("ssssssssss", $first_name, $last_name, $email, $hashed_password, $phone, $role, $company_name, $city, $skills, $category);
 
 if ($stmt->execute()) {
-    // Auto-login after signup
     $user_id = $stmt->insert_id;
-    $_SESSION['user_id']    = $user_id;
-    $_SESSION['user_name']  = $first_name . ' ' . $last_name;
-    $_SESSION['first_name'] = $first_name;
-    $_SESSION['user_email'] = $email;
-    $_SESSION['user_role']  = $role;
-    $_SESSION['logged_in']  = true;
+    
+    // Generate 6-digit verification code for the new account
+    $code = str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
 
-    // Redirect based on role
-    if ($role === 'usher') {
-        header('Location: usher/dashboard.php');
-    } else {
-        header('Location: dashboard.php');
-    }
+    // Save code to database
+    $update_stmt = $conn->prepare("UPDATE users SET email_verification_code = ? WHERE id = ?");
+    $update_stmt->bind_param("si", $code, $user_id);
+    $update_stmt->execute();
+    $update_stmt->close();
+
+    // Store pending login data in session for the verification screen
+    $_SESSION['pending_user_id']   = $user_id;
+    $_SESSION['pending_user_name'] = $first_name . ' ' . $last_name;
+    $_SESSION['pending_user_email']= $email;
+    $_SESSION['pending_user_role'] = $role;
+    $_SESSION['pending_code']      = $code;
+    $_SESSION['pending_code_time'] = time();
+
+    // Redirect to verification UI
+    header('Location: verify-email.php');
 } else {
     header('Location: signup.php?error=failed');
 }

@@ -5,32 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wasla - Verify Email</title>
     <meta name="description" content="Enter your verification code to complete login.">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=<?= time() ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="images/wasla-icon.png">
     <style>
-        .verify-card { background:var(--glass-bg,rgba(255,255,255,0.04)); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:40px; max-width:440px; width:100%; text-align:center; }
+        .verify-card { background:var(--card-bg, #fff); border:1px solid var(--border-color, #e2e8f0); border-radius:20px; padding:40px; max-width:440px; width:100%; text-align:center; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
         .verify-icon { width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,rgba(0,200,83,0.15),rgba(0,230,118,0.1)); color:#00c853; display:flex; align-items:center; justify-content:center; font-size:2rem; margin:0 auto 24px; animation:pulse 2s ease infinite; }
         @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
-        .verify-title { color:#fff; font-size:1.4rem; font-weight:800; margin-bottom:8px; }
-        .verify-subtitle { color:rgba(255,255,255,0.5); font-size:0.9rem; margin-bottom:28px; line-height:1.5; }
+        .verify-title { color:var(--text-color, #1a202c); font-size:1.4rem; font-weight:800; margin-bottom:8px; }
+        .verify-subtitle { color:var(--text-muted, #64748b); font-size:0.9rem; margin-bottom:28px; line-height:1.5; }
         .verify-subtitle strong { color:var(--accent,#00c9a7); }
         .code-inputs { display:flex; gap:10px; justify-content:center; margin-bottom:24px; }
-        .code-input { width:50px; height:58px; border-radius:12px; border:2px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06); color:#fff; font-size:1.5rem; font-weight:700; text-align:center; caret-color:var(--accent); transition:all 0.2s ease; font-family:'Inter',sans-serif; }
-        .code-input:focus { outline:none; border-color:var(--accent,#00c9a7); box-shadow:0 0 0 3px rgba(0,201,167,0.15); }
+        .code-input { width:50px; height:58px; border-radius:12px; border:2px solid var(--border-color, #e2e8f0); background:var(--input-bg, #f8fafc); color:var(--text-color, #1a202c); font-size:1.5rem; font-weight:700; text-align:center; caret-color:var(--accent); transition:all 0.2s ease; font-family:'Inter',sans-serif; }
+        .code-input:focus { outline:none; border-color:var(--accent,#00c9a7); box-shadow:0 0 0 3px rgba(0,201,167,0.15); background:#fff; }
         .code-input.filled { border-color:rgba(0,201,167,0.4); background:rgba(0,201,167,0.06); }
         .verify-btn { width:100%; padding:14px; border:none; border-radius:12px; background:linear-gradient(135deg,var(--accent,#00c9a7),#00e676); color:#fff; font-size:1rem; font-weight:700; cursor:pointer; transition:all 0.3s ease; display:flex; align-items:center; justify-content:center; gap:8px; }
         .verify-btn:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(0,201,167,0.3); }
         .verify-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
-        .verify-resend { color:rgba(255,255,255,0.4); font-size:0.85rem; margin-top:20px; }
+        .verify-resend { color:var(--text-muted, #64748b); font-size:0.85rem; margin-top:20px; }
         .verify-resend a { color:var(--accent,#00c9a7); text-decoration:none; font-weight:600; cursor:pointer; }
         .verify-resend a:hover { text-decoration:underline; }
         .verify-error { background:rgba(255,23,68,0.1); border:1px solid rgba(255,23,68,0.3); color:#ff5252; padding:10px 16px; border-radius:10px; font-size:0.85rem; margin-bottom:20px; display:none; align-items:center; gap:8px; }
         .verify-error.show { display:flex; }
-        .verify-dev-note { background:rgba(255,193,7,0.08); border:1px solid rgba(255,193,7,0.25); border-radius:10px; padding:12px 16px; margin-top:20px; font-size:0.8rem; color:#ffc107; text-align:left; }
-        .verify-dev-note strong { color:#ff9800; }
-        .verify-timer { color:rgba(255,255,255,0.3); font-size:0.8rem; margin-top:8px; }
+        .verify-dev-note { background:rgba(255,193,7,0.08); border:1px solid rgba(255,193,7,0.25); border-radius:10px; padding:12px 16px; margin-top:20px; font-size:0.8rem; color:#d97706; text-align:left; }
+        .verify-dev-note strong { color:#b45309; }
+        .verify-timer { color:var(--text-muted, #64748b); font-size:0.8rem; margin-top:8px; font-weight: 500; }
     </style>
 </head>
 <body class="auth-body">

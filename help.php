@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wasla - Help Center</title>
     <meta name="description" content="Get help and support for Wasla.">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=<?= time() ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="images/wasla-icon.png">
-    <script src="theme-init.js"></script>
+    <script src="wasla-theme.js"></script>
 </head>
 <body>
     <?php $active_page = 'help'; ?>
@@ -65,7 +65,7 @@
             <section id="guides" class="help-section">
                 <h2 class="help-section-title">Getting Started</h2>
                 <div class="guides-grid">
-                    <div class="guide-card" style="cursor:pointer" onclick="window.location.href='#faq'"><div class="guide-icon"><i class="fas fa-rocket"></i></div><h3>Quick Start Guide</h3><p>Learn the basics of Wasla in 5 minutes</p></div>
+                    <div class="guide-card trigger-quick-start" style="cursor:pointer"><div class="guide-icon"><i class="fas fa-rocket"></i></div><h3>Quick Start Guide</h3><p>Learn the basics of Wasla in 5 minutes</p></div>
                     <div class="guide-card" style="cursor:pointer" onclick="window.location.href='#faq'; setTimeout(() => document.querySelectorAll('.faq-item button')[2].click(), 300);"><div class="guide-icon"><i class="fas fa-project-diagram"></i></div><h3>Managing Projects</h3><p>Best practices for project management</p></div>
                     <div class="guide-card" style="cursor:pointer" onclick="window.location.href='#faq'; setTimeout(() => document.querySelectorAll('.faq-item button')[1].click(), 300);"><div class="guide-icon"><i class="fas fa-user-check"></i></div><h3>Working with Ushers</h3><p>How to find and hire the best ushers</p></div>
                 </div>

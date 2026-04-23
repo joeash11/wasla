@@ -6,11 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wasla - My Projects</title>
     <meta name="description" content="View and manage all your Wasla projects in one place.">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=<?= time() ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="images/wasla-icon.png">
-    <script src="theme-init.js"></script>
+    <script src="wasla-theme.js"></script>
 </head>
 <body>
     <?php $active_page = 'projects'; ?>
@@ -379,14 +379,6 @@
                                     <span class="manage-usher-name">Sara Ahmed</span>
                                     <span class="manage-usher-role">Coordinator</span>
                                 </div>
-                                <span class="manage-usher-status status-confirmed"><i class="fas fa-check-circle"></i> Confirmed</span>
-                            </div>
-                            <div class="manage-usher-item">
-                                <div class="manage-usher-avatar" style="color:var(--warning)"><i class="fas fa-user-circle"></i></div>
-                                <div class="manage-usher-info">
-                                    <span class="manage-usher-name">Khalid Al-Farsi</span>
-                                    <span class="manage-usher-role">Usher</span>
-                                </div>
                                 <span class="manage-usher-status status-pending-tag"><i class="fas fa-clock"></i> Pending</span>
                             </div>
                         </div>
@@ -395,9 +387,24 @@
             </div>
             <div class="modal-footer">
                 <button class="btn-modal-cancel" id="btn-cancel-project" onclick="closeManageModal()">Close</button>
-                <button class="btn-modal-action btn-action-applicants" onclick="alert('Viewing applicants...')"><i class="fas fa-user-plus"></i> View Applicants</button>
+                <button class="btn-modal-action btn-action-applicants" onclick="openApplicantsModal(window.currentManageProjectId)"><i class="fas fa-user-plus"></i> View Applicants</button>
                 <button class="btn-modal-action btn-action-edit" onclick="alert('Editing project...')"><i class="fas fa-edit"></i> Edit Project</button>
                 <button class="btn-modal-action btn-action-cancel" onclick="if(confirm('Cancel this project?')) alert('Project cancelled.')"><i class="fas fa-times-circle"></i> Cancel Project</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Applicants Modal -->
+    <div class="modal-overlay" id="applicants-modal" style="display:none; z-index:10001;">
+        <div class="modal-container modal-lg" style="max-width: 650px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-users"></i> Project Applicants</h2>
+                <button class="modal-close" onclick="closeApplicantsModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="applicants-list" style="display:flex; flex-direction:column; gap:12px;">
+                    <p style="color:var(--gray-400);text-align:center;">Loading applicants...</p>
+                </div>
             </div>
         </div>
     </div>
@@ -407,8 +414,12 @@
         document.getElementById('modal-close-project').addEventListener('click', closeManageModal);
         manageModal.addEventListener('click', (e) => { if (e.target === manageModal) closeManageModal(); });
 
+        window.currentManageProjectId = null;
+
         function openManageModal(index) {
             const project = projects[index];
+            window.currentManageProjectId = project.id;
+            
             document.getElementById('modal-project-title').textContent = project.title;
             document.getElementById('modal-project-date').textContent = project.date;
             document.getElementById('modal-project-location').textContent = project.location;
@@ -425,6 +436,77 @@
         function closeManageModal() {
             manageModal.classList.remove('active');
             document.body.style.overflow = '';
+        }
+
+        // --- Applicants Modal Logic ---
+        function openApplicantsModal(projectId) {
+            if (!projectId) return;
+            const modal = document.getElementById('applicants-modal');
+            modal.style.display = 'flex';
+            
+            const list = document.getElementById('applicants-list');
+            list.innerHTML = '<p style="color:var(--gray-400);text-align:center;">Loading applicants...</p>';
+            
+            fetch(`api/get_applicants.php?project_id=${projectId}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (!data.success) {
+                        list.innerHTML = `<p style="color:#ff5252;text-align:center;">${data.error || 'Failed to load applicants.'}</p>`;
+                        return;
+                    }
+                    if (data.applicants.length === 0) {
+                        list.innerHTML = '<p style="color:var(--gray-400);text-align:center;">No pending applicants found for this project.</p>';
+                        return;
+                    }
+                    list.innerHTML = data.applicants.map(app => {
+                        const cvBtn = app.cv_url 
+                            ? `<a href="${app.cv_url}" target="_blank" class="btn-manage" style="background:#2979ff; padding:6px 12px; font-size:0.8rem; text-decoration:none;"><i class="fas fa-file-pdf"></i> View CV</a>`
+                            : `<span style="color:var(--gray-400); font-size:0.8rem; border:1px solid var(--gray-300); padding:4px 8px; border-radius:4px;"><i class="fas fa-times"></i> No CV</span>`;
+                            
+                        return `
+                        <div class="manage-usher-item" style="justify-content: space-between;" id="app-row-${app.application_id}">
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <div class="manage-usher-avatar"><i class="fas fa-user-circle"></i></div>
+                                <div class="manage-usher-info">
+                                    <span class="manage-usher-name">${app.name}</span>
+                                    <span class="manage-usher-role"><i class="fas fa-star" style="color:#ffc107"></i> ${app.rating || 'New'}</span>
+                                </div>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                ${cvBtn}
+                                <button class="btn-manage" style="background:#00c853; padding:6px 12px; font-size:0.8rem;" onclick="respondApp(${app.application_id}, 'accepted')"><i class="fas fa-check"></i> Accept</button>
+                                <button class="btn-manage" style="background:#ff5252; padding:6px 12px; font-size:0.8rem;" onclick="respondApp(${app.application_id}, 'rejected')"><i class="fas fa-times"></i> Reject</button>
+                            </div>
+                        </div>`;
+                    }).join('');
+                })
+                .catch(() => {
+                    list.innerHTML = '<p style="color:#ff5252;text-align:center;">Network error.</p>';
+                });
+        }
+
+        function closeApplicantsModal() {
+            document.getElementById('applicants-modal').style.display = 'none';
+        }
+
+        function respondApp(appId, status) {
+            if (!confirm(`Are you sure you want to ${status} this applicant?`)) return;
+            
+            fetch('api/respond_application.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ application_id: appId, status: status })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(`Applicant ${status}!`);
+                    const row = document.getElementById(`app-row-${appId}`);
+                    if (row) row.style.display = 'none';
+                } else {
+                    alert(data.error || 'Failed to update application.');
+                }
+            });
         }
     </script>
 </body>

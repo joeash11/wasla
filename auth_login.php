@@ -46,45 +46,26 @@ if (!$user['is_active']) {
     exit;
 }
 
-// Verify role matches
-if ($role === 'admin' && $user['role'] !== 'admin') {
-    header('Location: login.php?error=role');
-    exit;
-}
-if ($role !== 'admin' && $user['role'] !== $role && $user['role'] !== 'admin') {
-    header('Location: login.php?error=role');
-    exit;
-}
-
-// On localhost, skip email verification and log in directly
-$is_localhost = in_array($_SERVER['HTTP_HOST'], ['localhost', '127.0.0.1']);
-
-if ($is_localhost) {
-    // Direct login - no verification needed on localhost
-    $_SESSION['user_id']    = $user['id'];
-    $_SESSION['user_name']  = $user['first_name'] . ' ' . $user['last_name'];
-    $_SESSION['first_name'] = $user['first_name'];
-    $_SESSION['user_email'] = $user['email'];
-    $_SESSION['user_role']  = $user['role'];
-    $_SESSION['logged_in']  = true;
-
-    // Redirect based on role
-    switch ($user['role']) {
-        case 'admin':
-            header('Location: admin/dashboard.php');
-            break;
-        case 'usher':
-            header('Location: usher/dashboard.php');
-            break;
-        case 'client':
-        default:
-            header('Location: dashboard.php');
-            break;
+// Verify role matches and secure the admin login
+if ($user['role'] === 'admin') {
+    // Admins must strictly use the admin tab and the specific admin email
+    if ($email !== 'admin@wasla.com' || $role !== 'admin') {
+        header('Location: login.php?error=unauthorized');
+        exit;
     }
-    exit;
+} else {
+    // For Clients and Ushers: 
+    // Do not allow them to use the Admin tab.
+    if ($role === 'admin') {
+        header('Location: login.php?error=role');
+        exit;
+    }
+    // We ignore if they are on the 'client' tab but their DB role is 'usher' 
+    // because they will naturally be routed correctly. This prevents the "logout lock" bug.
 }
 
-// ---- Production: Generate 6-digit verification code ----
+// Generate 6-digit verification code - required for ALL environments
+
 $code = str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
 
 // Save code to database

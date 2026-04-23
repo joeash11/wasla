@@ -4,14 +4,15 @@
 // Requires usher_guard.php to be included first
 // $active_page should be set before including this file
 // ============================================
-$name_parts = explode(' ', $user_name);
+// Always read from session — this reflects the actual logged-in user
+$name_parts = explode(' ', $_SESSION['user_name'] ?? ($user_name ?? ''), 2);
 $sidebar_first = $name_parts[0] ?? '';
-$sidebar_last = isset($name_parts[1]) ? $name_parts[1] : '';
+$sidebar_last  = $name_parts[1] ?? '';
 ?>
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-profile">
         <a href="profile.php" class="profile-avatar"><i class="fas fa-user-circle"></i></a>
-        <h3 class="profile-name"><?php echo htmlspecialchars($sidebar_first); ?><br><?php echo htmlspecialchars($sidebar_last); ?></h3>
+        <h3 class="profile-name" id="sidebar-name"><?php echo htmlspecialchars($sidebar_first); ?><br><?php echo htmlspecialchars($sidebar_last); ?></h3>
         <span class="usher-badge"><i class="fas fa-id-badge"></i> Usher</span>
     </div>
     <nav class="sidebar-nav">

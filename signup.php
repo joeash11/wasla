@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wasla - Sign Up</title>
     <meta name="description" content="Create your Wasla account and start connecting with events and talent.">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=<?= time() ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="images/wasla-icon.png">
+    <script src="wasla-theme.js"></script>
 </head>
-<body class="auth-body">
+<body class="auth-body page-transition">
     <div class="auth-wrapper">
         <div class="auth-left">
             <div class="auth-left-content">

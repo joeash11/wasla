@@ -12,11 +12,11 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wasla - Available Projects</title>
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../styles.css?v=<?= time() ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="../images/wasla-icon.png">
-    <script src="../theme-init.js"></script>
+    <script src="../wasla-theme.js?v=<?= time() ?>"></script>
 </head>
 <body>
     <?php $active_page = 'jobs'; ?>
@@ -82,14 +82,14 @@ $user_name = isset($_SESSION['first_name']) ? $_SESSION['first_name'] : (isset($
                     ${badge}
                     <div class="card-header"><h3 style="font-weight:700; font-size:1.25rem; color:var(--primary); font-family: 'Inter', sans-serif;">${j.title}</h3><p class="card-company" style="font-weight:500; margin-top:4px;"><i class="fas fa-building"></i> ${j.company}</p></div>
                     <div class="card-body">
-                        <div class="card-detail"><i class="fas fa-map-marker-alt"></i><span>${j.location}</span></div>
+                        <div class="card-detail"><i class="fas fa-map-marker-alt"></i><span class="loc-text">${j.location}</span></div>
                         <div class="card-detail"><i class="fas fa-calendar"></i><span>${j.date}</span></div>
-                        <div class="card-detail"><i class="fas fa-clock"></i><span>${j.hours} hours</span></div>
-                        <div class="card-detail"><i class="fas fa-money-bill"></i><span>EGP ${j.pay}/day</span></div>
+                        <div class="card-detail"><i class="fas fa-clock"></i><span><span>${j.hours}</span> <span>hours</span></span></div>
+                        <div class="card-detail"><i class="fas fa-money-bill"></i><span><span>EGP</span> <span>${j.pay}</span><span>/day</span></span></div>
                     </div>
                     <div class="card-tags"><span class="card-tag">${j.category || 'Event'}</span></div>
                     <div class="card-footer">
-                        <span class="card-slots"><i class="fas fa-users"></i> ${j.slots_left} slots left</span>
+                        <span class="card-slots"><i class="fas fa-users"></i> <span>${j.slots_left}</span> <span>slots left</span></span>
                         ${btnHtml}
                     </div>
                 </div>`;

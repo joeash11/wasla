@@ -2,7 +2,7 @@
 <?php
 // Fetch user data from DB for settings
 require_once __DIR__ . '/../db/connection.php';
-$stmt = $conn->prepare("SELECT first_name, last_name, email, phone FROM users WHERE id = ?");
+$stmt = $conn->prepare("SELECT first_name, last_name, email, phone, cv_path FROM users WHERE id = ?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
 $settings_user = $stmt->get_result()->fetch_assoc();
@@ -16,11 +16,11 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wasla - Settings</title>
     <meta name="description" content="Manage your Wasla account settings.">
-    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../styles.css?v=<?= time() ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="../images/wasla-icon.png">
-    <script src="../theme-init.js"></script>
+    <script src="../wasla-theme.js"></script>
 </head>
 <body>
     <?php $active_page = 'settings'; ?>
@@ -43,6 +43,17 @@ $conn->close();
                             <div class="form-row"><div class="form-group"><label class="form-label">First Name</label><input type="text" class="form-input" id="acct-first" value="<?php echo htmlspecialchars($settings_user['first_name'] ?? ''); ?>"></div><div class="form-group"><label class="form-label">Last Name</label><input type="text" class="form-input" id="acct-last" value="<?php echo htmlspecialchars($settings_user['last_name'] ?? ''); ?>"></div></div>
                             <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="acct-email" value="<?php echo htmlspecialchars($settings_user['email'] ?? ''); ?>"></div>
                             <div class="form-group"><label class="form-label">Phone Number</label><input type="tel" class="form-input" id="acct-phone" value="<?php echo htmlspecialchars($settings_user['phone'] ?? ''); ?>"></div>
+                            
+                            <!-- CV Upload -->
+                            <div class="form-group" style="margin-top: 10px;">
+                                <label class="form-label">Curriculum Vitae (CV) <span style="color:#ff5252">*Required for applying</span></label>
+                                <div style="display:flex; align-items:center; gap:12px;">
+                                    <input type="file" id="cv-upload" accept=".pdf,.doc,.docx" class="form-input" style="flex:1">
+                                    <a href="<?php echo htmlspecialchars(!empty($settings_user['cv_path']) ? '../' . $settings_user['cv_path'] : '#'); ?>" id="view-current-cv" target="_blank" style="display:<?php echo !empty($settings_user['cv_path']) ? 'inline-flex' : 'none'; ?>; color:var(--cyan); font-weight:600; font-size:0.9rem; white-space:nowrap;"><i class="fas fa-file-alt"></i> View Current CV</a>
+                                </div>
+                                <small style="color:var(--gray-400); margin-top:6px; display:block;">Only PDF, DOC, DOCX. Max 5MB.</small>
+                            </div>
+
                             <button class="btn-save" id="btn-save-account">Save Changes</button>
                         </div>
                     </div>
@@ -124,23 +135,34 @@ $conn->close();
             setTimeout(() => toast.classList.remove('show'), 2500);
         }
 
-        // ===== SAVE ACCOUNT INFO =====
+        // ===== SAVE ACCOUNT INFO & CV =====
         document.getElementById('btn-save-account').addEventListener('click', async () => {
             const btn = document.getElementById('btn-save-account');
-            const data = {
-                first_name: document.getElementById('acct-first').value,
-                last_name: document.getElementById('acct-last').value,
-                email: document.getElementById('acct-email').value,
-                phone: document.getElementById('acct-phone').value
-            };
+            
+            const formData = new FormData();
+            formData.append('first_name', document.getElementById('acct-first').value);
+            formData.append('last_name', document.getElementById('acct-last').value);
+            formData.append('email', document.getElementById('acct-email').value);
+            formData.append('phone', document.getElementById('acct-phone').value);
+            
+            const cvFile = document.getElementById('cv-upload').files[0];
+            if (cvFile) {
+                formData.append('cv', cvFile);
+            }
+
             btn.textContent = '✓ Saving...';
             btn.disabled = true;
             try {
-                await fetch('../db/update_profile.php', {
+                const res = await fetch('../db/update_profile.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+                    body: formData // Note: Content-Type is set automatically by browser for FormData
                 });
+                const data = await res.json();
+                if (data.cv_url) {
+                    const viewLnk = document.getElementById('view-current-cv');
+                    viewLnk.href = '.' + data.cv_url;
+                    viewLnk.style.display = 'inline-flex';
+                }
             } catch(e) {}
             btn.textContent = '✓ Saved!';
             btn.style.background = 'var(--accent)';
@@ -222,6 +244,7 @@ $conn->close();
             localStorage.setItem('wasla_language', langSelect.value);
             document.documentElement.dir = langSelect.value === 'ar' ? 'rtl' : 'ltr';
             showToast('Language changed');
+            setTimeout(() => window.location.reload(), 600);
         });
     </script>
 </body>

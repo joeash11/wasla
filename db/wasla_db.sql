@@ -24,6 +24,7 @@ CREATE TABLE users (
     category ENUM('Entertainment', 'Event organizers', 'Quality control', 'Models', 'Operation') DEFAULT NULL,
     email_verification_code VARCHAR(10) DEFAULT NULL,
     profile_image VARCHAR(255) DEFAULT NULL,
+    cv_path VARCHAR(255) DEFAULT NULL,
     bio TEXT DEFAULT NULL,
     rating DECIMAL(3,2) DEFAULT 0.00,
     is_verified TINYINT(1) DEFAULT 0,
