@@ -13,9 +13,9 @@
 </head>
 <body class="landing-body">
     <nav class="landing-nav">
-        <a href="index.php" class="logo">
+        <a href="index.php" class="logo" translate="no">
             <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36">
-            <span class="logo-text">Wasla</span>
+            <span class="logo-text" translate="no">Wasla</span>
         </a>
         <div class="landing-nav-links">
             <a href="index.php#features">Features</a>

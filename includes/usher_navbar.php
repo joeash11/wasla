@@ -6,9 +6,9 @@
 ?>
 <nav class="navbar" id="navbar">
     <div class="navbar-left">
-        <a href="dashboard.php" class="logo">
+        <a href="dashboard.php" class="logo" translate="no">
             <img src="../images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36">
-            <span class="logo-text">Wasla</span>
+            <span class="logo-text" translate="no">Wasla</span>
         </a>
     </div>
     <div class="navbar-right">

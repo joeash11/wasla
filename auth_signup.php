@@ -59,6 +59,11 @@ if ($stmt->execute()) {
     $update_stmt->execute();
     $update_stmt->close();
 
+    // Send email via SMTP (PHPMailer)
+    require_once __DIR__ . '/includes/mailer.php';
+    $toName = trim($first_name . ' ' . $last_name);
+    sendVerificationEmail($email, $toName, $code);
+
     // Store pending login data in session for the verification screen
     $_SESSION['pending_user_id']   = $user_id;
     $_SESSION['pending_user_name'] = $first_name . ' ' . $last_name;

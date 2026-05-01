@@ -45,7 +45,7 @@
 </head>
 <body>
     <nav class="navbar admin-navbar"><div class="navbar-left">
-        <a href="dashboard.php" class="logo"><img src="../images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36"><span class="logo-text">Wasla</span> <span class="admin-tag">Admin</span></a>
+        <a href="dashboard.php" class="logo" translate="no"><img src="../images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36"><span class="logo-text" translate="no">Wasla</span> <span class="admin-tag">Admin</span></a>
         <ul class="nav-links"><li><a href="dashboard.php">Dashboard</a></li><li><a href="users.php" class="active">Users</a></li><li><a href="projects.php">Projects</a></li><li><a href="reports.php">Reports</a></li></ul>
     </div><div class="navbar-right"><span class="welcome-text">Admin Panel</span><div class="user-avatar-small"><i class="fas fa-user-shield"></i></div></div></nav>
     <div class="main-wrapper">

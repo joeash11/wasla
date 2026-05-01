@@ -34,14 +34,21 @@
         document.documentElement.classList.remove('lang-ar');
     }
 
+    // ── Brand names that must NEVER be translated under any circumstances ──
+    const NEVER_TRANSLATE = ['Wasla', 'wasla', 'WASLA'];
+
     // ── 3. Translation engine ─────────────────────────────────────────────────
     function translateNode(node, dict) {
         if (node.nodeType === 3) {
             const text = node.nodeValue.trim();
+            // Hard-protect brand names — never replace these
+            if (NEVER_TRANSLATE.some(w => text === w)) return;
             if (text && dict[text]) {
                 node.nodeValue = node.nodeValue.replace(text, dict[text]);
             }
         } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE') {
+            // Skip elements explicitly marked as non-translatable
+            if (node.getAttribute && node.getAttribute('translate') === 'no') return;
             if (node.placeholder && dict[node.placeholder]) {
                 node.placeholder = dict[node.placeholder];
             }
@@ -99,7 +106,7 @@
 
         // Cache in sessionStorage so we don't re-fetch every page
         // Bump TRANS_VER whenever ar.json is updated to bust stale cache
-        const TRANS_VER = 3;
+        const TRANS_VER = 6;
         const cacheKey = 'wasla_trans_' + langCode + '_v' + TRANS_VER;
         const cached = sessionStorage.getItem(cacheKey);
         if (cached) {

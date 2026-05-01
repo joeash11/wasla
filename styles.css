@@ -312,8 +312,10 @@ body {
 .logo-text {
     font-size: 1.5rem;
     font-weight: 800;
-    color: var(--white);
+    color: #ffffff !important;
     letter-spacing: -0.5px;
+    font-style: normal;
+    font-family: 'Inter', sans-serif;
 }
 
 .nav-links {
@@ -5966,10 +5968,7 @@ a:visited {
     display: none !important;
 }
 
-/* ===== LOGO DARK MODE FIX ===== */
-[data-theme="dark"] .logo-text {
-    color: var(--white) !important;
-}
+/* ===== LOGO always white in all themes ===== */
 
 [data-theme="dark"] .logo-icon {
     filter: drop-shadow(0 0 4px var(--accent)) brightness(1.2);

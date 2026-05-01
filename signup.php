@@ -15,9 +15,9 @@
     <div class="auth-wrapper">
         <div class="auth-left">
             <div class="auth-left-content">
-                <a href="index.php" class="logo">
+                <a href="index.php" class="logo" translate="no">
                     <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="48" height="48">
-                    <span class="logo-text" style="color:#fff;font-size:1.6rem">Wasla</span>
+                    <span class="logo-text" style="color:#fff;font-size:1.6rem" translate="no">Wasla</span>
                 </a>
                 <h1 class="auth-hero-title">Join the Future<br>of <span class="hero-gradient-text">Event Staffing</span></h1>
                 <p class="auth-hero-desc">Whether you manage events or work as an usher, Wasla is your one-stop platform.</p>

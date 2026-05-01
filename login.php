@@ -19,9 +19,9 @@
     <div class="auth-wrapper">
         <div class="auth-left">
             <div class="auth-left-content">
-                <a href="index.php" class="logo">
+                <a href="index.php" class="logo" translate="no">
                     <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="48" height="48">
-                    <span class="logo-text" style="color:#fff;font-size:1.6rem">Wasla</span>
+                    <span class="logo-text" style="color:#fff;font-size:1.6rem" translate="no">Wasla</span>
                 </a>
                 <h1 class="auth-hero-title">Connect Events<br>With <span class="hero-gradient-text">Top Talent</span>
                 </h1>

@@ -14,9 +14,9 @@
 <body class="landing-body page-transition">
     <!-- Landing Navbar -->
     <nav class="landing-nav">
-        <a href="index.php" class="logo">
+        <a href="index.php" class="logo" translate="no">
             <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="36" height="36">
-            <span class="logo-text">Wasla</span>
+            <span class="logo-text" translate="no">Wasla</span>
         </a>
         <div class="landing-nav-links">
             <a href="#features">Features</a>
@@ -177,9 +177,9 @@
         <div class="landing-container">
             <div class="landing-footer-grid">
                 <div class="landing-footer-brand">
-                    <div class="logo" style="margin-bottom:12px">
+                    <div class="logo" style="margin-bottom:12px" translate="no">
                         <img src="images/wasla-icon.png" alt="Wasla" class="logo-icon" width="32" height="32">
-                        <span class="logo-text" style="color:#fff">Wasla</span>
+                        <span class="logo-text" style="color:#fff" translate="no">Wasla</span>
                     </div>
                     <p class="landing-footer-desc">The leading platform connecting event managers with professional talent across the MENA region.</p>
                     <div class="landing-social-links">

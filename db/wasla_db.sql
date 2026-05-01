@@ -7,6 +7,22 @@ CREATE DATABASE IF NOT EXISTS wasla_db;
 USE wasla_db;
 
 -- ============================================
+-- SMTP SETTINGS TABLE
+-- Stores email server configuration
+-- ============================================
+CREATE TABLE IF NOT EXISTS smtp_settings (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    smtp_host VARCHAR(100) NOT NULL DEFAULT 'smtp.gmail.com',
+    smtp_port INT NOT NULL DEFAULT 587,
+    smtp_username VARCHAR(150) NOT NULL DEFAULT '',
+    smtp_password VARCHAR(255) NOT NULL DEFAULT '',
+    smtp_from_email VARCHAR(150) NOT NULL DEFAULT 'noreply@wasla.com',
+    smtp_from_name VARCHAR(100) NOT NULL DEFAULT 'Wasla',
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- ============================================
 -- USERS TABLE
 -- Stores all users: clients, ushers, admins
 -- ============================================

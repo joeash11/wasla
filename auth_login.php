@@ -74,13 +74,10 @@ $stmt->bind_param("si", $code, $user['id']);
 $stmt->execute();
 $stmt->close();
 
-// Send email
-$to = $user['email'];
-$subject = "Wasla - Your Login Verification Code";
-$message = "Your Wasla verification code is: $code\n\nThis code expires in 10 minutes.\nIf you didn't request this, please ignore this email.";
-$headers = "From: noreply@wasla.com\r\nContent-Type: text/plain; charset=UTF-8";
-
-@mail($to, $subject, $message, $headers);
+// Send email via SMTP (PHPMailer)
+require_once __DIR__ . '/includes/mailer.php';
+$toName = trim($user['first_name'] . ' ' . $user['last_name']);
+sendVerificationEmail($user['email'], $toName, $code);
 
 // Store pending login data in session
 $_SESSION['pending_user_id']   = $user['id'];
