@@ -96,7 +96,7 @@
                 'role': 'No account found for the selected role.',
                 'auth': 'Please login to access that page.',
                 'unauthorized': 'You do not have permission to access that page.',
-                'wrong_privilege': 'This account is not for the chosen privilege.'
+                'wrong_privilege': 'This account doesn’t have permission to access this role'
             };
             errorText.textContent = messages[error] || 'Login failed. Please try again.';
             errorDiv.style.display = 'flex';
