@@ -48,7 +48,7 @@ function sendVerificationEmail($toEmail, $toName, $code) {
         $mail->Password   = $settings['smtp_password'];
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = (int)$settings['smtp_port'];
-        $mail->Timeout    = 10;
+        $mail->Timeout    = 4; // Fail fast if SMTP server is slow/unresponsive
         $mail->CharSet    = 'UTF-8';
 
         // ── Recipients ────────────────────────────────────────────────────────

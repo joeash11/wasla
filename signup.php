@@ -146,6 +146,18 @@
             errDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + msg;
             setTimeout(() => errDiv.remove(), 4000);
         }
+
+        // Prevent double submissions and show loading state
+        document.querySelectorAll('.auth-form').forEach(form => {
+            form.addEventListener('submit', function() {
+                const btn = this.querySelector('button[type="submit"]');
+                if (btn) {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.7';
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                }
+            });
+        });
     </script>
 </body>
 </html>

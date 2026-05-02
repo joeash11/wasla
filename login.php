@@ -136,7 +136,14 @@
             errDiv.innerHTML = '<i class="fas fa-exclamation-circle"></i> ' + msg;
             setTimeout(() => errDiv.remove(), 4000);
         }
+
+        // Prevent double submissions and show loading state
+        document.getElementById('login-form').addEventListener('submit', function() {
+            const btn = document.getElementById('login-submit');
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+        });
     </script>
 </body>
-
 </html>
