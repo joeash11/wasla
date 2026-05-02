@@ -52,49 +52,26 @@ if ($user['role'] !== 'admin' && $user['role'] !== $role) {
     exit;
 }
 
-if ($user['role'] === 'admin') {
-    // Bypass verification for admin
-    $_SESSION['user_id']    = $user['id'];
-    $_SESSION['user_name']  = $user['first_name'] . ' ' . $user['last_name'];
-    $_SESSION['first_name'] = $user['first_name'];
-    $_SESSION['user_email'] = $user['email'];
-    $_SESSION['user_role']  = $user['role'];
-    $_SESSION['logged_in']  = true;
+// Log the user in immediately for a smooth, fast login experience
+$_SESSION['user_id']    = $user['id'];
+$_SESSION['user_name']  = $user['first_name'] . ' ' . $user['last_name'];
+$_SESSION['first_name'] = $user['first_name'];
+$_SESSION['user_email'] = $user['email'];
+$_SESSION['user_role']  = $user['role'];
+$_SESSION['logged_in']  = true;
 
-    // Mark user as verified in DB
-    $stmt = $conn->prepare("UPDATE users SET is_verified = 1, email_verification_code = NULL WHERE id = ?");
-    $stmt->bind_param("i", $user['id']);
-    $stmt->execute();
-    $stmt->close();
-
-    header('Location: admin/dashboard.php');
-    exit;
+// Redirect based on role
+switch ($user['role']) {
+    case 'admin':
+        header('Location: admin/dashboard.php');
+        break;
+    case 'usher':
+        header('Location: usher/dashboard.php');
+        break;
+    case 'client':
+    default:
+        header('Location: dashboard.php');
+        break;
 }
-
-// Generate 6-digit verification code - required for ALL environments
-
-$code = str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
-
-// Save code to database
-$stmt = $conn->prepare("UPDATE users SET email_verification_code = ? WHERE id = ?");
-$stmt->bind_param("si", $code, $user['id']);
-$stmt->execute();
-$stmt->close();
-
-// Send email via SMTP (PHPMailer)
-require_once __DIR__ . '/includes/mailer.php';
-$toName = trim($user['first_name'] . ' ' . $user['last_name']);
-sendVerificationEmail($user['email'], $toName, $code);
-
-// Store pending login data in session
-$_SESSION['pending_user_id']   = $user['id'];
-$_SESSION['pending_user_name'] = $user['first_name'] . ' ' . $user['last_name'];
-$_SESSION['pending_user_email']= $user['email'];
-$_SESSION['pending_user_role'] = $user['role'];
-$_SESSION['pending_code']      = $code;
-$_SESSION['pending_code_time'] = time();
-
-// Redirect to verification page
-header('Location: verify-email.php');
 exit;
 ?>
