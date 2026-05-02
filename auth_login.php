@@ -46,19 +46,10 @@ if (!$user['is_active']) {
     exit;
 }
 
-// Verify role matches exactly
-if ($user['role'] !== $role) {
+// For non-admins, ensure they selected the correct tab
+if ($user['role'] !== 'admin' && $user['role'] !== $role) {
     header('Location: login.php?error=wrong_privilege');
     exit;
-}
-
-// Secure the admin login
-if ($user['role'] === 'admin') {
-    // Admins must strictly use the specific admin email
-    if ($email !== 'admin@wasla.com') {
-        header('Location: login.php?error=unauthorized');
-        exit;
-    }
 }
 
 if ($user['role'] === 'admin') {
