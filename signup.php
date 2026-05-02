@@ -47,8 +47,8 @@
                 <form class="auth-form" id="signup-client" action="auth_signup.php" method="POST">
                     <input type="hidden" name="role" value="client">
                     <div class="form-row">
-                        <div class="form-group"><label class="form-label">First Name</label><div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" name="first_name" class="form-input auth-input" placeholder="Abdullah" required></div></div>
-                        <div class="form-group"><label class="form-label">Last Name</label><div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" name="last_name" class="form-input auth-input" placeholder="Elsayed" required></div></div>
+                        <div class="form-group"><label class="form-label">First Name</label><div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" name="first_name" class="form-input auth-input" placeholder="first name" required></div></div>
+                        <div class="form-group"><label class="form-label">Last Name</label><div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" name="last_name" class="form-input auth-input" placeholder="last name" required></div></div>
                     </div>
                     <div class="form-group"><label class="form-label">Company Name</label><div class="auth-input-wrap"><i class="fas fa-building"></i><input type="text" name="company_name" class="form-input auth-input" placeholder="Your company" required></div></div>
                     <div class="form-group"><label class="form-label">Email Address</label><div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" name="email" class="form-input auth-input" placeholder="email@company.com" required></div></div>
@@ -61,8 +61,8 @@
                 <form class="auth-form" id="signup-usher" style="display:none" action="auth_signup.php" method="POST">
                     <input type="hidden" name="role" value="usher">
                     <div class="form-row">
-                        <div class="form-group"><label class="form-label">First Name</label><div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" name="first_name" class="form-input auth-input" placeholder="Ahmed" required></div></div>
-                        <div class="form-group"><label class="form-label">Last Name</label><div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" name="last_name" class="form-input auth-input" placeholder="Mohamed" required></div></div>
+                        <div class="form-group"><label class="form-label">First Name</label><div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" name="first_name" class="form-input auth-input" placeholder="first name" required></div></div>
+                        <div class="form-group"><label class="form-label">Last Name</label><div class="auth-input-wrap"><i class="fas fa-user"></i><input type="text" name="last_name" class="form-input auth-input" placeholder="last name" required></div></div>
                     </div>
                     <div class="form-group"><label class="form-label">Email Address</label><div class="auth-input-wrap"><i class="fas fa-envelope"></i><input type="email" name="email" class="form-input auth-input" placeholder="email@example.com" required></div></div>
                     <div class="form-group"><label class="form-label">Phone Number</label><div class="auth-input-wrap"><i class="fas fa-phone"></i><input type="tel" name="phone" class="form-input auth-input" placeholder="+966 5XX XXX XXXX" required></div></div>

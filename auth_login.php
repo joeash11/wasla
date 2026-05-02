@@ -64,6 +64,25 @@ if ($user['role'] === 'admin') {
     // because they will naturally be routed correctly. This prevents the "logout lock" bug.
 }
 
+if ($user['role'] === 'admin') {
+    // Bypass verification for admin
+    $_SESSION['user_id']    = $user['id'];
+    $_SESSION['user_name']  = $user['first_name'] . ' ' . $user['last_name'];
+    $_SESSION['first_name'] = $user['first_name'];
+    $_SESSION['user_email'] = $user['email'];
+    $_SESSION['user_role']  = $user['role'];
+    $_SESSION['logged_in']  = true;
+
+    // Mark user as verified in DB
+    $stmt = $conn->prepare("UPDATE users SET is_verified = 1, email_verification_code = NULL WHERE id = ?");
+    $stmt->bind_param("i", $user['id']);
+    $stmt->execute();
+    $stmt->close();
+
+    header('Location: admin/dashboard.php');
+    exit;
+}
+
 // Generate 6-digit verification code - required for ALL environments
 
 $code = str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
