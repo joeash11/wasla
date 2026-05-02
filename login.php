@@ -84,7 +84,6 @@
     <script>
         let selectedRole = 'client';
 
-        // Show error from URL params
         const params = new URLSearchParams(window.location.search);
         const error = params.get('error');
         if (error) {
@@ -96,7 +95,8 @@
                 'inactive': 'Your account has been deactivated.',
                 'role': 'No account found for the selected role.',
                 'auth': 'Please login to access that page.',
-                'unauthorized': 'You do not have permission to access that page.'
+                'unauthorized': 'You do not have permission to access that page.',
+                'wrong_privilege': 'This account is not for the chosen privilege.'
             };
             errorText.textContent = messages[error] || 'Login failed. Please try again.';
             errorDiv.style.display = 'flex';

@@ -46,22 +46,19 @@ if (!$user['is_active']) {
     exit;
 }
 
-// Verify role matches and secure the admin login
+// Verify role matches exactly
+if ($user['role'] !== $role) {
+    header('Location: login.php?error=wrong_privilege');
+    exit;
+}
+
+// Secure the admin login
 if ($user['role'] === 'admin') {
-    // Admins must strictly use the admin tab and the specific admin email
-    if ($email !== 'admin@wasla.com' || $role !== 'admin') {
+    // Admins must strictly use the specific admin email
+    if ($email !== 'admin@wasla.com') {
         header('Location: login.php?error=unauthorized');
         exit;
     }
-} else {
-    // For Clients and Ushers: 
-    // Do not allow them to use the Admin tab.
-    if ($role === 'admin') {
-        header('Location: login.php?error=role');
-        exit;
-    }
-    // We ignore if they are on the 'client' tab but their DB role is 'usher' 
-    // because they will naturally be routed correctly. This prevents the "logout lock" bug.
 }
 
 if ($user['role'] === 'admin') {
