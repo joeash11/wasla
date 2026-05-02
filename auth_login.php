@@ -21,7 +21,7 @@ if (empty($email) || empty($password)) {
 }
 
 // Look up user by email
-$stmt = $conn->prepare("SELECT id, first_name, last_name, email, password, role, is_active FROM users WHERE email = ?");
+$stmt = $conn->prepare("SELECT id, first_name, last_name, email, password, role, is_active, is_verified FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -49,6 +49,34 @@ if (!$user['is_active']) {
 // For non-admins, ensure they selected the correct tab
 if ($user['role'] !== 'admin' && $user['role'] !== $role) {
     header('Location: login.php?error=wrong_privilege');
+    exit;
+}
+
+// If the user's email is not verified, send them a verification code
+if (!$user['is_verified']) {
+    $code = str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
+
+    // Save code to database
+    $stmt = $conn->prepare("UPDATE users SET email_verification_code = ? WHERE id = ?");
+    $stmt->bind_param("si", $code, $user['id']);
+    $stmt->execute();
+    $stmt->close();
+
+    // Send email via SMTP (PHPMailer)
+    require_once __DIR__ . '/includes/mailer.php';
+    $toName = trim($user['first_name'] . ' ' . $user['last_name']);
+    sendVerificationEmail($user['email'], $toName, $code);
+
+    // Store pending login data in session
+    $_SESSION['pending_user_id']   = $user['id'];
+    $_SESSION['pending_user_name'] = $user['first_name'] . ' ' . $user['last_name'];
+    $_SESSION['pending_user_email']= $user['email'];
+    $_SESSION['pending_user_role'] = $user['role'];
+    $_SESSION['pending_code']      = $code;
+    $_SESSION['pending_code_time'] = time();
+
+    // Redirect to verification page
+    header('Location: verify-email.php');
     exit;
 }
 
