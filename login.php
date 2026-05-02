@@ -67,7 +67,7 @@
                     </div>
                     <div class="auth-options">
                         <label class="auth-remember"><input type="checkbox" checked> Remember me</label>
-                        <a href="#" class="auth-forgot">Forgot password?</a>
+                        <a href="forgot_password.php" class="auth-forgot">Forgot password?</a>
                     </div>
                     <button type="submit" class="btn-auth-submit" id="login-submit"><i class="fas fa-arrow-right"></i>
                         Log In</button>

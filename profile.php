@@ -26,8 +26,9 @@
                 <div class="profile-header-card animate-fade-in-up">
                     <div class="profile-banner"></div>
                     <div class="profile-header-body">
-                        <div class="profile-large-avatar">
-                            <i class="fas fa-user-circle"></i>
+                        <div class="profile-large-avatar" id="profile-avatar-display">
+                            <i class="fas fa-user-circle" id="avatar-icon"></i>
+                            <img src="" alt="Profile" class="profile-avatar-img" id="avatar-img" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;">
                         </div>
                         <div class="profile-header-info">
                             <h1 class="profile-full-name">Abdullah Elsayed</h1>
@@ -170,6 +171,16 @@
                     <label class="form-label">Bio</label>
                     <textarea class="form-input form-textarea" id="edit-bio" rows="4">Experienced event manager with a passion for creating seamless, large-scale experiences. Specializing in gaming festivals, corporate events, and training programs across the MENA region. Always looking for talented ushers and coordinators to build world-class event teams.</textarea>
                 </div>
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-camera"></i> Profile Photo</label>
+                    <input type="file" class="form-input" id="edit-profile-image" accept="image/jpeg,image/png,image/gif,image/webp" style="padding:10px;">
+                    <small style="color:rgba(255,255,255,0.4);font-size:0.78rem;">Max 5MB. JPG, PNG, GIF, or WebP.</small>
+                </div>
+                <div class="form-group">
+                    <label class="form-label"><i class="fas fa-file-pdf"></i> Upload CV</label>
+                    <input type="file" class="form-input" id="edit-cv" accept=".pdf,.doc,.docx" style="padding:10px;">
+                    <small style="color:rgba(255,255,255,0.4);font-size:0.78rem;">PDF, DOC, or DOCX format.</small>
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn-modal-cancel" id="btn-cancel-profile">Cancel</button>
@@ -209,17 +220,34 @@
             const phone = document.getElementById('edit-phone').value;
             const location = document.getElementById('edit-location').value;
             const bio = document.getElementById('edit-bio').value;
+            const profileImageFile = document.getElementById('edit-profile-image').files[0];
+            const cvFile = document.getElementById('edit-cv').files[0];
 
             saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
             saveBtn.disabled = true;
 
-            // Save to backend
+            // Use FormData to support file uploads
+            const formData = new FormData();
+            formData.append('first_name', firstName);
+            formData.append('last_name', lastName);
+            formData.append('email', email);
+            formData.append('phone', phone);
+            formData.append('city', location);
+            formData.append('bio', bio);
+            if (profileImageFile) formData.append('profile_image', profileImageFile);
+            if (cvFile) formData.append('cv', cvFile);
+
             try {
-                await fetch('db/update_profile.php', {
+                const res = await fetch('db/update_profile.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ first_name: firstName, last_name: lastName, email, phone, bio, city: location })
+                    body: formData
                 });
+                const data = await res.json();
+                if (data.profile_image) {
+                    document.getElementById('avatar-img').src = data.profile_image;
+                    document.getElementById('avatar-img').style.display = 'block';
+                    document.getElementById('avatar-icon').style.display = 'none';
+                }
             } catch(e) { console.log('Profile saved locally only'); }
 
             // Update displayed profile values
@@ -262,6 +290,13 @@
                     if (infoValues[3]) infoValues[3].textContent = new Date(u.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
                     if (u.bio) document.querySelector('.profile-bio-text').textContent = u.bio;
+
+                    // Show profile image if exists
+                    if (u.profile_image) {
+                        document.getElementById('avatar-img').src = u.profile_image;
+                        document.getElementById('avatar-img').style.display = 'block';
+                        document.getElementById('avatar-icon').style.display = 'none';
+                    }
 
                     // Populate edit modal
                     document.getElementById('edit-first-name').value = u.first_name;

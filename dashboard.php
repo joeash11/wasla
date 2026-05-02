@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="images/wasla-icon.png">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
     <script src="wasla-theme.js"></script>
 </head>
 
@@ -156,6 +157,12 @@
                     <button class="page-btn" id="next-page"><i class="fas fa-chevron-right"></i></button>
                 </div>
             </section>
+
+            <!-- Calendar Widget -->
+            <section class="calendar-widget" id="calendar-widget">
+                <h2><i class="fas fa-calendar-alt" style="color:var(--accent)"></i> Event Schedule</h2>
+                <div id="wasla-calendar"></div>
+            </section>
         </main>
     </div>
 
@@ -277,6 +284,49 @@
                 })
                 .catch(() => console.warn('Session check failed'));
         }, 5 * 60 * 1000);
+    })();
+    </script>
+    <script>
+    // ===== FULLCALENDAR INIT =====
+    (function() {
+        const calendarEl = document.getElementById('wasla-calendar');
+        if (calendarEl) {
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                height: 420,
+                headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,listWeek' },
+                events: function(info, successCallback, failureCallback) {
+                    fetch('api/get_calendar_events.php')
+                        .then(res => res.json())
+                        .then(events => successCallback(events))
+                        .catch(err => { console.warn('Calendar error:', err); failureCallback(err); });
+                },
+                eventClick: function(info) {
+                    alert('Event: ' + info.event.title + '\nLocation: ' + (info.event.extendedProps.location || 'N/A'));
+                }
+            });
+            calendar.render();
+        }
+    })();
+
+    // ===== NOTIFICATION POLLING =====
+    (function() {
+        function checkNotifications() {
+            fetch('api/check_notifications.php')
+                .then(res => res.json())
+                .then(data => {
+                    const badge = document.getElementById('notif-badge');
+                    if (badge && data.count > 0) {
+                        badge.textContent = data.count > 9 ? '9+' : data.count;
+                        badge.style.display = 'flex';
+                    } else if (badge) {
+                        badge.style.display = 'none';
+                    }
+                })
+                .catch(() => {});
+        }
+        checkNotifications();
+        setInterval(checkNotifications, 30000);
     })();
     </script>
 </body>

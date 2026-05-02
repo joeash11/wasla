@@ -27,6 +27,9 @@ $sidebar_last = isset($name_parts[1]) ? $name_parts[1] : '';
         <a href="settings.php" class="sidebar-link<?php echo ($active_page ?? '') === 'settings' ? ' active' : ''; ?>">
             <i class="fas fa-cog"></i><span>Settings</span>
         </a>
+        <a href="checkout.php" class="sidebar-link<?php echo ($active_page ?? '') === 'checkout' ? ' active' : ''; ?>">
+            <i class="fas fa-wallet"></i><span>Deposit Funds</span>
+        </a>
     </nav>
     <div class="sidebar-footer">
         <a href="help.php" class="sidebar-link"><i class="fas fa-question-circle"></i><span>Help Center</span></a>

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles.css?v=<?= time() ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
     <link rel="icon" type="image/png" href="images/wasla-icon.png">
     <script src="wasla-theme.js"></script>
 </head>
@@ -60,36 +61,36 @@
         <div class="landing-container">
             <div class="section-header">
                 <span class="section-badge">Features</span>
-                <h2 class="landing-section-title">Everything You Need to Run<br>World-Class Events</h2>
-                <p class="landing-section-desc">From project setup to team coordination, Wasla provides a complete suite of tools.</p>
+                <h2 class="landing-section-title" data-aos="fade-up">Everything You Need to Run<br>World-Class Events</h2>
+                <p class="landing-section-desc" data-aos="fade-up" data-aos-delay="100">From project setup to team coordination, Wasla provides a complete suite of tools.</p>
             </div>
             <div class="features-grid">
-                <div class="feature-card animate-on-scroll stagger-1">
+                <div class="feature-card animate-on-scroll stagger-1" data-aos="fade-up" data-aos-delay="0">
                     <div class="feature-icon"><i class="fas fa-project-diagram"></i></div>
                     <h3>Project Management</h3>
                     <p>Create, organize, and track your events with an intuitive dashboard that keeps everything on schedule.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
                     <div class="feature-icon feature-icon-green"><i class="fas fa-user-check"></i></div>
                     <h3>Smart Matching</h3>
                     <p>Our algorithm matches your events with the perfect ushers based on skills, location, and availability.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
                     <div class="feature-icon feature-icon-purple"><i class="fas fa-comments"></i></div>
                     <h3>Real-Time Messaging</h3>
                     <p>Communicate instantly with your team through our built-in messaging system — no third-party apps needed.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
                     <div class="feature-icon feature-icon-orange"><i class="fas fa-chart-line"></i></div>
                     <h3>Analytics & Reports</h3>
                     <p>Track performance metrics, hiring trends, and event outcomes with detailed visual reports.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
                     <div class="feature-icon feature-icon-red"><i class="fas fa-shield-alt"></i></div>
                     <h3>Verified Profiles</h3>
                     <p>Every usher is background-checked and rated by previous event managers for complete peace of mind.</p>
                 </div>
-                <div class="feature-card">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
                     <div class="feature-icon feature-icon-teal"><i class="fas fa-globe"></i></div>
                     <h3>MENA Coverage</h3>
                     <p>Access talent across Saudi Arabia, Egypt, UAE, and the wider MENA region from a single platform.</p>
@@ -106,13 +107,13 @@
                 <h2 class="landing-section-title" style="color:#fff">Get Started in Three Simple Steps</h2>
             </div>
             <div class="steps-row">
-                <div class="step-card">
+                <div class="step-card" data-aos="fade-right" data-aos-delay="0">
                     <div class="step-number-large">1</div>
                     <h3>Create Your Project</h3>
                     <p>Set up your event with details like date, location, and the number of ushers you need.</p>
                 </div>
                 <div class="step-connector"><i class="fas fa-arrow-right"></i></div>
-                <div class="step-card">
+                <div class="step-card" data-aos="fade-up" data-aos-delay="150">
                     <div class="step-number-large">2</div>
                     <h3>Review Applicants</h3>
                     <p>Browse verified usher profiles, check ratings, and select the best candidates for your event.</p>
@@ -256,5 +257,7 @@
             });
         });
     </script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init({ duration: 700, once: true, offset: 80 });</script>
 </body>
 </html>

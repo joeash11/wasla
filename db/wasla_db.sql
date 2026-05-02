@@ -45,6 +45,8 @@ CREATE TABLE users (
     rating DECIMAL(3,2) DEFAULT 0.00,
     is_verified TINYINT(1) DEFAULT 0,
     is_active TINYINT(1) DEFAULT 1,
+    reset_token VARCHAR(64) DEFAULT NULL,
+    reset_expires DATETIME DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -132,7 +134,7 @@ CREATE TABLE transactions (
     payee_id INT NOT NULL,
     project_id INT DEFAULT NULL,
     amount DECIMAL(10,2) NOT NULL,
-    type ENUM('payment', 'refund', 'payout') NOT NULL DEFAULT 'payment',
+    type ENUM('payment', 'refund', 'payout', 'deposit') NOT NULL DEFAULT 'payment',
     status ENUM('pending', 'completed', 'failed') NOT NULL DEFAULT 'pending',
     description VARCHAR(255) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -177,3 +179,20 @@ CREATE TABLE reports (
     FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- ============================================
+-- REVIEWS TABLE
+-- Client reviews of ushers after project completion
+-- ============================================
+CREATE TABLE IF NOT EXISTS reviews (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    reviewer_id INT NOT NULL,
+    usher_id INT NOT NULL,
+    project_id INT NOT NULL,
+    rating INT NOT NULL,
+    comment TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_review (reviewer_id, usher_id, project_id),
+    FOREIGN KEY (reviewer_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (usher_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

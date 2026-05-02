@@ -80,7 +80,7 @@
             <div class="sidebar-footer"><button class="btn-logout" onclick="window.location.href='../auth_logout.php'">Log Out</button></div>
         </aside>
         <main class="content">
-            <div class="page-header"><h1 class="section-title">Reports Management</h1></div>
+            <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;"><h1 class="section-title">Reports Management</h1><a href="../api/export_csv.php?type=reports" class="btn-create" style="font-size:0.85rem;padding:8px 18px;text-decoration:none;"><i class="fas fa-download"></i> Export CSV</a></div>
             <section class="stats-row">
                 <div class="stat-card"><p class="stat-label">Total Reports</p><h2 class="stat-value" id="stat-total">—</h2></div>
                 <div class="stat-card"><p class="stat-label">Pending</p><h2 class="stat-value" id="stat-pending" style="color:#ff9800">—</h2></div>

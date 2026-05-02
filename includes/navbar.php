@@ -18,6 +18,10 @@
             <i class="fas fa-globe"></i>
             <span id="lang-label">AR</span>
         </button>
+        <div class="notification-bell" id="notification-bell" title="Notifications" onclick="window.location.href='messages.php'">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge" id="notif-badge" style="display:none">0</span>
+        </div>
         <a href="profile.php" class="user-avatar-small"><i class="fas fa-user-circle"></i></a>
         <a href="create-project.php" class="btn-create">Create Project</a>
     </div>

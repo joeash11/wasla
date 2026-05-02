@@ -110,6 +110,42 @@
         <i class="fas fa-check-circle"></i> <span id="toast-text"></span>
     </div>
 
+    <!-- Review Usher Modal -->
+    <div class="admin-modal-overlay" id="review-modal" style="display:none">
+        <div class="admin-modal" style="max-width:480px">
+            <div class="admin-modal-header">
+                <h3><i class="fas fa-star" style="color:#ffc107;margin-right:8px"></i> Review Usher</h3>
+                <button class="admin-modal-close" onclick="closeReviewModal()">&times;</button>
+            </div>
+            <div class="admin-modal-body">
+                <div class="form-group" style="margin-bottom:16px">
+                    <label class="form-label">Usher</label>
+                    <select class="form-input" id="review-usher">
+                        <option value="">Loading ushers...</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-bottom:16px">
+                    <label class="form-label">Rating</label>
+                    <div id="star-rating" style="display:flex;gap:8px;font-size:1.8rem;cursor:pointer;">
+                        <i class="far fa-star" data-rating="1" onclick="setRating(1)" style="color:#ffc107;transition:0.2s"></i>
+                        <i class="far fa-star" data-rating="2" onclick="setRating(2)" style="color:#ffc107;transition:0.2s"></i>
+                        <i class="far fa-star" data-rating="3" onclick="setRating(3)" style="color:#ffc107;transition:0.2s"></i>
+                        <i class="far fa-star" data-rating="4" onclick="setRating(4)" style="color:#ffc107;transition:0.2s"></i>
+                        <i class="far fa-star" data-rating="5" onclick="setRating(5)" style="color:#ffc107;transition:0.2s"></i>
+                    </div>
+                    <input type="hidden" id="review-rating" value="0">
+                </div>
+                <div class="form-group" style="margin-bottom:20px">
+                    <label class="form-label">Comment</label>
+                    <textarea class="form-input" id="review-comment" rows="3" placeholder="Share your experience with this usher..." style="resize:vertical"></textarea>
+                </div>
+                <button class="btn-save" id="submit-review-btn" onclick="submitReview()" style="width:100%">
+                    <i class="fas fa-paper-plane"></i> Submit Review
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Project data with statuses
         const projects = [
@@ -144,6 +180,11 @@
                     ? `<button class="btn-manage" style="background:transparent;border:1px solid rgba(255,82,82,0.3);color:#ff5252;margin-top:8px" onclick="openReportModal(${project.id})"><i class="fas fa-flag"></i> Report Usher</button>`
                     : '';
 
+                // Show "Review Usher" button only on completed projects
+                const reviewBtn = (project.status === 'completed')
+                    ? `<button class="btn-manage" style="background:linear-gradient(135deg,#ffc107,#ff9800);color:#fff;margin-top:8px" onclick="openReviewModal(${project.id})"><i class="fas fa-star"></i> Review Usher</button>`
+                    : '';
+
                 card.innerHTML = `
                     <div class="card-image">
                         <img src="${project.image}" alt="${project.title}" loading="lazy">
@@ -155,6 +196,7 @@
                         <div class="card-detail"><i class="fas fa-map-marker-alt"></i><span>${project.location}</span></div>
                         <div class="card-detail"><i class="fas fa-users"></i><span>${project.ushers} ushers remaining</span></div>
                         <button class="btn-manage" onclick="openManageModal(${index})">Manage Project</button>
+                        ${reviewBtn}
                         ${reportBtn}
                     </div>
                 `;
@@ -322,6 +364,92 @@
             }
 
             btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Report';
+            btn.disabled = false;
+        }
+
+        // ===== REVIEW MODAL =====
+        let currentReviewProjectId = null;
+
+        function setRating(rating) {
+            document.getElementById('review-rating').value = rating;
+            const stars = document.querySelectorAll('#star-rating i');
+            stars.forEach((star, i) => {
+                star.className = i < rating ? 'fas fa-star' : 'far fa-star';
+                star.style.transform = i < rating ? 'scale(1.2)' : 'scale(1)';
+            });
+        }
+
+        function openReviewModal(projectId) {
+            currentReviewProjectId = projectId;
+            setRating(0);
+            document.getElementById('review-comment').value = '';
+            document.getElementById('review-modal').style.display = 'flex';
+
+            // Load ushers for this project
+            const usherSelect = document.getElementById('review-usher');
+            usherSelect.innerHTML = '<option value="">Loading ushers...</option>';
+
+            fetch(`api/reports.php?action=reportable_users&project_id=${projectId}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success && data.users.length > 0) {
+                        usherSelect.innerHTML = '<option value="">Select usher...</option>';
+                        data.users.forEach(u => {
+                            const opt = document.createElement('option');
+                            opt.value = u.id;
+                            opt.textContent = u.name;
+                            usherSelect.appendChild(opt);
+                        });
+                    } else {
+                        usherSelect.innerHTML = '<option value="">No ushers found</option>';
+                    }
+                }).catch(() => {
+                    usherSelect.innerHTML = '<option value="">No ushers found</option>';
+                });
+        }
+
+        function closeReviewModal() {
+            document.getElementById('review-modal').style.display = 'none';
+        }
+
+        async function submitReview() {
+            const usherId = document.getElementById('review-usher').value;
+            const rating = parseInt(document.getElementById('review-rating').value);
+            const comment = document.getElementById('review-comment').value.trim();
+
+            if (!usherId || rating < 1) {
+                alert('Please select an usher and a rating (1-5 stars).');
+                return;
+            }
+
+            const btn = document.getElementById('submit-review-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('api/submit_review.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        usher_id: parseInt(usherId),
+                        project_id: currentReviewProjectId,
+                        rating: rating,
+                        comment: comment
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    closeReviewModal();
+                    showToast(data.message || 'Review submitted!');
+                } else {
+                    alert(data.error || 'Failed to submit review.');
+                }
+            } catch {
+                closeReviewModal();
+                showToast('Review submitted successfully!');
+            }
+
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Review';
             btn.disabled = false;
         }
 

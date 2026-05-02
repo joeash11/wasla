@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="icon" type="image/png" href="../images/wasla-icon.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <nav class="navbar admin-navbar"><div class="navbar-left">
@@ -30,10 +31,10 @@
             <h1 class="section-title">Admin Dashboard</h1>
             <!-- Platform Stats -->
             <section class="stats-row">
-                <div class="stat-card"><p class="stat-label">Total Users</p><h2 class="stat-value">1,247</h2></div>
-                <div class="stat-card"><p class="stat-label">Active Projects</p><h2 class="stat-value">38</h2></div>
-                <div class="stat-card"><p class="stat-label">Platform Revenue</p><h2 class="stat-value">EGP 245K</h2></div>
-                <div class="stat-card"><p class="stat-label">New Signups (30d)</p><h2 class="stat-value">89</h2></div>
+                <div class="stat-card"><p class="stat-label">Total Users</p><h2 class="stat-value" id="s-users">...</h2></div>
+                <div class="stat-card"><p class="stat-label">Active Projects</p><h2 class="stat-value" id="s-projects">...</h2></div>
+                <div class="stat-card"><p class="stat-label">Platform Revenue</p><h2 class="stat-value" id="s-revenue">...</h2></div>
+                <div class="stat-card"><p class="stat-label">New Signups (30d)</p><h2 class="stat-value" id="s-signups">...</h2></div>
             </section>
             <!-- Revenue + User Growth -->
             <section class="revenue-row">
@@ -45,17 +46,12 @@
             <!-- Charts + Activity -->
             <section class="dashboard-grid-2col">
                 <div class="dashboard-panel">
-                    <h3 class="panel-title"><i class="fas fa-chart-bar"></i> User Growth (6 Months)</h3>
-                    <div class="chart-container">
-                        <div class="bar-chart">
-                            <div class="bar-group"><div class="bar" style="height:35%"></div><span>Jan</span></div>
-                            <div class="bar-group"><div class="bar" style="height:48%"></div><span>Feb</span></div>
-                            <div class="bar-group"><div class="bar" style="height:55%"></div><span>Mar</span></div>
-                            <div class="bar-group"><div class="bar" style="height:68%"></div><span>Apr</span></div>
-                            <div class="bar-group"><div class="bar" style="height:78%"></div><span>May</span></div>
-                            <div class="bar-group"><div class="bar bar-accent" style="height:92%"></div><span>Jun</span></div>
-                        </div>
-                    </div>
+                    <h3 class="panel-title"><i class="fas fa-chart-line"></i> User Growth (Monthly)</h3>
+                    <div style="position:relative;height:260px;"><canvas id="chart-growth"></canvas></div>
+                </div>
+                <div class="dashboard-panel">
+                    <h3 class="panel-title"><i class="fas fa-chart-pie"></i> User Distribution</h3>
+                    <div style="position:relative;height:260px;"><canvas id="chart-distribution"></canvas></div>
                 </div>
                 <div class="dashboard-panel">
                     <h3 class="panel-title"><i class="fas fa-clock"></i> Recent Activity</h3>
@@ -71,5 +67,50 @@
         </main>
     </div>
     <footer class="footer"><div class="footer-left"><h3>Wasla</h3><p>&copy; 2024 WASLA DIGITAL CONDUIT. ALL RIGHTS RESERVED.</p></div><div class="footer-links"><a href="../terms.php">TERMS OF SERVICE</a><a href="../privacy.php">PRIVACY POLICY</a><a href="../contact.php">CONTACT US</a></div></footer>
+    <script>
+    // Load admin stats from database
+    fetch('../api/admin_stats.php')
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById('s-users').textContent = Number(data.total_users || 0).toLocaleString();
+            document.getElementById('s-projects').textContent = data.active_projects || 0;
+            document.getElementById('s-revenue').textContent = 'EGP ' + Number(data.total_revenue || 0).toLocaleString();
+            document.getElementById('s-signups').textContent = data.new_signups || 0;
+
+            // Growth Line Chart
+            new Chart(document.getElementById('chart-growth'), {
+                type: 'line',
+                data: {
+                    labels: data.growth_labels || [],
+                    datasets: [{
+                        label: 'New Users',
+                        data: data.growth_data || [],
+                        borderColor: '#00c9a7',
+                        backgroundColor: 'rgba(0,201,167,0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#00c9a7'
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: 'rgba(255,255,255,0.6)' } } }, scales: { x: { ticks: { color: 'rgba(255,255,255,0.5)' }, grid: { color: 'rgba(255,255,255,0.05)' } }, y: { ticks: { color: 'rgba(255,255,255,0.5)' }, grid: { color: 'rgba(255,255,255,0.05)' } } } }
+            });
+
+            // Distribution Doughnut
+            new Chart(document.getElementById('chart-distribution'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Clients', 'Ushers', 'Admins'],
+                    datasets: [{
+                        data: [data.clients || 0, data.ushers || 0, data.admins || 0],
+                        backgroundColor: ['#00c9a7', '#6366f1', '#f59e0b'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: 'rgba(255,255,255,0.6)', padding: 16 } } } }
+            });
+        })
+        .catch(err => console.warn('Admin stats error:', err));
+    </script>
 </body>
 </html>

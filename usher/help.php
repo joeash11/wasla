@@ -36,16 +36,16 @@
                 <h2 class="help-section-title">Frequently Asked Questions</h2>
                 <div class="faq-list" id="faq-list">
                     <div class="faq-item">
-                        <button class="faq-question" onclick="toggleFaq(this)"><span>How do I create a new project?</span><i class="fas fa-chevron-down"></i></button>
-                        <div class="faq-answer"><p>Click the "Create Project" button in the top navbar or navigate to My Projects and click the create button. Fill in the project details, set usher requirements, and submit.</p></div>
+                        <button class="faq-question" onclick="toggleFaq(this)"><span>How do I find new projects to work on?</span><i class="fas fa-chevron-down"></i></button>
+                        <div class="faq-answer"><p>Click on "Available Projects" in the sidebar to see all active events. You can filter by location and pay range, then click "Apply Now" to send your application.</p></div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" onclick="toggleFaq(this)"><span>How do I hire ushers for my event?</span><i class="fas fa-chevron-down"></i></button>
-                        <div class="faq-answer"><p>After creating a project, ushers can apply to your event. You can review applications from the project management page and accept or decline candidates.</p></div>
+                        <button class="faq-question" onclick="toggleFaq(this)"><span>How do I know if I was accepted?</span><i class="fas fa-chevron-down"></i></button>
+                        <div class="faq-answer"><p>You will receive a notification in the top right bell icon when a client accepts your application. You can also track your application statuses in the "My Projects" page.</p></div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" onclick="toggleFaq(this)"><span>Can I edit a project after creating it?</span><i class="fas fa-chevron-down"></i></button>
-                        <div class="faq-answer"><p>Yes! Go to My Projects, click "Manage Project" on the card you want to edit, and you'll be able to update all project details including date, location, and usher requirements.</p></div>
+                        <button class="faq-question" onclick="toggleFaq(this)"><span>Can I review a project before applying?</span><i class="fas fa-chevron-down"></i></button>
+                        <div class="faq-answer"><p>Yes! In the Available Projects list, you can review the project details including location, dates, working hours, and pay rate before deciding to click "Apply Now".</p></div>
                     </div>
                     <div class="faq-item">
                         <button class="faq-question" onclick="toggleFaq(this)"><span>How does the messaging system work?</span><i class="fas fa-chevron-down"></i></button>
@@ -66,8 +66,8 @@
                 <h2 class="help-section-title">Getting Started</h2>
                 <div class="guides-grid">
                     <div class="guide-card trigger-quick-start" style="cursor:pointer"><div class="guide-icon"><i class="fas fa-rocket"></i></div><h3>Quick Start Guide</h3><p>Learn the basics of Wasla in 5 minutes</p></div>
-                    <div class="guide-card" style="cursor:pointer" onclick="window.location.href='#faq'; setTimeout(() => document.querySelectorAll('.faq-item button')[2].click(), 300);"><div class="guide-icon"><i class="fas fa-project-diagram"></i></div><h3>Managing Projects</h3><p>Best practices for project management</p></div>
-                    <div class="guide-card" style="cursor:pointer" onclick="window.location.href='#faq'; setTimeout(() => document.querySelectorAll('.faq-item button')[1].click(), 300);"><div class="guide-icon"><i class="fas fa-user-check"></i></div><h3>Working with Ushers</h3><p>How to find and hire the best ushers</p></div>
+                    <div class="guide-card" style="cursor:pointer" onclick="window.location.href='#faq'; setTimeout(() => document.querySelectorAll('.faq-item button')[0].click(), 300);"><div class="guide-icon"><i class="fas fa-search"></i></div><h3>Finding Projects</h3><p>Best practices for finding and applying to events</p></div>
+                    <div class="guide-card" style="cursor:pointer" onclick="window.location.href='#faq'; setTimeout(() => document.querySelectorAll('.faq-item button')[1].click(), 300);"><div class="guide-icon"><i class="fas fa-calendar-check"></i></div><h3>Managing Schedule</h3><p>How to track your upcoming and completed shifts</p></div>
                 </div>
             </section>
             <!-- Contact Support -->

@@ -43,6 +43,27 @@ if (isset($_FILES['cv']) && $_FILES['cv']['error'] === UPLOAD_ERR_OK) {
     }
 }
 
+// Handle Profile Image Upload
+$profile_image_url = null;
+if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
+    if (!is_dir(__DIR__ . '/../uploads/avatars')) {
+        mkdir(__DIR__ . '/../uploads/avatars', 0777, true);
+    }
+
+    $fileInfo = pathinfo($_FILES['profile_image']['name']);
+    $ext = strtolower($fileInfo['extension']);
+    $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+    $maxSize = 5 * 1024 * 1024; // 5MB
+
+    if (in_array($ext, $allowed) && $_FILES['profile_image']['size'] <= $maxSize) {
+        $filename = 'avatar_' . $user_id . '_' . time() . '.' . $ext;
+        $dest = __DIR__ . '/../uploads/avatars/' . $filename;
+        if (move_uploaded_file($_FILES['profile_image']['tmp_name'], $dest)) {
+            $profile_image_url = 'uploads/avatars/' . $filename;
+        }
+    }
+}
+
 // Build dynamic update query
 $fields = [];
 $types = '';
@@ -56,6 +77,7 @@ if ($city !== null) { $fields[] = 'city = ?'; $types .= 's'; $values[] = $city; 
 if ($bio !== null) { $fields[] = 'bio = ?'; $types .= 's'; $values[] = $bio; }
 if ($skills !== null) { $fields[] = 'skills = ?'; $types .= 's'; $values[] = $skills; }
 if ($cv_url !== null) { $fields[] = 'cv_path = ?'; $types .= 's'; $values[] = $cv_url; }
+if ($profile_image_url !== null) { $fields[] = 'profile_image = ?'; $types .= 's'; $values[] = $profile_image_url; }
 
 if (empty($fields)) {
     echo json_encode(['success' => false, 'error' => 'No fields to update']);
@@ -76,7 +98,7 @@ if ($stmt->execute()) {
     if ($first_name !== null || $last_name !== null) {
         $_SESSION['user_name'] = ($first_name ?? $_SESSION['first_name'] ?? '') . ' ' . ($last_name ?? $_SESSION['last_name'] ?? '');
     }
-    echo json_encode(['success' => true, 'cv_url' => $cv_url]);
+    echo json_encode(['success' => true, 'cv_url' => $cv_url, 'profile_image' => $profile_image_url]);
 } else {
     echo json_encode(['success' => false, 'error' => 'Update failed: ' . $stmt->error]);
 }
