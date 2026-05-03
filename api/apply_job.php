@@ -36,10 +36,11 @@ $stmt->execute();
 $user_data = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
-if (empty($user_data['cv_path'])) {
-    echo json_encode(['success' => false, 'error' => 'You must upload your CV in Settings before applying.']);
-    exit;
-}
+// Proceed without strict CV requirement for now
+// if (empty($user_data['cv_path'])) {
+//     echo json_encode(['success' => false, 'error' => 'You must upload your CV in Settings before applying.']);
+//     exit;
+// }
 
 // Check if already applied
 $stmt = $conn->prepare("SELECT id FROM project_applications WHERE project_id = ? AND usher_id = ?");

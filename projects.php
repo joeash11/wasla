@@ -542,8 +542,8 @@
     </div>
 
     <!-- Applicants Modal -->
-    <div class="modal-overlay" id="applicants-modal" style="display:none; z-index:10001;">
-        <div class="modal-container modal-lg" style="max-width: 650px;">
+    <div class="modal-overlay" id="applicants-modal" style="z-index:10001;">
+        <div class="modal-container modal-lg" style="max-width: 700px;">
             <div class="modal-header">
                 <h2><i class="fas fa-users"></i> Project Applicants</h2>
                 <button class="modal-close" onclick="closeApplicantsModal()">&times;</button>
@@ -552,6 +552,25 @@
                 <div id="applicants-list" style="display:flex; flex-direction:column; gap:12px;">
                     <p style="color:var(--gray-400);text-align:center;">Loading applicants...</p>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interview Modal -->
+    <div class="modal-overlay" id="interview-modal" style="z-index:10005;">
+        <div class="modal-container" style="max-width: 400px;">
+            <div class="modal-header">
+                <h2><i class="fas fa-video"></i> Schedule Interview</h2>
+                <button class="modal-close" onclick="closeInterviewModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="color:var(--gray-600); margin-bottom:15px; font-size:0.9rem;">Send an automated interview invite to <strong id="interview-usher-name"></strong>.</p>
+                <input type="hidden" id="interview-app-id">
+                <div class="form-group" style="margin-bottom:15px;">
+                    <label class="form-label">Date & Time</label>
+                    <input type="datetime-local" id="interview-datetime" class="form-input">
+                </div>
+                <button class="btn-save" id="btn-submit-interview" onclick="submitInterview()" style="width:100%;"><i class="fas fa-paper-plane"></i> Send Invite</button>
             </div>
         </div>
     </div>
@@ -618,10 +637,13 @@
         function openApplicantsModal(projectId) {
             if (!projectId) return;
             const modal = document.getElementById('applicants-modal');
-            modal.style.display = 'flex';
+            modal.classList.add('active');
             
             const list = document.getElementById('applicants-list');
             list.innerHTML = '<p style="color:var(--gray-400);text-align:center;">Loading applicants...</p>';
+            
+            const applicantsHeader = document.querySelector('#applicants-modal h2');
+            applicantsHeader.innerHTML = `<i class="fas fa-users"></i> Project Applicants <span style="background:var(--accent);color:white;font-size:0.8rem;padding:2px 8px;border-radius:12px;vertical-align:middle;margin-left:8px;">...</span>`;
             
             fetch(`api/get_applicants.php?project_id=${projectId}`)
                 .then(r => r.json())
@@ -631,27 +653,34 @@
                         return;
                     }
                     if (data.applicants.length === 0) {
+                        applicantsHeader.innerHTML = `<i class="fas fa-users"></i> Project Applicants <span style="background:var(--gray-300);color:var(--gray-600);font-size:0.8rem;padding:2px 8px;border-radius:12px;vertical-align:middle;margin-left:8px;">0</span>`;
                         list.innerHTML = '<p style="color:var(--gray-400);text-align:center;">No pending applicants found for this project.</p>';
                         return;
                     }
+                    
+                    applicantsHeader.innerHTML = `<i class="fas fa-users"></i> Project Applicants <span style="background:var(--accent);color:white;font-size:0.8rem;padding:2px 8px;border-radius:12px;vertical-align:middle;margin-left:8px;">${data.applicants.length}</span>`;
                     list.innerHTML = data.applicants.map(app => {
                         const cvBtn = app.cv_url 
-                            ? `<a href="${app.cv_url}" target="_blank" class="btn-manage" style="background:#2979ff; padding:6px 12px; font-size:0.8rem; text-decoration:none;"><i class="fas fa-file-pdf"></i> View CV</a>`
-                            : `<span style="color:var(--gray-400); font-size:0.8rem; border:1px solid var(--gray-300); padding:4px 8px; border-radius:4px;"><i class="fas fa-times"></i> No CV</span>`;
+                            ? `<a href="${app.cv_url}" target="_blank" class="btn-app-action" style="background:#2979ff; padding:6px 12px; font-size:0.8rem; color:white; text-decoration:none;"><i class="fas fa-file-pdf"></i> View CV</a>`
+                            : `<span style="color:var(--gray-400); font-size:0.8rem; border:1px solid var(--gray-300); padding:4px 8px; border-radius:6px; display:inline-block;"><i class="fas fa-times"></i> No CV</span>`;
                             
                         return `
-                        <div class="manage-usher-item" style="justify-content: space-between;" id="app-row-${app.application_id}">
-                            <div style="display:flex; align-items:center; gap:12px;">
+                        <div class="manage-usher-item" style="justify-content: space-between; flex-wrap:wrap; gap:16px;" id="app-row-${app.application_id}">
+                            <div style="display:flex; align-items:center; gap:12px; min-width:200px;">
                                 <div class="manage-usher-avatar"><i class="fas fa-user-circle"></i></div>
                                 <div class="manage-usher-info">
                                     <span class="manage-usher-name">${app.name}</span>
-                                    <span class="manage-usher-role"><i class="fas fa-star" style="color:#ffc107"></i> ${app.rating || 'New'}</span>
+                                    <div style="display:flex; align-items:center; gap:8px;">
+                                        <span class="manage-usher-role"><i class="fas fa-star" style="color:#ffc107"></i> ${app.rating || 'New'}</span>
+                                        <span style="background:rgba(0, 212, 170, 0.15); color:var(--cyan-dark); padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:700;">${app.match_score}% Match</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div style="display:flex; align-items:center; gap:8px;">
+                            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
                                 ${cvBtn}
-                                <button class="btn-manage" style="background:#00c853; padding:6px 12px; font-size:0.8rem;" onclick="respondApp(${app.application_id}, 'accepted')"><i class="fas fa-check"></i> Accept</button>
-                                <button class="btn-manage" style="background:#ff5252; padding:6px 12px; font-size:0.8rem;" onclick="respondApp(${app.application_id}, 'rejected')"><i class="fas fa-times"></i> Reject</button>
+                                <button class="btn-app-action" style="background:linear-gradient(135deg, #00d4aa, #00b386); padding:6px 12px; font-size:0.8rem; color:white;" onclick="openInterviewModal(${app.application_id}, '${app.name.replace(/'/g, "\\'")}')"><i class="fas fa-video"></i> Interview</button>
+                                <button class="btn-app-action" style="background:#00c853; padding:6px 12px; font-size:0.8rem; color:white;" onclick="respondApp(${app.application_id}, 'accepted')"><i class="fas fa-check"></i> Accept</button>
+                                <button class="btn-app-action" style="background:#ff5252; padding:6px 12px; font-size:0.8rem; color:white;" onclick="respondApp(${app.application_id}, 'rejected')"><i class="fas fa-times"></i> Reject</button>
                             </div>
                         </div>`;
                     }).join('');
@@ -662,7 +691,7 @@
         }
 
         function closeApplicantsModal() {
-            document.getElementById('applicants-modal').style.display = 'none';
+            document.getElementById('applicants-modal').classList.remove('active');
         }
 
         function respondApp(appId, status) {
@@ -683,6 +712,47 @@
                     alert(data.error || 'Failed to update application.');
                 }
             });
+        }
+
+        // --- Interview Logic ---
+        function openInterviewModal(appId, usherName) {
+            document.getElementById('interview-app-id').value = appId;
+            document.getElementById('interview-usher-name').textContent = usherName;
+            document.getElementById('interview-datetime').value = '';
+            document.getElementById('interview-modal').classList.add('active');
+        }
+
+        function closeInterviewModal() {
+            document.getElementById('interview-modal').classList.remove('active');
+        }
+
+        async function submitInterview() {
+            const appId = document.getElementById('interview-app-id').value;
+            const dt = document.getElementById('interview-datetime').value;
+            if (!dt) return alert('Please select a date and time.');
+
+            const btn = document.getElementById('btn-submit-interview');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch('api/schedule_interview.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ application_id: appId, datetime: dt })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast('Interview invite sent via messages!');
+                    closeInterviewModal();
+                } else {
+                    alert(data.error || 'Failed to send invite.');
+                }
+            } catch (err) {
+                alert('Network error.');
+            }
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Invite';
+            btn.disabled = false;
         }
     </script>
 </body>

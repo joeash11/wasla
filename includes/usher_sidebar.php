@@ -25,6 +25,9 @@ $sidebar_last  = $name_parts[1] ?? '';
         <a href="projects.php" class="sidebar-link<?php echo ($active_page ?? '') === 'projects' ? ' active' : ''; ?>">
             <i class="fas fa-calendar-check"></i><span>My Projects</span>
         </a>
+        <a href="messages.php" class="sidebar-link<?php echo ($active_page ?? '') === 'messages' ? ' active' : ''; ?>">
+            <i class="fas fa-envelope"></i><span>Messages</span>
+        </a>
         <a href="profile.php" class="sidebar-link<?php echo ($active_page ?? '') === 'profile' ? ' active' : ''; ?>">
             <i class="fas fa-user"></i><span>Profile</span>
         </a>

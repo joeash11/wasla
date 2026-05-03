@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . '/includes/client_guard.php'; ?>
+<?php require_once __DIR__ . '/../includes/usher_guard.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,18 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wasla - Messages</title>
     <meta name="description" content="View and send messages on Wasla.">
-    <link rel="stylesheet" href="styles.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="../styles.css?v=<?= time() ?>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="icon" type="image/png" href="images/wasla-icon.png">
-    <script src="wasla-theme.js"></script>
+    <link rel="icon" type="image/png" href="../images/wasla-icon.png">
+    <script src="../wasla-theme.js"></script>
 </head>
 <body>
     <?php $active_page = 'messages'; ?>
-    <?php include __DIR__ . '/includes/navbar.php'; ?>
+    <?php include __DIR__ . '/../includes/usher_navbar.php'; ?>
 
     <div class="main-wrapper">
-        <?php include __DIR__ . '/includes/sidebar.php'; ?>
+        <?php include __DIR__ . '/../includes/usher_sidebar.php'; ?>
 
         <!-- Main Content -->
         <main class="content" id="main-content">
@@ -124,7 +124,7 @@
         // ===== LOAD CONVERSATIONS FROM BACKEND =====
         async function loadConversations() {
             try {
-                const res = await fetch(`db/get_conversations.php?user_id=${CURRENT_USER_ID}`);
+                const res = await fetch(`../db/get_conversations.php?user_id=${CURRENT_USER_ID}`);
                 const data = await res.json();
                 if (data.error) throw new Error(data.error);
                 conversations = data;
@@ -200,7 +200,7 @@
 
             // Load messages
             try {
-                const res = await fetch(`db/get_messages.php?user_id=${CURRENT_USER_ID}&partner_id=${partnerId}`);
+                const res = await fetch(`../db/get_messages.php?user_id=${CURRENT_USER_ID}&partner_id=${partnerId}`);
                 const messages = await res.json();
                 if (messages.error) throw new Error(messages.error);
                 renderMessages(messages);
@@ -252,7 +252,7 @@
             if (!confirm('Delete this message?')) return;
             
             try {
-                const res = await fetch('db/delete_message.php', {
+                const res = await fetch('../db/delete_message.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -300,7 +300,7 @@
 
             // Send to backend
             try {
-                await fetch('db/send_message.php', {
+                await fetch('../db/send_message.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -324,7 +324,7 @@
             
             // Send to backend
             try {
-                const res = await fetch('db/clear_chat.php', {
+                const res = await fetch('../db/clear_chat.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({

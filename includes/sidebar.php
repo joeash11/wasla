@@ -13,6 +13,7 @@ $sidebar_last = isset($name_parts[1]) ? $name_parts[1] : '';
     <div class="sidebar-profile">
         <a href="profile.php" class="profile-avatar"><i class="fas fa-user-circle"></i></a>
         <h3 class="profile-name"><?php echo htmlspecialchars($sidebar_first); ?><br><?php echo htmlspecialchars($sidebar_last); ?></h3>
+        <span class="client-badge"><i class="fas fa-user-tie"></i> Client</span>
     </div>
     <nav class="sidebar-nav">
         <a href="dashboard.php" class="sidebar-link<?php echo ($active_page ?? '') === 'dashboard' ? ' active' : ''; ?>">
