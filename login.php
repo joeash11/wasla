@@ -1,3 +1,16 @@
+<?php
+session_start();
+if (isset($_SESSION['user_id'])) {
+    $redirect = 'dashboard.php';
+    if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'usher') {
+        $redirect = 'usher/dashboard.php';
+    } else if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
+        $redirect = 'admin/dashboard.php';
+    }
+    header("Location: $redirect");
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 

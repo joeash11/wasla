@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+// Prevent caching so the user's logged-in state is always fresh
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
 $is_logged_in = isset($_SESSION['user_id']);
 $dashboard_link = 'index.php';
 if ($is_logged_in) {

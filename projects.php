@@ -147,30 +147,49 @@
     </div>
 
     <script>
-        // Project data with statuses
-        const projects = [
-            { id: 1, title: "Gaming Festival 2024", date: "Jun 28, 2024", location: "Riyadh Exhibition Center", ushers: 5, image: "images/event_gaming.png", status: "active" },
-            { id: 2, title: "MDLBEAST Soundstorm", date: "Jul 02, 2024", location: "Banban, Riyadh", ushers: 12, image: "images/event_training.png", status: "active" },
-            { id: 3, title: "Fashion Week Riyadh", date: "Jun 15, 2024", location: "The Ritz-Carlton", ushers: 0, image: "images/event_training.png", status: "completed" },
-            { id: 4, title: "Annual Charity Gala", date: "Jun 08, 2024", location: "Al Faisaliyah Hotel", ushers: 0, image: "images/event_gaming.png", status: "completed" },
-            { id: 7, title: "Tech Innovation Expo", date: "Aug 05, 2024", location: "DIFC Dubai", ushers: 20, image: "images/event_training.png", status: "active" },
-        ];
-
+        let projects = [];
         let currentFilter = 'all';
 
         document.addEventListener('DOMContentLoaded', () => {
-            renderProjects();
+            fetchProjects();
             setupTabs();
             setupSearch();
         });
+
+        function fetchProjects() {
+            fetch('api/client_dashboard.php')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.logged_in && data.projects) {
+                        projects = data.projects.map(p => ({
+                            id: p.id,
+                            title: p.title,
+                            date: p.event_date,
+                            location: p.location,
+                            city: p.city,
+                            ushers_needed: p.ushers_needed,
+                            ushers: p.ushers_remaining,
+                            image: p.image || "images/event_gaming.png",
+                            status: p.status
+                        }));
+                        renderProjects(currentFilter);
+                    }
+                })
+                .catch(err => console.error("Error fetching projects", err));
+        }
 
         function renderProjects(filter = 'all') {
             const grid = document.getElementById('projects-grid');
             grid.innerHTML = '';
             const filtered = filter === 'all' ? projects : projects.filter(p => p.status === filter);
 
+            if (filtered.length === 0) {
+                grid.innerHTML = '<p style="color:var(--gray-500); grid-column: 1 / -1; text-align: center; padding: 40px 0;">No projects found.</p>';
+                return;
+            }
+
             filtered.forEach((project, index) => {
-                const statusClass = project.status === 'active' ? 'status-active' : project.status === 'completed' ? 'status-completed' : 'status-pending';
+                const statusClass = project.status === 'active' ? 'status-active' : project.status === 'completed' ? 'status-completed' : (project.status === 'cancelled' ? 'status-cancelled' : 'status-pending');
                 const statusLabel = project.status.charAt(0).toUpperCase() + project.status.slice(1);
                 const card = document.createElement('div');
                 card.className = 'project-card';
@@ -195,7 +214,7 @@
                         <div class="card-detail"><i class="far fa-calendar"></i><span>${project.date}</span></div>
                         <div class="card-detail"><i class="fas fa-map-marker-alt"></i><span>${project.location}</span></div>
                         <div class="card-detail"><i class="fas fa-users"></i><span>${project.ushers} ushers remaining</span></div>
-                        <button class="btn-manage" onclick="openManageModal(${index})">Manage Project</button>
+                        <button class="btn-manage" onclick="openManageModal(${project.id})">Manage Project</button>
                         ${reviewBtn}
                         ${reportBtn}
                     </div>
@@ -516,8 +535,8 @@
             <div class="modal-footer">
                 <button class="btn-modal-cancel" id="btn-cancel-project" onclick="closeManageModal()">Close</button>
                 <button class="btn-modal-action btn-action-applicants" onclick="openApplicantsModal(window.currentManageProjectId)"><i class="fas fa-user-plus"></i> View Applicants</button>
-                <button class="btn-modal-action btn-action-edit" onclick="alert('Editing project...')"><i class="fas fa-edit"></i> Edit Project</button>
-                <button class="btn-modal-action btn-action-cancel" onclick="if(confirm('Cancel this project?')) alert('Project cancelled.')"><i class="fas fa-times-circle"></i> Cancel Project</button>
+                <button class="btn-modal-action btn-action-edit" onclick="editProject()"><i class="fas fa-edit"></i> Edit Project</button>
+                <button class="btn-modal-action btn-action-cancel" onclick="cancelProject()"><i class="fas fa-times-circle"></i> Cancel Project</button>
             </div>
         </div>
     </div>
@@ -544,16 +563,17 @@
 
         window.currentManageProjectId = null;
 
-        function openManageModal(index) {
-            const project = projects[index];
+        function openManageModal(projectId) {
+            const project = projects.find(p => p.id === projectId);
+            if (!project) return;
             window.currentManageProjectId = project.id;
             
             document.getElementById('modal-project-title').textContent = project.title;
             document.getElementById('modal-project-date').textContent = project.date;
             document.getElementById('modal-project-location').textContent = project.location;
-            document.getElementById('modal-project-ushers').textContent = project.ushers;
+            document.getElementById('modal-project-ushers').textContent = project.ushers_needed;
 
-            const statusClass = project.status === 'active' ? 'status-active' : project.status === 'completed' ? 'status-completed' : 'status-pending';
+            const statusClass = project.status === 'active' ? 'status-active' : project.status === 'completed' ? 'status-completed' : (project.status === 'cancelled' ? 'status-cancelled' : 'status-pending');
             const statusLabel = project.status.charAt(0).toUpperCase() + project.status.slice(1);
             document.getElementById('modal-project-status').innerHTML = `<span class="card-badge ${statusClass}">${statusLabel}</span>`;
 
@@ -564,6 +584,34 @@
         function closeManageModal() {
             manageModal.classList.remove('active');
             document.body.style.overflow = '';
+        }
+
+        function editProject() {
+            if (!window.currentManageProjectId) return;
+            // Create edit modal if it doesn't exist, or just redirect
+            window.location.href = `edit-project.php?id=${window.currentManageProjectId}`;
+        }
+
+        function cancelProject() {
+            if (!window.currentManageProjectId) return;
+            if (confirm('Are you sure you want to cancel this project? This will reject all pending/accepted ushers.')) {
+                fetch('api/cancel_project.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ project_id: window.currentManageProjectId })
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast('Project cancelled successfully!');
+                        closeManageModal();
+                        fetchProjects();
+                    } else {
+                        alert(data.error || 'Failed to cancel project.');
+                    }
+                })
+                .catch(() => alert('Network error.'));
+            }
         }
 
         // --- Applicants Modal Logic ---

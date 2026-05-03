@@ -95,46 +95,21 @@
                         <div class="chat-header-actions">
                             <button class="chat-action-btn"><i class="fas fa-phone"></i></button>
                             <button class="chat-action-btn"><i class="fas fa-video"></i></button>
+                            <button class="chat-action-btn" onclick="clearChat()" title="Clear Chat"><i class="fas fa-trash-alt"></i></button>
                             <button class="chat-action-btn"><i class="fas fa-ellipsis-v"></i></button>
                         </div>
                     </div>
                     <div class="chat-messages" id="chat-messages">
-                        <div class="chat-date-divider"><span>Today</span></div>
-                        <div class="chat-msg chat-msg-received">
-                            <div class="chat-msg-bubble">
-                                <p>Hey Abdullah! Are we still on for the Gaming Festival setup tomorrow?</p>
-                                <span class="chat-msg-time">9:30 AM</span>
-                            </div>
-                        </div>
-                        <div class="chat-msg chat-msg-sent">
-                            <div class="chat-msg-bubble">
-                                <p>Yes! Everything is confirmed. We need to be at the venue by 8 AM.</p>
-                                <span class="chat-msg-time">9:32 AM</span>
-                            </div>
-                        </div>
-                        <div class="chat-msg chat-msg-received">
-                            <div class="chat-msg-bubble">
-                                <p>Great, I'll coordinate with the other ushers. How many are we expecting?</p>
-                                <span class="chat-msg-time">9:35 AM</span>
-                            </div>
-                        </div>
-                        <div class="chat-msg chat-msg-sent">
-                            <div class="chat-msg-bubble">
-                                <p>We have 3 ushers confirmed and 2 more pending. I'll send you the full roster by tonight.</p>
-                                <span class="chat-msg-time">9:38 AM</span>
-                            </div>
-                        </div>
-                        <div class="chat-msg chat-msg-received">
-                            <div class="chat-msg-bubble">
-                                <p>Sure, I'll be there at 9 AM</p>
-                                <span class="chat-msg-time">9:41 AM</span>
-                            </div>
+                        <!-- Messages will be loaded here -->
+                        <div style="display:flex; height:100%; align-items:center; justify-content:center; color:var(--gray-500); flex-direction:column; gap:10px;">
+                            <i class="fas fa-comments" style="font-size:3rem; color:var(--gray-300)"></i>
+                            <p>Select a conversation to start messaging</p>
                         </div>
                     </div>
                     <div class="chat-input-area">
                         <button class="chat-attach-btn"><i class="fas fa-paperclip"></i></button>
-                        <input type="text" class="chat-input" placeholder="Type a message..." id="chat-input">
-                        <button class="chat-send-btn" id="chat-send-btn"><i class="fas fa-paper-plane"></i></button>
+                        <input type="text" class="chat-input" placeholder="Type a message..." id="chat-input" disabled>
+                        <button class="chat-send-btn" id="chat-send-btn" disabled><i class="fas fa-paper-plane"></i></button>
                     </div>
                 </div>
             </div>
@@ -142,7 +117,7 @@
     </div>
 
     <script>
-        const CURRENT_USER_ID = 2; // Abdullah Elsayed
+        const CURRENT_USER_ID = <?= isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'null' ?>;
         let currentPartnerId = null;
         let conversations = [];
 
@@ -213,6 +188,10 @@
                 document.getElementById('chat-name').textContent = conv.name;
             }
 
+            // Enable input area
+            document.getElementById('chat-input').disabled = false;
+            document.getElementById('chat-send-btn').disabled = false;
+
             // Load messages
             try {
                 const res = await fetch(`db/get_messages.php?user_id=${CURRENT_USER_ID}&partner_id=${partnerId}`);
@@ -243,13 +222,49 @@
 
                 const time = new Date(msg.sent_at).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
                 const cls = msg.is_mine ? 'chat-msg-sent' : 'chat-msg-received';
+                const deleteBtn = msg.is_mine ? `<span class="msg-delete-btn" onclick="deleteMessage(${msg.id}, this)" title="Delete message" style="cursor:pointer; margin-left:10px; color:rgba(255,255,255,0.7); font-size:0.9em; transition:color 0.2s;" onmouseover="this.style.color='#ff5252'" onmouseout="this.style.color='rgba(255,255,255,0.7)'"><i class="fas fa-trash"></i></span>` : '';
+                
                 const div = document.createElement('div');
                 div.className = `chat-msg ${cls}`;
-                div.innerHTML = `<div class="chat-msg-bubble"><p>${escapeHTML(msg.message)}</p><span class="chat-msg-time">${time}</span></div>`;
+                div.innerHTML = `
+                    <div class="chat-msg-bubble">
+                        <p>${escapeHTML(msg.message)}</p>
+                        <div class="chat-msg-meta">
+                            <span class="chat-msg-time">${time}</span>
+                            ${deleteBtn}
+                        </div>
+                    </div>
+                `;
                 container.appendChild(div);
             });
 
             container.scrollTop = container.scrollHeight;
+        }
+
+        // ===== DELETE INDIVIDUAL MESSAGE =====
+        async function deleteMessage(msgId, btnElement) {
+            if (!confirm('Delete this message?')) return;
+            
+            try {
+                const res = await fetch('db/delete_message.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        msg_id: msgId,
+                        user_id: CURRENT_USER_ID
+                    })
+                });
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error);
+                
+                // Remove message from DOM
+                const msgBubble = btnElement.closest('.chat-msg');
+                msgBubble.style.opacity = '0';
+                msgBubble.style.transform = 'scale(0.9)';
+                setTimeout(() => msgBubble.remove(), 300);
+            } catch (err) {
+                alert('Failed to delete message: ' + err.message);
+            }
         }
 
         // ===== SEND MESSAGE =====
@@ -290,6 +305,34 @@
                 });
             } catch (err) {
                 console.log('Message saved locally only:', err.message);
+            }
+        }
+
+        // ===== CLEAR CHAT =====
+        async function clearChat() {
+            if (!currentPartnerId) return;
+            if (!confirm('Are you sure you want to clear this entire conversation? This cannot be undone.')) return;
+
+            // Clear UI immediately
+            document.getElementById('chat-messages').innerHTML = '<div class="chat-date-divider"><span>Messages Cleared</span></div>';
+            
+            // Send to backend
+            try {
+                const res = await fetch('db/clear_chat.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: CURRENT_USER_ID,
+                        partner_id: currentPartnerId
+                    })
+                });
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error);
+                
+                // Refresh conversations list to update previews
+                loadConversations();
+            } catch (err) {
+                alert('Failed to clear chat on server: ' + err.message);
             }
         }
 

@@ -110,6 +110,41 @@ if ($user_role === 'client') {
     $stmt->close();
 
     // Client's projects for the project cards
+    $stmt = $conn->prepare("SELECT id FROM projects WHERE client_id = ?");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $has_projects = $stmt->get_result()->num_rows > 0;
+    $stmt->close();
+
+    if (!$has_projects) {
+        // Seed dummy projects for testing
+        $dummy_projects = [
+            ['Gaming Festival 2024', date('Y-m-d', strtotime('+15 days')), 'Riyadh Exhibition Center', 'Riyadh', 5, 'active', 'images/event_gaming.png'],
+            ['MDLBEAST Soundstorm', date('Y-m-d', strtotime('+30 days')), 'Banban, Riyadh', 'Riyadh', 12, 'active', 'images/event_training.png'],
+            ['Fashion Week Riyadh', date('Y-m-d', strtotime('-15 days')), 'The Ritz-Carlton', 'Riyadh', 3, 'completed', 'images/event_training.png'],
+            ['Annual Charity Gala', date('Y-m-d', strtotime('-30 days')), 'Al Faisaliyah Hotel', 'Riyadh', 4, 'completed', 'images/event_gaming.png'],
+            ['Tech Innovation Expo', date('Y-m-d', strtotime('+60 days')), 'DIFC Dubai', 'Dubai', 20, 'active', 'images/event_training.png'],
+            ['Jeddah Summer Concerts', date('Y-m-d', strtotime('+20 days')), 'Jeddah Superdome', 'Jeddah', 8, 'active', 'images/event_gaming.png'],
+            ['Cairo Tech Summit', date('Y-m-d', strtotime('+40 days')), 'CICC', 'Cairo', 15, 'pending', 'images/event_training.png'],
+            ['Alexandria Food Festival', date('Y-m-d', strtotime('+50 days')), 'Bibliotheca Alexandrina', 'Alexandria', 6, 'pending', 'images/event_gaming.png']
+        ];
+        foreach ($dummy_projects as $dp) {
+            $istmt = $conn->prepare("INSERT INTO projects (client_id, title, event_date, location, city, ushers_needed, status, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            $istmt->bind_param("issssdss", $user_id, $dp[0], $dp[1], $dp[2], $dp[3], $dp[4], $dp[5], $dp[6]);
+            $istmt->execute();
+            $new_pid = $istmt->insert_id;
+            $istmt->close();
+
+            // Insert dummy applicants for these projects
+            if ($dp[5] === 'active') {
+                $astmt = $conn->prepare("INSERT INTO project_applications (project_id, usher_id, status) VALUES (?, 5, 'pending')");
+                $astmt->bind_param("i", $new_pid);
+                $astmt->execute();
+                $astmt->close();
+            }
+        }
+    }
+
     $stmt = $conn->prepare(
         "SELECT p.id, p.title, p.event_date, p.end_date, p.location, p.city, 
                 p.ushers_needed, p.status, p.category, p.image,

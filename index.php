@@ -1,3 +1,23 @@
+<?php
+session_start();
+
+// Prevent caching so the user's logged-in state is always fresh
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+
+$is_logged_in = isset($_SESSION['user_id']);
+$dashboard_link = 'index.php';
+if ($is_logged_in) {
+    if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'usher') {
+        $dashboard_link = 'usher/dashboard.php';
+    } else if (isset($_SESSION['user_role']) && $_SESSION['user_role'] === 'admin') {
+        $dashboard_link = 'admin/dashboard.php';
+    } else {
+        $dashboard_link = 'dashboard.php';
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,8 +46,12 @@
             <a href="contact.php">Contact</a>
         </div>
         <div class="landing-nav-actions">
-            <a href="login.php" class="btn-landing-login">Log In</a>
-            <a href="signup.php" class="btn-landing-signup">Get Started</a>
+            <?php if ($is_logged_in): ?>
+                <a href="<?php echo $dashboard_link; ?>" class="btn-landing-login">Dashboard</a>
+            <?php else: ?>
+                <a href="login.php" class="btn-landing-login">Log In</a>
+                <a href="signup.php" class="btn-landing-signup">Get Started</a>
+            <?php endif; ?>
         </div>
     </nav>
 
